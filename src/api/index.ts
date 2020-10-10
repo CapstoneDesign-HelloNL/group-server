@@ -3,6 +3,6 @@ import groupRouter from "@src/api/group";
 
 const router = Router();
 
-router.use("/auth", groupRouter);
+router.use("/group", groupRouter);
 
 export default router;
