@@ -8,7 +8,7 @@ module.exports = {
     entry: "./src/app.ts",
     output: {
         path: path.resolve(__dirname, "dist"),
-        filename: "authServer.js"
+        filename: "groupServer.js"
     },
 
     resolve: {
@@ -20,25 +20,23 @@ module.exports = {
         }
     },
     module: {
-        rules: [
-            {
-                test: /\.(ts|tsx)$/,
-                exclude: [/node_modules/, /test/],
-                use: {
-                    loader: "babel-loader",
-                    options: {
-                        presets: [
-                            "@babel/preset-env",
-                            "@babel/preset-typescript"
-                        ],
-                        plugins: [
-                            "@babel/proposal-class-properties",
-                            "@babel/proposal-object-rest-spread"
-                        ]
-                    }
+        rules: [{
+            test: /\.(ts|tsx)$/,
+            exclude: [/node_modules/, /test/],
+            use: {
+                loader: "babel-loader",
+                options: {
+                    presets: [
+                        "@babel/preset-env",
+                        "@babel/preset-typescript"
+                    ],
+                    plugins: [
+                        "@babel/proposal-class-properties",
+                        "@babel/proposal-object-rest-spread"
+                    ]
                 }
             }
-        ]
+        }]
     },
     plugins: [
         new Dotenv({

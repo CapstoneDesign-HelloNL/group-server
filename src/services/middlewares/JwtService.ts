@@ -1,33 +1,6 @@
 import jwt, { TokenExpiredError } from "jsonwebtoken";
 
 class JwtService {
-    static async createAccessToken(email): Promise<string> {
-        const payload = {
-            email
-        };
-        const options = {
-            expiresIn: "150D"
-        };
-        const token = await jwt.sign(
-            payload,
-            process.env.JWT_SECRET_KEY,
-            options
-        );
-        return token;
-    }
-    static async createRefreshToken(): Promise<string> {
-        const payload = {};
-        const options = {
-            expiresIn: "1 year"
-        };
-        const token = await jwt.sign(
-            payload,
-            process.env.JWT_SECRET_KEY,
-            options
-        );
-        return token;
-    }
-
     static async verifyToken(token): Promise<string | object | undefined> {
         let validToken: string | object | undefined = "";
         try {
