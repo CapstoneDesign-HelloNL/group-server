@@ -1,18 +1,18 @@
 import { DataTypes } from "sequelize";
 import LogService from "@src/utils/LogService";
 import env from "@src/utils/Dotenv";
-import DBManager from "@src/models/DBManager";
+import GroupDBManager from "@src/models/GroupDBManager";
 import UserModel from "@src/models/UserModel";
 import { UserModelTypes } from "@src/vo/auth/models/UserModel";
 
 const logger = LogService.getInstance();
 env.chooseEnv();
 describe("sequelize and postgresql test", () => {
-    let cntn: DBManager;
+    let cntn: GroupDBManager;
     let attr: UserModelTypes.IUserScheme;
 
     beforeEach(async () => {
-        cntn = new DBManager();
+        cntn = new GroupDBManager();
         attr = {
             name: {
                 type: DataTypes.STRING,
