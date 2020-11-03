@@ -1,31 +1,28 @@
 import { Model, Sequelize, Optional } from "sequelize";
 import { GroupModelTypes } from "@src/vo/group/models/GroupModel";
-import { SignUpTypes } from "@src/vo/group/controllers/Group";
+import { GroupTypes } from "@src/vo/group/controllers/Group";
 
-interface UserCreationAttributes
-    extends Optional<SignUpTypes.SignUpBody, "id"> {}
-class UserModel
-    extends Model<SignUpTypes.SignUpBody, UserCreationAttributes>
-    implements SignUpTypes.SignUpBody {
+interface GroupCreationAttributes
+    extends Optional<GroupTypes.GroupBody, "id"> {}
+class Group
+    extends Model<GroupTypes.GroupBody, GroupCreationAttributes>
+    implements GroupTypes.GroupBody {
     public id!: number;
     public name!: string;
-    public email!: string;
-    public pwd!: string;
-    public grade!: number;
-    public school!: string;
-    public stdNum!: string;
+    public admin!: string;
+    public advisor!: string;
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
     static initiate(connection: Sequelize): Model {
-        const opt: UserModelTypes.IBaseUserTableOptions = {
+        const opt: GroupModelTypes.IBaseGroupTableOptions = {
             sequelize: connection,
             tableName: "User"
         };
-        return UserModel.init(UserModelTypes.attr, opt);
+        return Group.init(GroupModelTypes.attr, opt);
     }
-    // static createUser(value: SignUpTypes.SignUpPostBody) {
+    // static createUser(value: GroupTypes.GroupPostBody) {
     //     return UserModel.create(value);
     // }
 }
 
-export default UserModel;
+export default Group;
