@@ -1,7 +1,7 @@
-import { Model, Sequelize, Optional } from "sequelize";
+import { Model, Sequelize, Optional, Association } from "sequelize";
 import { GroupModelTypes } from "@src/vo/group/models/GroupModel";
 import { GroupTypes } from "@src/vo/group/controllers/Group";
-
+import GroupAgenda from "@src/models/GroupAgendaModel";
 interface GroupCreationAttributes
     extends Optional<GroupTypes.GroupBody, "id"> {}
 class Group
@@ -13,6 +13,13 @@ class Group
     public advisor!: string;
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
+
+    public readonly groupAgenda?: GroupAgenda[];
+
+    public static associations: {
+        agendas: Association<Group, GroupAgenda>;
+    };
+
     static initiate(connection: Sequelize): Model {
         const opt: GroupModelTypes.IBaseGroupTableOptions = {
             sequelize: connection,
@@ -24,5 +31,9 @@ class Group
     //     return UserModel.create(value);
     // }
 }
-
+Group.hasMany(GroupAgenda, {
+    sourceKey: "id",
+    foreignKey: "groupId",
+    as: "agendas" // this determines the name in `associations`!
+});
 export default Group;

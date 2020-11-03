@@ -9,8 +9,10 @@ class GroupAgenda
     implements GroupAgendaTypes.GroupAgendaBody {
     public id!: number;
     public content!: string;
+    public groupId!: number;
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
+
     static initiate(connection: Sequelize): Model {
         const opt: GroupAgendaModelTypes.IBaseGroupAgendaTableOptions = {
             sequelize: connection,
@@ -22,5 +24,5 @@ class GroupAgenda
     //     return UserModel.create(value);
     // }
 }
-
+// GroupAgenda.Group = GroupAgenda.belongsTo(Group);
 export default GroupAgenda;
