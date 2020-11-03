@@ -1,5 +1,6 @@
 import GroupDBManager from "@src/models/GroupDBManager";
 import Group from "@src/models/GroupModel";
+import GroupAgenda from "@src/models/GroupAgendaModel";
 import LogService from "@src/utils/LogService";
 import Dao from "@src/dao/Dao";
 import { GroupTypes } from "@src/vo/group/controllers/Group";
@@ -12,6 +13,11 @@ class GroupDao extends Dao {
     protected async connect() {
         this.db = new GroupDBManager();
         Group.initiate(this.db.getConnection());
+        Group.hasMany(GroupAgenda, {
+            sourceKey: "id",
+            foreignKey: "groupId",
+            as: "agendas" // this determines the name in `associations`!
+        });
         await Group.sync();
     }
 

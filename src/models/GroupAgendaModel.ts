@@ -17,7 +17,7 @@ class GroupAgenda
     static initiate(connection: Sequelize): Model {
         const opt: GroupAgendaModelTypes.IBaseGroupAgendaTableOptions = {
             sequelize: connection,
-            tableName: "User"
+            tableName: "GroupAgenda"
         };
         return GroupAgenda.init(GroupAgendaModelTypes.attr, opt);
     }

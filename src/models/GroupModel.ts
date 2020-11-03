@@ -23,7 +23,7 @@ class Group
     static initiate(connection: Sequelize): Model {
         const opt: GroupModelTypes.IBaseGroupTableOptions = {
             sequelize: connection,
-            tableName: "User"
+            tableName: "Group"
         };
         return Group.init(GroupModelTypes.attr, opt);
     }
@@ -31,9 +31,5 @@ class Group
     //     return UserModel.create(value);
     // }
 }
-Group.hasMany(GroupAgenda, {
-    sourceKey: "id",
-    foreignKey: "groupId",
-    as: "agendas" // this determines the name in `associations`!
-});
+
 export default Group;
