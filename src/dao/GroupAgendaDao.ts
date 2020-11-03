@@ -3,6 +3,7 @@ import GroupAgenda from "@src/models/GroupAgendaModel";
 import LogService from "@src/utils/LogService";
 import Dao from "@src/dao/Dao";
 import { GroupAgendaTypes } from "@src/vo/group/controllers/GroupAgenda";
+import Group from "@src/models/GroupModel";
 /*
 update, delete logic need to change
 */
@@ -14,6 +15,10 @@ class GroupAgendaDao extends Dao {
     protected async connect() {
         this.db = new GroupDBManager();
         GroupAgenda.initiate(this.db.getConnection());
+        // GroupAgenda.belongsTo(Group, {
+        //     targetKey: "id",
+        //     foreignKey: "groupId"
+        // });
         await GroupAgenda.sync();
     }
 

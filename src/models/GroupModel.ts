@@ -1,7 +1,18 @@
-import { Model, Sequelize, Optional, Association } from "sequelize";
+import {
+    Model,
+    Sequelize,
+    Optional,
+    Association,
+    HasManyGetAssociationsMixin,
+    HasManyAddAssociationMixin,
+    HasManyHasAssociationMixin,
+    HasManyCountAssociationsMixin,
+    HasManyCreateAssociationMixin
+} from "sequelize";
 import { GroupModelTypes } from "@src/vo/group/models/GroupModel";
 import { GroupTypes } from "@src/vo/group/controllers/Group";
 import GroupAgenda from "@src/models/GroupAgendaModel";
+
 interface GroupCreationAttributes
     extends Optional<GroupTypes.GroupBody, "id"> {}
 class Group
@@ -14,11 +25,20 @@ class Group
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
 
-    public readonly groupAgenda?: GroupAgenda[];
+    // Since TS cannot determine model association at compile time
+    // we have to declare them here purely virtually
+    // these will not exist until `Model.init` was called.
+    // public getGroupAgendas!: HasManyGetAssociationsMixin<GroupAgenda>; // Note the null assertions!
+    // public addGroupAgenda!: HasManyAddAssociationMixin<GroupAgenda, number>;
+    // public hasGroupAgenda!: HasManyHasAssociationMixin<GroupAgenda, number>;
+    // public countGroupAgenda!: HasManyCountAssociationsMixin;
+    // public createGroupAgenda!: HasManyCreateAssociationMixin<GroupAgenda>;
 
-    public static associations: {
-        agendas: Association<Group, GroupAgenda>;
-    };
+    // public readonly groupAgenda?: GroupAgenda[];
+
+    // public static associations: {
+    //     agendas: Association<Group, GroupAgenda>;
+    // };
 
     static initiate(connection: Sequelize): Model {
         const opt: GroupModelTypes.IBaseGroupTableOptions = {
