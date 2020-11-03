@@ -2,6 +2,7 @@ import { Model, Sequelize, Optional } from "sequelize";
 import { GroupAgendaModelTypes } from "@src/vo/group/models/GroupAgendaModel";
 import { GroupAgendaTypes } from "@src/vo/group/controllers/GroupAgenda";
 import Group from "@src/models/GroupModel";
+
 interface GroupCreationAttributes
     extends Optional<GroupAgendaTypes.GroupAgendaBody, "id"> {}
 class GroupAgenda
