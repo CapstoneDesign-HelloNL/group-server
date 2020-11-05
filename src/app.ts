@@ -20,6 +20,7 @@ app.use(
     })
 );
 app.use("/api", apiRouter);
+
 if (process.env.NODE_ENV !== "test")
     app.listen(process.env.SERVER_PORT || 3000);
 

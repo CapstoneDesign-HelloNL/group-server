@@ -28,17 +28,17 @@ class Group
     // Since TS cannot determine model association at compile time
     // we have to declare them here purely virtually
     // these will not exist until `Model.init` was called.
-    // public getGroupAgendas!: HasManyGetAssociationsMixin<GroupAgenda>; // Note the null assertions!
-    // public addGroupAgenda!: HasManyAddAssociationMixin<GroupAgenda, number>;
-    // public hasGroupAgenda!: HasManyHasAssociationMixin<GroupAgenda, number>;
-    // public countGroupAgenda!: HasManyCountAssociationsMixin;
-    // public createGroupAgenda!: HasManyCreateAssociationMixin<GroupAgenda>;
+    public getGroupAgendas!: HasManyGetAssociationsMixin<GroupAgenda>; // Note the null assertions!
+    public addGroupAgenda!: HasManyAddAssociationMixin<GroupAgenda, number>;
+    public hasGroupAgenda!: HasManyHasAssociationMixin<GroupAgenda, number>;
+    public countGroupAgenda!: HasManyCountAssociationsMixin;
+    public createGroupAgenda!: HasManyCreateAssociationMixin<GroupAgenda>;
 
-    // public readonly groupAgenda?: GroupAgenda[];
+    public readonly groupAgenda?: GroupAgenda[];
 
-    // public static associations: {
-    //     agendas: Association<Group, GroupAgenda>;
-    // };
+    public static associations: {
+        agendas: Association<Group, GroupAgenda>;
+    };
 
     static initiate(connection: Sequelize): Model {
         const opt: GroupModelTypes.IBaseGroupTableOptions = {

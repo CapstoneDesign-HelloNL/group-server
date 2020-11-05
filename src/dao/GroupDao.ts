@@ -13,8 +13,16 @@ class GroupDao extends Dao {
     protected async connect() {
         this.db = new GroupDBManager();
         Group.initiate(this.db.getConnection());
-        Group.hasMany(GroupAgenda);
+        GroupAgenda.initiate(this.db.getConnection());
+
+        Group.hasMany(GroupAgenda, {
+            sourceKey: "id",
+            foreignKey: "groupId",
+            as: "agendas" // this determines the name in `associations`!
+        });
+
         await Group.sync();
+        await GroupAgenda.sync();
     }
 
     protected async endConnect() {

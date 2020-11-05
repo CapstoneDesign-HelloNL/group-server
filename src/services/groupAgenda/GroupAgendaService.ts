@@ -1,14 +1,16 @@
 import { Request, Response, NextFunction } from "express";
 
 import { GroupAgendaTypes } from "@src/vo/group/controllers/GroupAgenda";
-import Group from "@src/models/GroupModel";
-import GroupDao from "@src/dao/GroupDao";
+import GroupAgenda from "@src/models/GroupAgendaModel";
+import GroupAgendaDao from "@src/dao/GroupAgendaDao";
 
 class GroupAgendaService {
-    static async findAll(req: Request): Promise<Group | string> {
+    static async findAll(req: Request): Promise<GroupAgenda | string> {
         const groupBody: GroupAgendaTypes.GroupAgendaPostBody = req.body;
         if (!groupBody.content) return "BadRequest";
-        const find = await GroupDao.getInstance().findAll(groupBody.content);
+        const find = await GroupAgendaDao.getInstance().findAll(
+            groupBody.content
+        );
         switch (find) {
             case undefined:
                 return "InternalServerError";
@@ -27,9 +29,11 @@ class GroupAgendaService {
         if (!groupAgedaBody.content) return "BadRequest";
 
         const groupAgenda:
-            | Group
+            | GroupAgenda
             | null
-            | undefined = await GroupDao.getInstance().save(groupAgedaBody);
+            | undefined = await GroupAgendaDao.getInstance().save(
+            groupAgedaBody
+        );
         switch (groupAgenda) {
             case undefined:
                 return "InternalServerError";
@@ -51,7 +55,9 @@ class GroupAgendaService {
         const group:
             | any
             | null
-            | undefined = await GroupDao.getInstance().update(groupAgendaBody);
+            | undefined = await GroupAgendaDao.getInstance().update(
+            groupAgendaBody
+        );
         switch (group) {
             case undefined:
                 return "InternalServerError";
@@ -73,7 +79,7 @@ class GroupAgendaService {
         const group:
             | number
             | null
-            | undefined = await GroupDao.getInstance().destroy(groupBody);
+            | undefined = await GroupAgendaDao.getInstance().destroy(groupBody);
         switch (group) {
             case undefined:
                 return "InternalServerError";
