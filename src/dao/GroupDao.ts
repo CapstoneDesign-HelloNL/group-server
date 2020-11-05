@@ -25,6 +25,18 @@ class GroupDao extends Dao {
             as: "agendas" // this determines the name in `associations`!
         });
 
+        Group.hasMany(GroupNotice, {
+            sourceKey: "id",
+            foreignKey: "groupId",
+            as: "notices" // this determines the name in `associations`!
+        });
+
+        Group.hasMany(GroupSchedule, {
+            sourceKey: "id",
+            foreignKey: "groupId",
+            as: "schedules" // this determines the name in `associations`!
+        });
+
         await Group.sync();
         await GroupAgenda.sync();
     }
