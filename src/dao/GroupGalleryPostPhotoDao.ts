@@ -1,34 +1,34 @@
 import GroupDBManager from "@src/models/GroupDBManager";
-import GroupAgenda from "@src/models/GroupAgendaModel";
+import GroupGalleryPostPhoto from "@src/models/GroupGalleryPostPhotoModel";
 import LogService from "@src/utils/LogService";
 import Dao from "@src/dao/Dao";
-import { GroupAgendaTypes } from "@src/vo/group/controllers/GroupAgenda";
+import { GroupGalleryPostPhotoTypes } from "@src/vo/group/controllers/GroupGalleryPostPhoto";
 import Group from "@src/models/GroupModel";
 /*
 update, delete logic need to change
 */
 const logger = LogService.getInstance();
-class GroupAgendaDao extends Dao {
+class GroupGalleryPostPhotoDao extends Dao {
     private constructor() {
         super();
     }
     protected async connect() {
         this.db = new GroupDBManager();
-        GroupAgenda.initiate(this.db.getConnection());
+        GroupGalleryPostPhoto.initiate(this.db.getConnection());
         Group.initiate(this.db.getConnection());
         await Group.sync();
-        await GroupAgenda.sync();
+        await GroupGalleryPostPhoto.sync();
     }
 
     protected async endConnect() {
         await this.db?.endConnection();
     }
-    async find(id: number): Promise<GroupAgenda | null | undefined> {
+    async find(id: number): Promise<GroupGalleryPostPhoto | null | undefined> {
         await this.connect();
-        let groupAgenda: GroupAgenda | null = null;
-        console.log(groupAgenda);
+        let groupGalleryPostPhoto: GroupGalleryPostPhoto | null = null;
+        console.log(groupGalleryPostPhoto);
         try {
-            groupAgenda = await GroupAgenda.findOne({
+            groupGalleryPostPhoto = await GroupGalleryPostPhoto.findOne({
                 where: {
                     id
                 }
@@ -39,15 +39,15 @@ class GroupAgendaDao extends Dao {
             return undefined;
         }
         await this.endConnect();
-        return groupAgenda;
+        return groupGalleryPostPhoto;
     }
 
-    async findAll(): Promise<GroupAgenda[] | null | undefined> {
+    async findAll(): Promise<GroupGalleryPostPhoto[] | null | undefined> {
         await this.connect();
-        let groups: GroupAgenda[] | null = null;
+        let groups: GroupGalleryPostPhoto[] | null = null;
         console.log(groups);
         try {
-            groups = await GroupAgenda.findAll();
+            groups = await GroupGalleryPostPhoto.findAll();
         } catch (err) {
             logger.error(err);
             await this.endConnect();
@@ -58,60 +58,62 @@ class GroupAgendaDao extends Dao {
     }
 
     async save(
-        groupAgendaData: GroupAgendaTypes.GroupAgendaPostBody
-    ): Promise<GroupAgenda | undefined> {
+        groupGalleryPostPhotoData: GroupGalleryPostPhotoTypes.GroupGalleryPostPhotoPostBody
+    ): Promise<GroupGalleryPostPhoto | undefined> {
         await this.connect();
         if (process.env.NODE_ENV === "test")
-            await GroupAgenda.sync({ force: true });
+            await GroupGalleryPostPhoto.sync({ force: true });
         // else await Group.sync();
 
-        let newGroupAgenda: GroupAgenda | null = null;
+        let newGroupGalleryPostPhoto: GroupGalleryPostPhoto | null = null;
         try {
-            newGroupAgenda = await GroupAgenda.create(groupAgendaData);
-        } catch (err) {
-            logger.error(err);
-            return undefined;
-        }
-        await this.endConnect();
-        return newGroupAgenda;
-    }
-
-    async update(
-        groupAgendaData: GroupAgendaTypes.GroupAgendaPostBody,
-        afterGroupAgendaData: GroupAgendaTypes.GroupAgendaPostBody
-    ): Promise<any | null | undefined> {
-        await this.connect();
-        if (process.env.NODE_ENV === "test")
-            await GroupAgenda.sync({ force: true });
-        // else await Group.sync();
-
-        let updateGroupAgenda: any | null = null;
-        try {
-            updateGroupAgenda = await GroupAgenda.update(
-                { ...afterGroupAgendaData },
-                { where: { ...groupAgendaData } }
+            newGroupGalleryPostPhoto = await GroupGalleryPostPhoto.create(
+                groupGalleryPostPhotoData
             );
         } catch (err) {
             logger.error(err);
             return undefined;
         }
         await this.endConnect();
-        return updateGroupAgenda;
+        return newGroupGalleryPostPhoto;
+    }
+
+    async update(
+        groupGalleryPostPhotoData: GroupGalleryPostPhotoTypes.GroupGalleryPostPhotoPostBody,
+        afterGroupGalleryPostPhotoData: GroupGalleryPostPhotoTypes.GroupGalleryPostPhotoPostBody
+    ): Promise<any | null | undefined> {
+        await this.connect();
+        if (process.env.NODE_ENV === "test")
+            await GroupGalleryPostPhoto.sync({ force: true });
+        // else await Group.sync();
+
+        let updateGroupGalleryPostPhoto: any | null = null;
+        try {
+            updateGroupGalleryPostPhoto = await GroupGalleryPostPhoto.update(
+                { ...afterGroupGalleryPostPhotoData },
+                { where: { ...groupGalleryPostPhotoData } }
+            );
+        } catch (err) {
+            logger.error(err);
+            return undefined;
+        }
+        await this.endConnect();
+        return updateGroupGalleryPostPhoto;
     }
 
     async delete(
-        groupAgendaData: GroupAgendaTypes.GroupAgendaPostBody
+        groupGalleryPostPhotoData: GroupGalleryPostPhotoTypes.GroupGalleryPostPhotoPostBody
     ): Promise<number | undefined> {
         await this.connect();
         if (process.env.NODE_ENV === "test")
-            await GroupAgenda.sync({ force: true });
+            await GroupGalleryPostPhoto.sync({ force: true });
         // else await Group.sync();
 
-        let deleteAgendaGroup: number | null = null;
+        let deleteGalleryPostPhotoGroup: number | null = null;
         try {
-            deleteAgendaGroup = await GroupAgenda.destroy({
+            deleteGalleryPostPhotoGroup = await GroupGalleryPostPhoto.destroy({
                 where: {
-                    ...groupAgendaData
+                    ...groupGalleryPostPhotoData
                 }
             });
         } catch (err) {
@@ -119,8 +121,8 @@ class GroupAgendaDao extends Dao {
             return undefined;
         }
         await this.endConnect();
-        return deleteAgendaGroup; //1 is success, 0 or undefined are fail
+        return deleteGalleryPostPhotoGroup; //1 is success, 0 or undefined are fail
     }
 }
 
-export default GroupAgendaDao;
+export default GroupGalleryPostPhotoDao;

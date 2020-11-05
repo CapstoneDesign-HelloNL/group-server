@@ -1,6 +1,8 @@
 import GroupDBManager from "@src/models/GroupDBManager";
 import Group from "@src/models/GroupModel";
 import GroupAgenda from "@src/models/GroupAgendaModel";
+import GroupSchedule from "@src/models/GroupScheduleModel";
+import GroupNotice from "@src/models/GroupScheduleModel";
 import LogService from "@src/utils/LogService";
 import Dao from "@src/dao/Dao";
 import { GroupTypes } from "@src/vo/group/controllers/Group";
@@ -14,6 +16,8 @@ class GroupDao extends Dao {
         this.db = new GroupDBManager();
         Group.initiate(this.db.getConnection());
         GroupAgenda.initiate(this.db.getConnection());
+        GroupNotice.initiate(this.db.getConnection());
+        GroupSchedule.initiate(this.db.getConnection());
 
         Group.hasMany(GroupAgenda, {
             sourceKey: "id",

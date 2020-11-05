@@ -1,34 +1,34 @@
 import GroupDBManager from "@src/models/GroupDBManager";
-import GroupAgenda from "@src/models/GroupAgendaModel";
+import GroupNotice from "@src/models/GroupNoticeModel";
 import LogService from "@src/utils/LogService";
 import Dao from "@src/dao/Dao";
-import { GroupAgendaTypes } from "@src/vo/group/controllers/GroupAgenda";
+import { GroupNoticeTypes } from "@src/vo/group/controllers/GroupNotice";
 import Group from "@src/models/GroupModel";
 /*
 update, delete logic need to change
 */
 const logger = LogService.getInstance();
-class GroupAgendaDao extends Dao {
+class GroupNoticeDao extends Dao {
     private constructor() {
         super();
     }
     protected async connect() {
         this.db = new GroupDBManager();
-        GroupAgenda.initiate(this.db.getConnection());
+        GroupNotice.initiate(this.db.getConnection());
         Group.initiate(this.db.getConnection());
         await Group.sync();
-        await GroupAgenda.sync();
+        await GroupNotice.sync();
     }
 
     protected async endConnect() {
         await this.db?.endConnection();
     }
-    async find(id: number): Promise<GroupAgenda | null | undefined> {
+    async find(id: number): Promise<GroupNotice | null | undefined> {
         await this.connect();
-        let groupAgenda: GroupAgenda | null = null;
-        console.log(groupAgenda);
+        let groupNotice: GroupNotice | null = null;
+        console.log(groupNotice);
         try {
-            groupAgenda = await GroupAgenda.findOne({
+            groupNotice = await GroupNotice.findOne({
                 where: {
                     id
                 }
@@ -39,15 +39,15 @@ class GroupAgendaDao extends Dao {
             return undefined;
         }
         await this.endConnect();
-        return groupAgenda;
+        return groupNotice;
     }
 
-    async findAll(): Promise<GroupAgenda[] | null | undefined> {
+    async findAll(): Promise<GroupNotice[] | null | undefined> {
         await this.connect();
-        let groups: GroupAgenda[] | null = null;
+        let groups: GroupNotice[] | null = null;
         console.log(groups);
         try {
-            groups = await GroupAgenda.findAll();
+            groups = await GroupNotice.findAll();
         } catch (err) {
             logger.error(err);
             await this.endConnect();
@@ -58,60 +58,60 @@ class GroupAgendaDao extends Dao {
     }
 
     async save(
-        groupAgendaData: GroupAgendaTypes.GroupAgendaPostBody
-    ): Promise<GroupAgenda | undefined> {
+        groupNoticeData: GroupNoticeTypes.GroupNoticePostBody
+    ): Promise<GroupNotice | undefined> {
         await this.connect();
         if (process.env.NODE_ENV === "test")
-            await GroupAgenda.sync({ force: true });
+            await GroupNotice.sync({ force: true });
         // else await Group.sync();
 
-        let newGroupAgenda: GroupAgenda | null = null;
+        let newGroupNotice: GroupNotice | null = null;
         try {
-            newGroupAgenda = await GroupAgenda.create(groupAgendaData);
+            newGroupNotice = await GroupNotice.create(groupNoticeData);
         } catch (err) {
             logger.error(err);
             return undefined;
         }
         await this.endConnect();
-        return newGroupAgenda;
+        return newGroupNotice;
     }
 
     async update(
-        groupAgendaData: GroupAgendaTypes.GroupAgendaPostBody,
-        afterGroupAgendaData: GroupAgendaTypes.GroupAgendaPostBody
+        groupNoticeData: GroupNoticeTypes.GroupNoticePostBody,
+        afterGroupNoticeData: GroupNoticeTypes.GroupNoticePostBody
     ): Promise<any | null | undefined> {
         await this.connect();
         if (process.env.NODE_ENV === "test")
-            await GroupAgenda.sync({ force: true });
+            await GroupNotice.sync({ force: true });
         // else await Group.sync();
 
-        let updateGroupAgenda: any | null = null;
+        let updateGroupNotice: any | null = null;
         try {
-            updateGroupAgenda = await GroupAgenda.update(
-                { ...afterGroupAgendaData },
-                { where: { ...groupAgendaData } }
+            updateGroupNotice = await GroupNotice.update(
+                { ...afterGroupNoticeData },
+                { where: { ...groupNoticeData } }
             );
         } catch (err) {
             logger.error(err);
             return undefined;
         }
         await this.endConnect();
-        return updateGroupAgenda;
+        return updateGroupNotice;
     }
 
     async delete(
-        groupAgendaData: GroupAgendaTypes.GroupAgendaPostBody
+        groupNoticeData: GroupNoticeTypes.GroupNoticePostBody
     ): Promise<number | undefined> {
         await this.connect();
         if (process.env.NODE_ENV === "test")
-            await GroupAgenda.sync({ force: true });
+            await GroupNotice.sync({ force: true });
         // else await Group.sync();
 
-        let deleteAgendaGroup: number | null = null;
+        let deleteNoticeGroup: number | null = null;
         try {
-            deleteAgendaGroup = await GroupAgenda.destroy({
+            deleteNoticeGroup = await GroupNotice.destroy({
                 where: {
-                    ...groupAgendaData
+                    ...groupNoticeData
                 }
             });
         } catch (err) {
@@ -119,8 +119,8 @@ class GroupAgendaDao extends Dao {
             return undefined;
         }
         await this.endConnect();
-        return deleteAgendaGroup; //1 is success, 0 or undefined are fail
+        return deleteNoticeGroup; //1 is success, 0 or undefined are fail
     }
 }
 
-export default GroupAgendaDao;
+export default GroupNoticeDao;
