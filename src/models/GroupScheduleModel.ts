@@ -1,29 +1,36 @@
 import { Model, Sequelize, Optional } from "sequelize";
-import { GroupAgendaModelTypes } from "@src/vo/group/models/GroupAgendaModel";
-import { GroupAgendaTypes } from "@src/vo/group/controllers/GroupAgenda";
+import { GroupScheduleModelTypes } from "@src/vo/group/models/GroupScheduleModel";
+import { GroupScheduleTypes } from "@src/vo/group/controllers/GroupSchedule";
 import Group from "@src/models/GroupModel";
 
-interface GroupCreationAttributes
-    extends Optional<GroupAgendaTypes.GroupAgendaBody, "id"> {}
-class GroupAgenda
-    extends Model<GroupAgendaTypes.GroupAgendaBody, GroupCreationAttributes>
-    implements GroupAgendaTypes.GroupAgendaBody {
+interface GroupScheduleCreationAttributes
+    extends Optional<GroupScheduleTypes.GroupScheduleBody, "id"> {}
+class GroupSchedule
+    extends Model<
+        GroupScheduleTypes.GroupScheduleBody,
+        GroupScheduleCreationAttributes
+    >
+    implements GroupScheduleTypes.GroupScheduleBody {
     public id!: number;
+    public title!: string;
     public content!: string;
+    public author!: string;
+    public startDate!: Date;
+    public endDate!: Date;
     public groupId!: number;
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
 
     static initiate(connection: Sequelize): Model {
-        const opt: GroupAgendaModelTypes.IBaseGroupAgendaTableOptions = {
+        const opt: GroupScheduleModelTypes.IBaseGroupScheduleTableOptions = {
             sequelize: connection,
-            tableName: "GroupAgenda"
+            tableName: "GroupSchedule"
         };
-        return GroupAgenda.init(GroupAgendaModelTypes.attr, opt);
+        return GroupSchedule.init(GroupScheduleModelTypes.attr, opt);
     }
     // static createUser(value: GroupTypes.GroupPostBody) {
     //     return UserModel.create(value);
     // }
 }
-// GroupAgenda.Group = GroupAgenda.belongsTo(Group);
-export default GroupAgenda;
+// GroupSchedule.Group = GroupSchedule.belongsTo(Group);
+export default GroupSchedule;

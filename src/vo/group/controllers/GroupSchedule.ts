@@ -3,6 +3,8 @@ export namespace GroupScheduleTypes {
         title: string;
         content: string;
         author: string;
+        startDate: Date;
+        endDate: Date;
         groupId: number;
     }
     export interface GroupScheduleBody extends GroupSchedulePostBody {

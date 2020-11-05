@@ -1,25 +1,31 @@
 import { Model, Sequelize, Optional } from "sequelize";
-import { GroupAgendaModelTypes } from "@src/vo/group/models/GroupAgendaModel";
-import { GroupAgendaTypes } from "@src/vo/group/controllers/GroupAgenda";
+import { GroupNoticeModelTypes } from "@src/vo/group/models/GroupNoticeModel";
+import { GroupNoticeTypes } from "@src/vo/group/controllers/GroupNotice";
 import Group from "@src/models/GroupModel";
 
-interface GroupCreationAttributes
-    extends Optional<GroupAgendaTypes.GroupAgendaBody, "id"> {}
+interface GroupNoticeCreationAttributes
+    extends Optional<GroupNoticeTypes.GroupNoticeBody, "id"> {}
 class GroupAgenda
-    extends Model<GroupAgendaTypes.GroupAgendaBody, GroupCreationAttributes>
-    implements GroupAgendaTypes.GroupAgendaBody {
+    extends Model<
+        GroupNoticeTypes.GroupNoticeBody,
+        GroupNoticeCreationAttributes
+    >
+    implements GroupNoticeTypes.GroupNoticeBody {
     public id!: number;
+    public title!: string;
     public content!: string;
+    public author!: string;
+    public photo!: string;
     public groupId!: number;
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
 
     static initiate(connection: Sequelize): Model {
-        const opt: GroupAgendaModelTypes.IBaseGroupAgendaTableOptions = {
+        const opt: GroupNoticeModelTypes.IBaseGroupNoticeTableOptions = {
             sequelize: connection,
             tableName: "GroupAgenda"
         };
-        return GroupAgenda.init(GroupAgendaModelTypes.attr, opt);
+        return GroupAgenda.init(GroupNoticeModelTypes.attr, opt);
     }
     // static createUser(value: GroupTypes.GroupPostBody) {
     //     return UserModel.create(value);

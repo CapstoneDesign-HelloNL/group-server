@@ -1,9 +1,9 @@
 export namespace GroupGalleryPostPhotoTypes {
     export interface GroupGalleryPostPhotoPostBody {
-        galleryPostUrl: string;
+        galleryPostPhotoUrl: string;
         galleryPostId: number;
     }
-    export interface GroupGaleryPostPhotoBody
+    export interface GroupGalleryPostPhotoBody
         extends GroupGalleryPostPhotoPostBody {
         id: number;
     }
