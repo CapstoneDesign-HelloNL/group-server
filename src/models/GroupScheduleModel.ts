@@ -1,7 +1,6 @@
 import { Model, Sequelize, Optional } from "sequelize";
 import { GroupScheduleModelTypes } from "@src/vo/group/models/GroupScheduleModel";
 import { GroupScheduleTypes } from "@src/vo/group/controllers/GroupSchedule";
-import Group from "@src/models/GroupModel";
 
 interface GroupScheduleCreationAttributes
     extends Optional<GroupScheduleTypes.GroupScheduleBody, "id"> {}
