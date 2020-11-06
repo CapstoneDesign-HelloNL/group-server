@@ -1,8 +1,10 @@
 import GroupDBManager from "@src/models/GroupDBManager";
+import Member from "@src/models/MemberModel";
 import Group from "@src/models/GroupModel";
 import GroupAgenda from "@src/models/GroupAgendaModel";
 import GroupSchedule from "@src/models/GroupScheduleModel";
 import GroupNotice from "@src/models/GroupScheduleModel";
+import GroupToMember from "@src/models/GroupToMemberModel";
 import LogService from "@src/utils/LogService";
 import Dao from "@src/dao/Dao";
 import { GroupTypes } from "@src/vo/group/controllers/Group";
@@ -11,8 +13,6 @@ const logger = LogService.getInstance();
 class GroupDao extends Dao {
     private constructor() {
         super();
-    }
-    protected async connect() {
         this.db = new GroupDBManager();
         Group.initiate(this.db.getConnection());
         GroupAgenda.initiate(this.db.getConnection());
@@ -37,8 +37,49 @@ class GroupDao extends Dao {
             as: "schedules" // this determines the name in `associations`!
         });
 
-        await Group.sync();
-        await GroupAgenda.sync();
+        Group.belongsToMany(Member, { through: "GroupToMember" });
+        const test = async () => {
+            await Group.sync();
+            await GroupAgenda.sync();
+            await GroupNotice.sync();
+            await GroupSchedule.sync();
+            await GroupToMember.sync();
+            await this.endConnect();
+        };
+        test();
+    }
+    protected async connect() {
+        this.db = new GroupDBManager();
+        // Group.initiate(this.db.getConnection());
+        // GroupAgenda.initiate(this.db.getConnection());
+        // GroupNotice.initiate(this.db.getConnection());
+        // GroupSchedule.initiate(this.db.getConnection());
+
+        // Group.hasMany(GroupAgenda, {
+        //     sourceKey: "id",
+        //     foreignKey: "groupId",
+        //     as: "agendas" // this determines the name in `associations`!
+        // });
+
+        // Group.hasMany(GroupNotice, {
+        //     sourceKey: "id",
+        //     foreignKey: "groupId",
+        //     as: "notices" // this determines the name in `associations`!
+        // });
+
+        // Group.hasMany(GroupSchedule, {
+        //     sourceKey: "id",
+        //     foreignKey: "groupId",
+        //     as: "schedules" // this determines the name in `associations`!
+        // });
+
+        // Group.belongsToMany(Member, { through: "GroupToMember" });
+
+        // await Group.sync();
+        // await GroupAgenda.sync();
+        // await GroupNotice.sync();
+        // await GroupSchedule.sync();
+        // await GroupToMember.sync();
     }
 
     protected async endConnect() {
