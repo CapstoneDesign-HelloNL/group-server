@@ -19,7 +19,7 @@ class GroupToMember
     static initiate(connection: Sequelize): Model {
         const opt: GroupToMemberModelTypes.IBaseGroupToMemberTableOptions = {
             sequelize: connection,
-            tableName: "User"
+            tableName: "GroupToMember"
         };
         return GroupToMember.init(GroupToMemberModelTypes.attr, opt);
     }

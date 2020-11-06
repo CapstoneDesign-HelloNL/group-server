@@ -10,7 +10,7 @@ export namespace MemberModelTypes {
         allowNull: boolean;
     }
     export interface IMemberScheme extends ModelAttributes {
-        userId: IColumnOption;
+        memberId: IColumnOption;
     }
     export const attr: MemberModelTypes.IMemberScheme = {
         id: {
@@ -18,7 +18,7 @@ export namespace MemberModelTypes {
             autoIncrement: true,
             primaryKey: true
         },
-        userId: {
+        memberId: {
             type: DataTypes.INTEGER,
             allowNull: false
         }

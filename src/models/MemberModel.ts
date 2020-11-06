@@ -14,7 +14,7 @@ class Member
     static initiate(connection: Sequelize): Model {
         const opt: MemberModelTypes.IBaseMemberTableOptions = {
             sequelize: connection,
-            tableName: "User"
+            tableName: "Member"
         };
         return Member.init(MemberModelTypes.attr, opt);
     }

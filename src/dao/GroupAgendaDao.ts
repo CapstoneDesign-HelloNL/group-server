@@ -11,6 +11,16 @@ const logger = LogService.getInstance();
 class GroupAgendaDao extends Dao {
     private constructor() {
         super();
+        this.db = new GroupDBManager();
+        GroupAgenda.initiate(this.db.getConnection());
+        Group.initiate(this.db.getConnection());
+
+        const firstSync = async () => {
+            await Group.sync();
+            await GroupAgenda.sync();
+            await this.endConnect();
+        };
+        firstSync();
     }
     protected async connect() {
         this.db = new GroupDBManager();

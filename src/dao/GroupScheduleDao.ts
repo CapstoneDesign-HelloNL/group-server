@@ -11,13 +11,19 @@ const logger = LogService.getInstance();
 class GroupScheduleDao extends Dao {
     private constructor() {
         super();
-    }
-    protected async connect() {
         this.db = new GroupDBManager();
         GroupSchedule.initiate(this.db.getConnection());
         Group.initiate(this.db.getConnection());
-        await Group.sync();
-        await GroupSchedule.sync();
+
+        const firstSync = async () => {
+            await Group.sync();
+            await GroupSchedule.sync();
+            await this.endConnect();
+        };
+        firstSync();
+    }
+    protected async connect() {
+        this.db = new GroupDBManager();
     }
 
     protected async endConnect() {

@@ -5,7 +5,7 @@ import Group from "@src/models/GroupModel";
 
 interface GroupNoticeCreationAttributes
     extends Optional<GroupNoticeTypes.GroupNoticeBody, "id"> {}
-class GroupAgenda
+class GroupNotice
     extends Model<
         GroupNoticeTypes.GroupNoticeBody,
         GroupNoticeCreationAttributes
@@ -23,13 +23,13 @@ class GroupAgenda
     static initiate(connection: Sequelize): Model {
         const opt: GroupNoticeModelTypes.IBaseGroupNoticeTableOptions = {
             sequelize: connection,
-            tableName: "GroupAgenda"
+            tableName: "GroupNotice"
         };
-        return GroupAgenda.init(GroupNoticeModelTypes.attr, opt);
+        return GroupNotice.init(GroupNoticeModelTypes.attr, opt);
     }
     // static createUser(value: GroupTypes.GroupPostBody) {
     //     return UserModel.create(value);
     // }
 }
 // GroupAgenda.Group = GroupAgenda.belongsTo(Group);
-export default GroupAgenda;
+export default GroupNotice;

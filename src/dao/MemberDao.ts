@@ -4,6 +4,7 @@ import LogService from "@src/utils/LogService";
 import Dao from "@src/dao/Dao";
 import { GroupAgendaTypes } from "@src/vo/group/controllers/GroupAgenda";
 import Group from "@src/models/GroupModel";
+import Member from "@src/models/MemberModel";
 /*
 update, delete logic need to change
 */
@@ -11,13 +12,21 @@ const logger = LogService.getInstance();
 class GroupAgendaDao extends Dao {
     private constructor() {
         super();
-    }
-    protected async connect() {
         this.db = new GroupDBManager();
         GroupAgenda.initiate(this.db.getConnection());
         Group.initiate(this.db.getConnection());
-        await Group.sync();
-        await GroupAgenda.sync();
+        Member.belongsToMany(Group, { through: "GroupToMember" });
+
+        const firstSync = async () => {
+            await Group.sync();
+            await GroupAgenda.sync();
+            await Member.sync();
+            await this.endConnect();
+        };
+        firstSync();
+    }
+    protected async connect() {
+        this.db = new GroupDBManager();
     }
 
     protected async endConnect() {

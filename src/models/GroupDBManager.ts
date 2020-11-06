@@ -37,6 +37,9 @@ class GroupDBManager extends DBManager {
     getConnection(): Sequelize {
         return this.connection;
     }
+    async sync(): Promise<void> {
+        await this.connection.sync();
+    }
     async endConnection(): Promise<void> {
         await this.connection
             .close()
