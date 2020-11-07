@@ -1,13 +1,26 @@
-import { Sequelize, DataTypes, InitOptions, ModelAttributes } from "sequelize";
+import {
+    Sequelize,
+    DataTypes,
+    InitOptions,
+    Model,
+    ModelAttributes,
+    ModelAttributeColumnReferencesOptions
+} from "sequelize";
 export namespace GroupGalleryPostToPhotoModelTypes {
     export interface IBaseGroupGalleryPostToPhotoTableOptions
         extends InitOptions {
         sequelize: Sequelize;
         tableName: string;
     }
+    export interface IForeignReferences
+        extends ModelAttributeColumnReferencesOptions {
+        model: string | typeof Model;
+        key: string;
+    }
     export interface IColumnOption {
         type: DataTypes.DataType;
         allowNull: boolean;
+        references?: IForeignReferences;
     }
     export interface IGroupGalleryPostToPhotoScheme extends ModelAttributes {
         galleryPostId: IColumnOption;
@@ -21,11 +34,19 @@ export namespace GroupGalleryPostToPhotoModelTypes {
         },
         galleryPostId: {
             type: DataTypes.INTEGER,
-            allowNull: false
+            allowNull: false,
+            references: {
+                model: "GroupGalleryPost",
+                key: "id"
+            }
         },
         galleryPhotoId: {
             type: DataTypes.INTEGER,
-            allowNull: false
+            allowNull: false,
+            references: {
+                model: "GroupGalleryPostPhoto",
+                key: "id"
+            }
         }
     };
 }

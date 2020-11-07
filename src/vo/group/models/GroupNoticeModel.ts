@@ -17,7 +17,7 @@ export namespace GroupNoticeModelTypes {
     }
     export const attr: GroupNoticeModelTypes.IGroupNoticeScheme = {
         id: {
-            type: DataTypes.INTEGER.UNSIGNED,
+            type: DataTypes.INTEGER,
             autoIncrement: true,
             primaryKey: true
         },

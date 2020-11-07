@@ -18,7 +18,7 @@ export namespace GroupScheduleModelTypes {
     }
     export const attr: GroupScheduleModelTypes.IGroupScheduleScheme = {
         id: {
-            type: DataTypes.INTEGER.UNSIGNED,
+            type: DataTypes.INTEGER,
             autoIncrement: true,
             primaryKey: true
         },

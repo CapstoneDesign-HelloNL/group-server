@@ -14,7 +14,7 @@ export namespace GroupGalleryModelTypes {
     }
     export const attr: GroupGalleryModelTypes.IGroupGalleryScheme = {
         id: {
-            type: DataTypes.INTEGER.UNSIGNED,
+            type: DataTypes.INTEGER,
             autoIncrement: true,
             primaryKey: true
         },

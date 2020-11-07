@@ -29,7 +29,7 @@ class GroupAgenda
     public createGroupAgenda!: BelongsToCreateAssociationMixin<Group>;
     public setGroupAgenda!: BelongsToSetAssociationMixin<Group, "groupId">;
     public static associations: {
-        groups: Association<GroupAgenda, Group>;
+        agendasToGroups: Association<GroupAgenda, Group>;
     };
     static initiate(connection: Sequelize): Model {
         const opt: GroupAgendaModelTypes.IBaseGroupAgendaTableOptions = {

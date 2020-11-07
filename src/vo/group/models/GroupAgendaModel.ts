@@ -14,7 +14,7 @@ export namespace GroupAgendaModelTypes {
     }
     export const attr: GroupAgendaModelTypes.IGroupAgendaScheme = {
         id: {
-            type: DataTypes.INTEGER.UNSIGNED,
+            type: DataTypes.INTEGER,
             autoIncrement: true,
             primaryKey: true
         },
@@ -23,7 +23,7 @@ export namespace GroupAgendaModelTypes {
             allowNull: false
         },
         groupId: {
-            type: DataTypes.INTEGER.UNSIGNED,
+            type: DataTypes.INTEGER,
             allowNull: false
         }
     };

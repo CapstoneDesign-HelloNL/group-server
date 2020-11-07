@@ -1,6 +1,15 @@
-import { Model, Sequelize, Optional } from "sequelize";
+import {
+    Model,
+    Sequelize,
+    Optional,
+    Association,
+    BelongsToGetAssociationMixin,
+    BelongsToCreateAssociationMixin,
+    BelongsToSetAssociationMixin
+} from "sequelize";
 import { GroupScheduleModelTypes } from "@src/vo/group/models/GroupScheduleModel";
 import { GroupScheduleTypes } from "@src/vo/group/controllers/GroupSchedule";
+import Group from "@src/models/group/GroupModel";
 
 interface GroupScheduleCreationAttributes
     extends Optional<GroupScheduleTypes.GroupScheduleBody, "id"> {}
@@ -20,6 +29,12 @@ class GroupSchedule
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
 
+    public getGroupSchedules!: BelongsToGetAssociationMixin<Group>; // Note the null assertions!
+    public createGroupSchedule!: BelongsToCreateAssociationMixin<Group>;
+    public setGroupSchedule!: BelongsToSetAssociationMixin<Group, "groupId">;
+    public static associations: {
+        schedulesToGroups: Association<GroupSchedule, Group>;
+    };
     static initiate(connection: Sequelize): Model {
         const opt: GroupScheduleModelTypes.IBaseGroupScheduleTableOptions = {
             sequelize: connection,
