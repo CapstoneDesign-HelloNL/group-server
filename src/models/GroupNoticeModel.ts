@@ -1,7 +1,6 @@
 import { Model, Sequelize, Optional } from "sequelize";
 import { GroupNoticeModelTypes } from "@src/vo/group/models/GroupNoticeModel";
 import { GroupNoticeTypes } from "@src/vo/group/controllers/GroupNotice";
-import Group from "@src/models/GroupModel";
 
 interface GroupNoticeCreationAttributes
     extends Optional<GroupNoticeTypes.GroupNoticeBody, "id"> {}

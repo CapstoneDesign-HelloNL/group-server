@@ -1,9 +1,8 @@
 import { Model, Sequelize, Optional } from "sequelize";
 import { GroupGalleryPostPhotoModelTypes } from "@src/vo/group/models/GroupGalleryPostPhotoModel";
 import { GroupGalleryPostPhotoTypes } from "@src/vo/group/controllers/GroupGalleryPostPhoto";
-import Group from "@src/models/GroupModel";
 
-interface GroupCreationAttributes
+interface GroupGalleryPostPhotoCreationAttributes
     extends Optional<
         GroupGalleryPostPhotoTypes.GroupGalleryPostPhotoBody,
         "id"
@@ -11,12 +10,11 @@ interface GroupCreationAttributes
 class GroupGalleryPostPhoto
     extends Model<
         GroupGalleryPostPhotoTypes.GroupGalleryPostPhotoBody,
-        GroupCreationAttributes
+        GroupGalleryPostPhotoCreationAttributes
     >
     implements GroupGalleryPostPhotoTypes.GroupGalleryPostPhotoBody {
     public id!: number;
     public galleryPostPhotoUrl!: string;
-    public galleryPostId!: number;
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
 
