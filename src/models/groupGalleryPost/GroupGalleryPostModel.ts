@@ -25,9 +25,5 @@ class GroupGalleryPost
         };
         return GroupGalleryPost.init(GroupGalleryPostModelTypes.attr, opt);
     }
-    // static createUser(value: GroupTypes.GroupPostBody) {
-    //     return UserModel.create(value);
-    // }
 }
-// GroupAgenda.Group = GroupAgenda.belongsTo(Group);
 export default GroupGalleryPost;

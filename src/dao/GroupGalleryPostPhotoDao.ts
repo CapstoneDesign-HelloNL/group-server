@@ -1,23 +1,33 @@
 import GroupDBManager from "@src/models/GroupDBManager";
-import GroupNotice from "@src/models/groupNotice/GroupNoticeModel";
+import GroupGalleryPostPhoto from "@src/models/groupGalleryPostPhoto/GroupGalleryPostPhotoModel";
 import LogService from "@src/utils/LogService";
 import Dao from "@src/dao/Dao";
-import { GroupNoticeTypes } from "@src/vo/group/controllers/GroupNotice";
-import Group from "@src/models/group/GroupModel";
+import { GroupGalleryPostPhotoTypes } from "@src/vo/group/controllers/GroupGalleryPostPhoto";
+import GroupGalleryPost from "@src/models/groupGalleryPost/GroupGalleryPostModel";
+import GroupGalleryPostToPhoto from "@src/models/groupGalleryPostToPhoto/GroupGalleryPostToPhotoModel";
 /*
 update, delete logic need to change
 */
 const logger = LogService.getInstance();
-class GroupNoticeDao extends Dao {
+class GroupGalleryPostPhotoDao extends Dao {
     private constructor() {
         super();
         this.db = new GroupDBManager();
-        GroupNotice.initiate(this.db.getConnection());
-        Group.initiate(this.db.getConnection());
+        GroupGalleryPostPhoto.initiate(this.db.getConnection());
+        GroupGalleryPost.initiate(this.db.getConnection());
+        GroupGalleryPostToPhoto.initiate(this.db.getConnection());
+
+        GroupGalleryPostPhoto.belongsToMany(GroupGalleryPost, {
+            through: "GroupGalleryPostToPhoto"
+        });
+        GroupGalleryPost.belongsToMany(GroupGalleryPostPhoto, {
+            through: "GroupGalleryPostToPhoto"
+        });
 
         const firstSync = async () => {
-            await Group.sync();
-            await GroupNotice.sync();
+            await GroupGalleryPost.sync();
+            await GroupGalleryPostPhoto.sync();
+            await GroupGalleryPostToPhoto.sync();
             await this.endConnect();
         };
         firstSync();
@@ -29,12 +39,12 @@ class GroupNoticeDao extends Dao {
     protected async endConnect() {
         await this.db?.endConnection();
     }
-    async find(id: number): Promise<GroupNotice | null | undefined> {
+    async find(id: number): Promise<GroupGalleryPostPhoto | null | undefined> {
         await this.connect();
-        let groupNotice: GroupNotice | null = null;
-        console.log(groupNotice);
+        let groupGalleryPostPhoto: GroupGalleryPostPhoto | null = null;
+        console.log(groupGalleryPostPhoto);
         try {
-            groupNotice = await GroupNotice.findOne({
+            groupGalleryPostPhoto = await GroupGalleryPostPhoto.findOne({
                 where: {
                     id
                 }
@@ -45,15 +55,15 @@ class GroupNoticeDao extends Dao {
             return undefined;
         }
         await this.endConnect();
-        return groupNotice;
+        return groupGalleryPostPhoto;
     }
 
-    async findAll(): Promise<GroupNotice[] | null | undefined> {
+    async findAll(): Promise<GroupGalleryPostPhoto[] | null | undefined> {
         await this.connect();
-        let groups: GroupNotice[] | null = null;
+        let groups: GroupGalleryPostPhoto[] | null = null;
         console.log(groups);
         try {
-            groups = await GroupNotice.findAll();
+            groups = await GroupGalleryPostPhoto.findAll();
         } catch (err) {
             logger.error(err);
             await this.endConnect();
@@ -64,60 +74,62 @@ class GroupNoticeDao extends Dao {
     }
 
     async save(
-        groupNoticeData: GroupNoticeTypes.GroupNoticePostBody
-    ): Promise<GroupNotice | undefined> {
+        groupGalleryPostPhotoData: GroupGalleryPostPhotoTypes.GroupGalleryPostPhotoPostBody
+    ): Promise<GroupGalleryPostPhoto | undefined> {
         await this.connect();
         if (process.env.NODE_ENV === "test")
-            await GroupNotice.sync({ force: true });
+            await GroupGalleryPostPhoto.sync({ force: true });
         // else await Group.sync();
 
-        let newGroupNotice: GroupNotice | null = null;
+        let newGroupGalleryPostPhoto: GroupGalleryPostPhoto | null = null;
         try {
-            newGroupNotice = await GroupNotice.create(groupNoticeData);
-        } catch (err) {
-            logger.error(err);
-            return undefined;
-        }
-        await this.endConnect();
-        return newGroupNotice;
-    }
-
-    async update(
-        groupNoticeData: GroupNoticeTypes.GroupNoticePostBody,
-        afterGroupNoticeData: GroupNoticeTypes.GroupNoticePostBody
-    ): Promise<any | null | undefined> {
-        await this.connect();
-        if (process.env.NODE_ENV === "test")
-            await GroupNotice.sync({ force: true });
-        // else await Group.sync();
-
-        let updateGroupNotice: any | null = null;
-        try {
-            updateGroupNotice = await GroupNotice.update(
-                { ...afterGroupNoticeData },
-                { where: { ...groupNoticeData } }
+            newGroupGalleryPostPhoto = await GroupGalleryPostPhoto.create(
+                groupGalleryPostPhotoData
             );
         } catch (err) {
             logger.error(err);
             return undefined;
         }
         await this.endConnect();
-        return updateGroupNotice;
+        return newGroupGalleryPostPhoto;
+    }
+
+    async update(
+        groupGalleryPostPhotoData: GroupGalleryPostPhotoTypes.GroupGalleryPostPhotoPostBody,
+        afterGroupGalleryPostPhotoData: GroupGalleryPostPhotoTypes.GroupGalleryPostPhotoPostBody
+    ): Promise<any | null | undefined> {
+        await this.connect();
+        if (process.env.NODE_ENV === "test")
+            await GroupGalleryPostPhoto.sync({ force: true });
+        // else await Group.sync();
+
+        let updateGroupGalleryPostPhoto: any | null = null;
+        try {
+            updateGroupGalleryPostPhoto = await GroupGalleryPostPhoto.update(
+                { ...afterGroupGalleryPostPhotoData },
+                { where: { ...groupGalleryPostPhotoData } }
+            );
+        } catch (err) {
+            logger.error(err);
+            return undefined;
+        }
+        await this.endConnect();
+        return updateGroupGalleryPostPhoto;
     }
 
     async delete(
-        groupNoticeData: GroupNoticeTypes.GroupNoticePostBody
+        groupGalleryPostPhotoData: GroupGalleryPostPhotoTypes.GroupGalleryPostPhotoPostBody
     ): Promise<number | undefined> {
         await this.connect();
         if (process.env.NODE_ENV === "test")
-            await GroupNotice.sync({ force: true });
+            await GroupGalleryPostPhoto.sync({ force: true });
         // else await Group.sync();
 
-        let deleteNoticeGroup: number | null = null;
+        let deleteGalleryPostPhotoGroup: number | null = null;
         try {
-            deleteNoticeGroup = await GroupNotice.destroy({
+            deleteGalleryPostPhotoGroup = await GroupGalleryPostPhoto.destroy({
                 where: {
-                    ...groupNoticeData
+                    ...groupGalleryPostPhotoData
                 }
             });
         } catch (err) {
@@ -125,8 +137,8 @@ class GroupNoticeDao extends Dao {
             return undefined;
         }
         await this.endConnect();
-        return deleteNoticeGroup; //1 is success, 0 or undefined are fail
+        return deleteGalleryPostPhotoGroup; //1 is success, 0 or undefined are fail
     }
 }
 
-export default GroupNoticeDao;
+export default GroupGalleryPostPhotoDao;
