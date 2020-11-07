@@ -1,6 +1,15 @@
-import { Model, Sequelize, Optional } from "sequelize";
+import {
+    Model,
+    Sequelize,
+    Optional,
+    Association,
+    BelongsToGetAssociationMixin,
+    BelongsToCreateAssociationMixin,
+    BelongsToSetAssociationMixin
+} from "sequelize";
 import { GroupNoticeModelTypes } from "@src/vo/group/models/GroupNoticeModel";
 import { GroupNoticeTypes } from "@src/vo/group/controllers/GroupNotice";
+import Group from "@src/models/group/GroupModel";
 
 interface GroupNoticeCreationAttributes
     extends Optional<GroupNoticeTypes.GroupNoticeBody, "id"> {}
@@ -18,6 +27,13 @@ class GroupNotice
     public groupId!: number;
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
+
+    public getGroupNotices!: BelongsToGetAssociationMixin<Group>; // Note the null assertions!
+    public createGroupNotice!: BelongsToCreateAssociationMixin<Group>;
+    public setGroupNotice!: BelongsToSetAssociationMixin<Group, "groupId">;
+    public static associations: {
+        noticesToGroups: Association<GroupNotice, Group>;
+    };
 
     static initiate(connection: Sequelize): Model {
         const opt: GroupNoticeModelTypes.IBaseGroupNoticeTableOptions = {

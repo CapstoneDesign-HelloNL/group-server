@@ -83,20 +83,20 @@ class InitializerDao extends Dao {
         });
 
         GroupNotice.belongsTo(Group, {
-            targetKey: "groupId",
-            foreignKey: "id",
+            targetKey: "id",
+            foreignKey: "groupId",
             as: "noticesToGroups"
         });
 
         GroupSchedule.belongsTo(Group, {
-            targetKey: "groupId",
-            foreignKey: "id",
+            targetKey: "id",
+            foreignKey: "groupId",
             as: "schedulesToGroups"
         });
 
         GroupGallery.belongsTo(Group, {
-            targetKey: "groupId",
-            foreignKey: "id",
+            targetKey: "id",
+            foreignKey: "groupId",
             as: "gallerysToGroups"
         });
 
