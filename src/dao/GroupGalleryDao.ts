@@ -1,44 +1,40 @@
 import GroupDBManager from "@src/models/GroupDBManager";
-import GroupAgenda from "@src/models/GroupAgendaModel";
+import GroupGallery from "@src/models/groupGallery/GroupGalleryModel";
 import LogService from "@src/utils/LogService";
 import Dao from "@src/dao/Dao";
-import { GroupAgendaTypes } from "@src/vo/group/controllers/GroupAgenda";
-import Group from "@src/models/GroupModel";
+import { GroupGalleryTypes } from "@src/vo/group/controllers/GroupGallery";
+import Group from "@src/models/group/GroupModel";
 /*
 update, delete logic need to change
 */
 const logger = LogService.getInstance();
-class GroupAgendaDao extends Dao {
+class GroupGalleryDao extends Dao {
     private constructor() {
         super();
         this.db = new GroupDBManager();
-        GroupAgenda.initiate(this.db.getConnection());
+        GroupGallery.initiate(this.db.getConnection());
         Group.initiate(this.db.getConnection());
 
         const firstSync = async () => {
             await Group.sync();
-            await GroupAgenda.sync();
+            await GroupGallery.sync();
             await this.endConnect();
         };
         firstSync();
     }
     protected async connect() {
         this.db = new GroupDBManager();
-        GroupAgenda.initiate(this.db.getConnection());
-        Group.initiate(this.db.getConnection());
-        await Group.sync();
-        await GroupAgenda.sync();
     }
 
     protected async endConnect() {
         await this.db?.endConnection();
     }
-    async find(id: number): Promise<GroupAgenda | null | undefined> {
+    async find(id: number): Promise<GroupGallery | null | undefined> {
         await this.connect();
-        let groupAgenda: GroupAgenda | null = null;
-        console.log(groupAgenda);
+        let groupGallery: GroupGallery | null = null;
+        console.log(groupGallery);
         try {
-            groupAgenda = await GroupAgenda.findOne({
+            groupGallery = await GroupGallery.findOne({
                 where: {
                     id
                 }
@@ -49,15 +45,15 @@ class GroupAgendaDao extends Dao {
             return undefined;
         }
         await this.endConnect();
-        return groupAgenda;
+        return groupGallery;
     }
 
-    async findAll(): Promise<GroupAgenda[] | null | undefined> {
+    async findAll(): Promise<GroupGallery[] | null | undefined> {
         await this.connect();
-        let groups: GroupAgenda[] | null = null;
+        let groups: GroupGallery[] | null = null;
         console.log(groups);
         try {
-            groups = await GroupAgenda.findAll();
+            groups = await GroupGallery.findAll();
         } catch (err) {
             logger.error(err);
             await this.endConnect();
@@ -68,60 +64,60 @@ class GroupAgendaDao extends Dao {
     }
 
     async save(
-        groupAgendaData: GroupAgendaTypes.GroupAgendaPostBody
-    ): Promise<GroupAgenda | undefined> {
+        groupGalleryData: GroupGalleryTypes.GroupGalleryPostBody
+    ): Promise<GroupGallery | undefined> {
         await this.connect();
         if (process.env.NODE_ENV === "test")
-            await GroupAgenda.sync({ force: true });
+            await GroupGallery.sync({ force: true });
         // else await Group.sync();
 
-        let newGroupAgenda: GroupAgenda | null = null;
+        let newGroupGallery: GroupGallery | null = null;
         try {
-            newGroupAgenda = await GroupAgenda.create(groupAgendaData);
+            newGroupGallery = await GroupGallery.create(groupGalleryData);
         } catch (err) {
             logger.error(err);
             return undefined;
         }
         await this.endConnect();
-        return newGroupAgenda;
+        return newGroupGallery;
     }
 
     async update(
-        groupAgendaData: GroupAgendaTypes.GroupAgendaPostBody,
-        afterGroupAgendaData: GroupAgendaTypes.GroupAgendaPostBody
+        groupGalleryData: GroupGalleryTypes.GroupGalleryPostBody,
+        afterGroupGalleryData: GroupGalleryTypes.GroupGalleryPostBody
     ): Promise<any | null | undefined> {
         await this.connect();
         if (process.env.NODE_ENV === "test")
-            await GroupAgenda.sync({ force: true });
+            await GroupGallery.sync({ force: true });
         // else await Group.sync();
 
-        let updateGroupAgenda: any | null = null;
+        let updateGroupGallery: any | null = null;
         try {
-            updateGroupAgenda = await GroupAgenda.update(
-                { ...afterGroupAgendaData },
-                { where: { ...groupAgendaData } }
+            updateGroupGallery = await GroupGallery.update(
+                { ...afterGroupGalleryData },
+                { where: { ...groupGalleryData } }
             );
         } catch (err) {
             logger.error(err);
             return undefined;
         }
         await this.endConnect();
-        return updateGroupAgenda;
+        return updateGroupGallery;
     }
 
     async delete(
-        groupAgendaData: GroupAgendaTypes.GroupAgendaPostBody
+        groupGalleryData: GroupGalleryTypes.GroupGalleryPostBody
     ): Promise<number | undefined> {
         await this.connect();
         if (process.env.NODE_ENV === "test")
-            await GroupAgenda.sync({ force: true });
+            await GroupGallery.sync({ force: true });
         // else await Group.sync();
 
-        let deleteAgendaGroup: number | null = null;
+        let deleteGalleryGroup: number | null = null;
         try {
-            deleteAgendaGroup = await GroupAgenda.destroy({
+            deleteGalleryGroup = await GroupGallery.destroy({
                 where: {
-                    ...groupAgendaData
+                    ...groupGalleryData
                 }
             });
         } catch (err) {
@@ -129,8 +125,8 @@ class GroupAgendaDao extends Dao {
             return undefined;
         }
         await this.endConnect();
-        return deleteAgendaGroup; //1 is success, 0 or undefined are fail
+        return deleteGalleryGroup; //1 is success, 0 or undefined are fail
     }
 }
 
-export default GroupAgendaDao;
+export default GroupGalleryDao;

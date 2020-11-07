@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from "express";
 
 import { GroupAgendaTypes } from "@src/vo/group/controllers/GroupAgenda";
-import GroupAgenda from "@src/models/GroupAgendaModel";
-import GroupAgendaDao from "@src/dao/GroupAgendaDao";
+import GroupAgenda from "@src/models/groupAgenda/GroupAgendaModel";
+import GroupAgendaDao from "@src/dao/groupAgenda/GroupAgendaDao";
 
 class GroupAgendaService {
     static async findAll(req: Request): Promise<GroupAgenda | string> {

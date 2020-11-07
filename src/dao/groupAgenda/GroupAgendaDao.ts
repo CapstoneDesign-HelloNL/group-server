@@ -1,40 +1,44 @@
 import GroupDBManager from "@src/models/GroupDBManager";
-import GroupSchedule from "@src/models/GroupScheduleModel";
+import GroupAgenda from "@src/models/groupAgenda/GroupAgendaModel";
 import LogService from "@src/utils/LogService";
 import Dao from "@src/dao/Dao";
-import { GroupScheduleTypes } from "@src/vo/group/controllers/GroupSchedule";
-import Group from "@src/models/GroupModel";
+import { GroupAgendaTypes } from "@src/vo/group/controllers/GroupAgenda";
+import Group from "@src/models/group/GroupModel";
 /*
 update, delete logic need to change
 */
 const logger = LogService.getInstance();
-class GroupScheduleDao extends Dao {
+class GroupAgendaDao extends Dao {
     private constructor() {
         super();
         this.db = new GroupDBManager();
-        GroupSchedule.initiate(this.db.getConnection());
+        GroupAgenda.initiate(this.db.getConnection());
         Group.initiate(this.db.getConnection());
 
         const firstSync = async () => {
             await Group.sync();
-            await GroupSchedule.sync();
+            await GroupAgenda.sync();
             await this.endConnect();
         };
         firstSync();
     }
     protected async connect() {
         this.db = new GroupDBManager();
+        GroupAgenda.initiate(this.db.getConnection());
+        Group.initiate(this.db.getConnection());
+        await Group.sync();
+        await GroupAgenda.sync();
     }
 
     protected async endConnect() {
         await this.db?.endConnection();
     }
-    async find(id: number): Promise<GroupSchedule | null | undefined> {
+    async find(id: number): Promise<GroupAgenda | null | undefined> {
         await this.connect();
-        let groupSchedule: GroupSchedule | null = null;
-        console.log(groupSchedule);
+        let groupAgenda: GroupAgenda | null = null;
+        console.log(groupAgenda);
         try {
-            groupSchedule = await GroupSchedule.findOne({
+            groupAgenda = await GroupAgenda.findOne({
                 where: {
                     id
                 }
@@ -45,15 +49,15 @@ class GroupScheduleDao extends Dao {
             return undefined;
         }
         await this.endConnect();
-        return groupSchedule;
+        return groupAgenda;
     }
 
-    async findAll(): Promise<GroupSchedule[] | null | undefined> {
+    async findAll(): Promise<GroupAgenda[] | null | undefined> {
         await this.connect();
-        let groups: GroupSchedule[] | null = null;
+        let groups: GroupAgenda[] | null = null;
         console.log(groups);
         try {
-            groups = await GroupSchedule.findAll();
+            groups = await GroupAgenda.findAll();
         } catch (err) {
             logger.error(err);
             await this.endConnect();
@@ -64,60 +68,60 @@ class GroupScheduleDao extends Dao {
     }
 
     async save(
-        groupScheduleData: GroupScheduleTypes.GroupSchedulePostBody
-    ): Promise<GroupSchedule | undefined> {
+        groupAgendaData: GroupAgendaTypes.GroupAgendaPostBody
+    ): Promise<GroupAgenda | undefined> {
         await this.connect();
         if (process.env.NODE_ENV === "test")
-            await GroupSchedule.sync({ force: true });
+            await GroupAgenda.sync({ force: true });
         // else await Group.sync();
 
-        let newGroupSchedule: GroupSchedule | null = null;
+        let newGroupAgenda: GroupAgenda | null = null;
         try {
-            newGroupSchedule = await GroupSchedule.create(groupScheduleData);
+            newGroupAgenda = await GroupAgenda.create(groupAgendaData);
         } catch (err) {
             logger.error(err);
             return undefined;
         }
         await this.endConnect();
-        return newGroupSchedule;
+        return newGroupAgenda;
     }
 
     async update(
-        groupScheduleData: GroupScheduleTypes.GroupSchedulePostBody,
-        afterGroupScheduleData: GroupScheduleTypes.GroupSchedulePostBody
+        groupAgendaData: GroupAgendaTypes.GroupAgendaPostBody,
+        afterGroupAgendaData: GroupAgendaTypes.GroupAgendaPostBody
     ): Promise<any | null | undefined> {
         await this.connect();
         if (process.env.NODE_ENV === "test")
-            await GroupSchedule.sync({ force: true });
+            await GroupAgenda.sync({ force: true });
         // else await Group.sync();
 
-        let updateGroupSchedule: any | null = null;
+        let updateGroupAgenda: any | null = null;
         try {
-            updateGroupSchedule = await GroupSchedule.update(
-                { ...afterGroupScheduleData },
-                { where: { ...groupScheduleData } }
+            updateGroupAgenda = await GroupAgenda.update(
+                { ...afterGroupAgendaData },
+                { where: { ...groupAgendaData } }
             );
         } catch (err) {
             logger.error(err);
             return undefined;
         }
         await this.endConnect();
-        return updateGroupSchedule;
+        return updateGroupAgenda;
     }
 
     async delete(
-        groupScheduleData: GroupScheduleTypes.GroupSchedulePostBody
+        groupAgendaData: GroupAgendaTypes.GroupAgendaPostBody
     ): Promise<number | undefined> {
         await this.connect();
         if (process.env.NODE_ENV === "test")
-            await GroupSchedule.sync({ force: true });
+            await GroupAgenda.sync({ force: true });
         // else await Group.sync();
 
-        let deleteScheduleGroup: number | null = null;
+        let deleteAgendaGroup: number | null = null;
         try {
-            deleteScheduleGroup = await GroupSchedule.destroy({
+            deleteAgendaGroup = await GroupAgenda.destroy({
                 where: {
-                    ...groupScheduleData
+                    ...groupAgendaData
                 }
             });
         } catch (err) {
@@ -125,8 +129,8 @@ class GroupScheduleDao extends Dao {
             return undefined;
         }
         await this.endConnect();
-        return deleteScheduleGroup; //1 is success, 0 or undefined are fail
+        return deleteAgendaGroup; //1 is success, 0 or undefined are fail
     }
 }
 
-export default GroupScheduleDao;
+export default GroupAgendaDao;

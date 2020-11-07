@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from "express";
 
 import { GroupTypes } from "@src/vo/group/controllers/Group";
-import Group from "@src/models/GroupModel";
-import GroupDao from "@src/dao/GroupDao";
+import Group from "@src/models/group/GroupModel";
+import GroupDao from "@src/dao/group/GroupDao";
 
 class GroupService {
     static async isAlreadyHaveGroup(req: Request): Promise<string> {

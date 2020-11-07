@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from "express";
 
 import { GroupScheduleTypes } from "@src/vo/group/controllers/GroupSchedule";
-import GroupSchedule from "@src/models/GroupScheduleModel";
-import GroupScheduleDao from "@src/dao/GroupScheduleDao";
+import GroupSchedule from "@src/models/groupSchedule/GroupScheduleModel";
+import GroupScheduleDao from "@src/dao/groupSchedule/GroupScheduleDao";
 
 class GroupScheduleService {
     static async findAll(req: Request): Promise<GroupSchedule | string> {

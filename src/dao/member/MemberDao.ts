@@ -1,23 +1,24 @@
 import GroupDBManager from "@src/models/GroupDBManager";
-import GroupNotice from "@src/models/GroupNoticeModel";
 import LogService from "@src/utils/LogService";
 import Dao from "@src/dao/Dao";
-import { GroupNoticeTypes } from "@src/vo/group/controllers/GroupNotice";
-import Group from "@src/models/GroupModel";
+import { MemberTypes } from "@src/vo/group/controllers/Member";
+import Group from "@src/models/group/GroupModel";
+import Member from "@src/models/member/MemberModel";
 /*
 update, delete logic need to change
 */
 const logger = LogService.getInstance();
-class GroupNoticeDao extends Dao {
+class MemberDao extends Dao {
     private constructor() {
         super();
         this.db = new GroupDBManager();
-        GroupNotice.initiate(this.db.getConnection());
         Group.initiate(this.db.getConnection());
+        Member.belongsToMany(Group, { through: "GroupToMember" });
+        Group.belongsToMany(Member, { through: "GroupToMember" });
 
         const firstSync = async () => {
             await Group.sync();
-            await GroupNotice.sync();
+            await Member.sync();
             await this.endConnect();
         };
         firstSync();
@@ -29,12 +30,12 @@ class GroupNoticeDao extends Dao {
     protected async endConnect() {
         await this.db?.endConnection();
     }
-    async find(id: number): Promise<GroupNotice | null | undefined> {
+    async find(id: number): Promise<Member | null | undefined> {
         await this.connect();
-        let groupNotice: GroupNotice | null = null;
-        console.log(groupNotice);
+        let groupMember: Member | null = null;
+        console.log(groupMember);
         try {
-            groupNotice = await GroupNotice.findOne({
+            groupMember = await Member.findOne({
                 where: {
                     id
                 }
@@ -45,15 +46,15 @@ class GroupNoticeDao extends Dao {
             return undefined;
         }
         await this.endConnect();
-        return groupNotice;
+        return groupMember;
     }
 
-    async findAll(): Promise<GroupNotice[] | null | undefined> {
+    async findAll(): Promise<Member[] | null | undefined> {
         await this.connect();
-        let groups: GroupNotice[] | null = null;
+        let groups: Member[] | null = null;
         console.log(groups);
         try {
-            groups = await GroupNotice.findAll();
+            groups = await Member.findAll();
         } catch (err) {
             logger.error(err);
             await this.endConnect();
@@ -64,60 +65,57 @@ class GroupNoticeDao extends Dao {
     }
 
     async save(
-        groupNoticeData: GroupNoticeTypes.GroupNoticePostBody
-    ): Promise<GroupNotice | undefined> {
+        groupMemberData: MemberTypes.MemberPostBody
+    ): Promise<Member | undefined> {
         await this.connect();
-        if (process.env.NODE_ENV === "test")
-            await GroupNotice.sync({ force: true });
+        if (process.env.NODE_ENV === "test") await Member.sync({ force: true });
         // else await Group.sync();
 
-        let newGroupNotice: GroupNotice | null = null;
+        let newMember: Member | null = null;
         try {
-            newGroupNotice = await GroupNotice.create(groupNoticeData);
+            newMember = await Member.create(groupMemberData);
         } catch (err) {
             logger.error(err);
             return undefined;
         }
         await this.endConnect();
-        return newGroupNotice;
+        return newMember;
     }
 
     async update(
-        groupNoticeData: GroupNoticeTypes.GroupNoticePostBody,
-        afterGroupNoticeData: GroupNoticeTypes.GroupNoticePostBody
+        groupMemberData: MemberTypes.MemberPostBody,
+        afterMemberData: MemberTypes.MemberPostBody
     ): Promise<any | null | undefined> {
         await this.connect();
-        if (process.env.NODE_ENV === "test")
-            await GroupNotice.sync({ force: true });
+        if (process.env.NODE_ENV === "test") await Member.sync({ force: true });
         // else await Group.sync();
 
-        let updateGroupNotice: any | null = null;
+        let updateMember: any | null = null;
         try {
-            updateGroupNotice = await GroupNotice.update(
-                { ...afterGroupNoticeData },
-                { where: { ...groupNoticeData } }
+            updateMember = await Member.update(
+                { ...afterMemberData },
+                { where: { ...groupMemberData } }
             );
         } catch (err) {
             logger.error(err);
             return undefined;
         }
         await this.endConnect();
-        return updateGroupNotice;
+        return updateMember;
     }
 
     async delete(
-        groupNoticeData: GroupNoticeTypes.GroupNoticePostBody
+        groupMemberData: MemberTypes.MemberPostBody
     ): Promise<number | undefined> {
         await this.connect();
-        if (process.env.NODE_ENV === "test")
-            await GroupNotice.sync({ force: true });
+        if (process.env.NODE_ENV === "test") await Member.sync({ force: true });
         // else await Group.sync();
 
-        let deleteNoticeGroup: number | null = null;
+        let deleteMemberGroup: number | null = null;
         try {
-            deleteNoticeGroup = await GroupNotice.destroy({
+            deleteMemberGroup = await Member.destroy({
                 where: {
-                    ...groupNoticeData
+                    ...groupMemberData
                 }
             });
         } catch (err) {
@@ -125,8 +123,8 @@ class GroupNoticeDao extends Dao {
             return undefined;
         }
         await this.endConnect();
-        return deleteNoticeGroup; //1 is success, 0 or undefined are fail
+        return deleteMemberGroup; //1 is success, 0 or undefined are fail
     }
 }
 
-export default GroupNoticeDao;
+export default MemberDao;

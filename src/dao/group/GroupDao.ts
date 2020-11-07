@@ -1,10 +1,11 @@
 import GroupDBManager from "@src/models/GroupDBManager";
-import Member from "@src/models/MemberModel";
-import Group from "@src/models/GroupModel";
-import GroupAgenda from "@src/models/GroupAgendaModel";
-import GroupSchedule from "@src/models/GroupScheduleModel";
-import GroupNotice from "@src/models/GroupNoticeModel";
-import GroupToMember from "@src/models/GroupToMemberModel";
+import Member from "@src/models/member/MemberModel";
+import Group from "@src/models/group/GroupModel";
+import GroupAgenda from "@src/models/groupAgenda/GroupAgendaModel";
+import GroupSchedule from "@src/models/groupSchedule/GroupScheduleModel";
+import GroupNotice from "@src/models/groupNotice/GroupNoticeModel";
+import GroupToMember from "@src/models/groupToMember/GroupToMemberModel";
+import GroupGallery from "@src/models/groupGallery/GroupGalleryModel";
 import LogService from "@src/utils/LogService";
 import Dao from "@src/dao/Dao";
 import { GroupTypes } from "@src/vo/group/controllers/Group";
@@ -20,6 +21,7 @@ class GroupDao extends Dao {
         GroupNotice.initiate(this.db.getConnection());
         GroupSchedule.initiate(this.db.getConnection());
         GroupToMember.initiate(this.db.getConnection());
+        GroupGallery.initiate(this.db.getConnection());
         Group.hasMany(GroupAgenda, {
             sourceKey: "id",
             foreignKey: "groupId",
@@ -38,6 +40,12 @@ class GroupDao extends Dao {
             as: "schedules" // this determines the name in `associations`!
         });
 
+        Group.hasMany(GroupGallery, {
+            sourceKey: "id",
+            foreignKey: "groupId",
+            as: "galleries" // this determines the name in `associations`!
+        });
+
         Group.belongsToMany(Member, { through: "GroupToMember" });
         Member.belongsToMany(Group, { through: "GroupToMember" });
         const firstSync = async () => {
@@ -47,6 +55,7 @@ class GroupDao extends Dao {
             await GroupNotice.sync();
             await GroupSchedule.sync();
             await GroupToMember.sync();
+            await GroupGallery.sync();
             await this.endConnect();
         };
         firstSync();

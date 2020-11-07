@@ -23,9 +23,6 @@ class GroupToMember
         };
         return GroupToMember.init(GroupToMemberModelTypes.attr, opt);
     }
-    // static createUser(value: MemberTypes.SignUpPostBody) {
-    //     return UserModel.create(value);
-    // }
 }
 
 export default GroupToMember;

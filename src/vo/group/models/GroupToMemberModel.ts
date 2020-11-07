@@ -7,8 +7,8 @@ import {
     ModelAttributeColumnOptions,
     ModelAttributeColumnReferencesOptions
 } from "sequelize";
-import Group from "@src/models/GroupModel";
-import Member from "@src/models/MemberModel";
+import Group from "@src/models/group/GroupModel";
+import Member from "@src/models/member/MemberModel";
 
 export namespace GroupToMemberModelTypes {
     export interface IBaseGroupToMemberTableOptions extends InitOptions {

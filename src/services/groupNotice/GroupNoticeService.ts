@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from "express";
 
 import { GroupNoticeTypes } from "@src/vo/group/controllers/GroupNotice";
-import GroupNotice from "@src/models/GroupNoticeModel";
-import GroupNoticeDao from "@src/dao/GroupNoticeDao";
+import GroupNotice from "@src/models/groupNotice/GroupNoticeModel";
+import GroupNoticeDao from "@src/dao/groupNotice/GroupNoticeDao";
 
 class GroupNoticeService {
     static async findAll(req: Request): Promise<GroupNotice | string> {
