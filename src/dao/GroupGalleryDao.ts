@@ -11,26 +11,26 @@ const logger = LogService.getInstance();
 class GroupGalleryDao extends Dao {
     private constructor() {
         super();
-        this.db = new GroupDBManager();
-        GroupGallery.initiate(this.db.getConnection());
-        Group.initiate(this.db.getConnection());
+        this.db = GroupDBManager.getInstance();
+        // GroupGallery.initiate(this.db.getConnection());
+        // Group.initiate(this.db.getConnection());
 
-        const firstSync = async () => {
-            await Group.sync();
-            await GroupGallery.sync();
-            await this.endConnect();
-        };
-        firstSync();
+        // const firstSync = async () => {
+        //     await Group.sync();
+        //     await GroupGallery.sync();
+        //     // await this.endConnect();
+        // };
+        // firstSync();
     }
     protected async connect() {
-        this.db = new GroupDBManager();
+        this.db = GroupDBManager.getInstance();
     }
 
     protected async endConnect() {
         await this.db?.endConnection();
     }
     async find(id: number): Promise<GroupGallery | null | undefined> {
-        await this.connect();
+        // await this.connect();
         let groupGallery: GroupGallery | null = null;
         console.log(groupGallery);
         try {
@@ -41,32 +41,32 @@ class GroupGalleryDao extends Dao {
             });
         } catch (err) {
             logger.error(err);
-            await this.endConnect();
+            // await this.endConnect();
             return undefined;
         }
-        await this.endConnect();
+        // // await this.endConnect();
         return groupGallery;
     }
 
     async findAll(): Promise<GroupGallery[] | null | undefined> {
-        await this.connect();
+        // await this.connect();
         let groups: GroupGallery[] | null = null;
         console.log(groups);
         try {
             groups = await GroupGallery.findAll();
         } catch (err) {
             logger.error(err);
-            await this.endConnect();
+            // await this.endConnect();
             return undefined;
         }
-        await this.endConnect();
+        // // await this.endConnect();
         return groups;
     }
 
     async save(
         groupGalleryData: GroupGalleryTypes.GroupGalleryPostBody
     ): Promise<GroupGallery | undefined> {
-        await this.connect();
+        // await this.connect();
         if (process.env.NODE_ENV === "test")
             await GroupGallery.sync({ force: true });
         // else await Group.sync();
@@ -78,7 +78,7 @@ class GroupGalleryDao extends Dao {
             logger.error(err);
             return undefined;
         }
-        await this.endConnect();
+        // // await this.endConnect();
         return newGroupGallery;
     }
 
@@ -86,7 +86,7 @@ class GroupGalleryDao extends Dao {
         groupGalleryData: GroupGalleryTypes.GroupGalleryPostBody,
         afterGroupGalleryData: GroupGalleryTypes.GroupGalleryPostBody
     ): Promise<any | null | undefined> {
-        await this.connect();
+        // await this.connect();
         if (process.env.NODE_ENV === "test")
             await GroupGallery.sync({ force: true });
         // else await Group.sync();
@@ -101,14 +101,14 @@ class GroupGalleryDao extends Dao {
             logger.error(err);
             return undefined;
         }
-        await this.endConnect();
+        // // await this.endConnect();
         return updateGroupGallery;
     }
 
     async delete(
         groupGalleryData: GroupGalleryTypes.GroupGalleryPostBody
     ): Promise<number | undefined> {
-        await this.connect();
+        // await this.connect();
         if (process.env.NODE_ENV === "test")
             await GroupGallery.sync({ force: true });
         // else await Group.sync();
@@ -124,7 +124,7 @@ class GroupGalleryDao extends Dao {
             logger.error(err);
             return undefined;
         }
-        await this.endConnect();
+        // // await this.endConnect();
         return deleteGalleryGroup; //1 is success, 0 or undefined are fail
     }
 }

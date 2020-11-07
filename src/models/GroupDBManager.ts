@@ -3,7 +3,8 @@ import LogService from "@src/utils/LogService";
 import DBManager from "@src/models/DBManager";
 
 class GroupDBManager extends DBManager {
-    constructor() {
+    private static instance: GroupDBManager;
+    private constructor() {
         super();
         this.connection = new Sequelize(
             process.env.DATABASE || "postgres",
@@ -12,12 +13,27 @@ class GroupDBManager extends DBManager {
             {
                 host: process.env.DB_HOST,
                 dialect: "postgres",
+                pool: {
+                    max: 20,
+                    min: 5,
+                    idle: 100000,
+                    acquire: 50000,
+                    evict: 50000
+                },
                 logging: LogService.getInstance().info.bind(
                     LogService.getLogger()
                 )
             }
         );
         async () => await this.checkConnection();
+    }
+
+    protected static setSingleton(): void {
+        if (this.instance == null) this.instance = new this();
+    }
+    static getInstance(): any {
+        if (this.instance == null) this.setSingleton();
+        return this.instance;
     }
 
     async checkConnection(): Promise<void> {

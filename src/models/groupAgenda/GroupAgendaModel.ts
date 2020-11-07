@@ -1,6 +1,15 @@
-import { Model, Sequelize, Optional } from "sequelize";
+import {
+    Model,
+    Sequelize,
+    Optional,
+    Association,
+    BelongsToGetAssociationMixin,
+    BelongsToCreateAssociationMixin,
+    BelongsToSetAssociationMixin
+} from "sequelize";
 import { GroupAgendaModelTypes } from "@src/vo/group/models/GroupAgendaModel";
 import { GroupAgendaTypes } from "@src/vo/group/controllers/GroupAgenda";
+import Group from "@src/models/group/GroupModel";
 
 interface GroupAgendaCreationAttributes
     extends Optional<GroupAgendaTypes.GroupAgendaBody, "id"> {}
@@ -16,6 +25,12 @@ class GroupAgenda
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
 
+    public getGroupAgendas!: BelongsToGetAssociationMixin<Group>; // Note the null assertions!
+    public createGroupAgenda!: BelongsToCreateAssociationMixin<Group>;
+    public setGroupAgenda!: BelongsToSetAssociationMixin<Group, "groupId">;
+    public static associations: {
+        groups: Association<GroupAgenda, Group>;
+    };
     static initiate(connection: Sequelize): Model {
         const opt: GroupAgendaModelTypes.IBaseGroupAgendaTableOptions = {
             sequelize: connection,

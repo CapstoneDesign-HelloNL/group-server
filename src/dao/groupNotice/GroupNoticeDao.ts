@@ -11,26 +11,31 @@ const logger = LogService.getInstance();
 class GroupNoticeDao extends Dao {
     private constructor() {
         super();
-        this.db = new GroupDBManager();
-        GroupNotice.initiate(this.db.getConnection());
-        Group.initiate(this.db.getConnection());
+        this.db = GroupDBManager.getInstance();
+        // GroupNotice.initiate(this.db.getConnection());
+        // Group.initiate(this.db.getConnection());
 
-        const firstSync = async () => {
-            await Group.sync();
-            await GroupNotice.sync();
-            await this.endConnect();
-        };
-        firstSync();
+        // GroupNotice.belongsTo(Group, {
+        //     targetKey: "groupId",
+        //     foreignKey: "id"
+        // });
+
+        // const firstSync = async () => {
+        //     await Group.sync();
+        //     await GroupNotice.sync();
+        //     // await this.endConnect();
+        // };
+        // firstSync();
     }
     protected async connect() {
-        this.db = new GroupDBManager();
+        this.db = GroupDBManager.getInstance();
     }
 
     protected async endConnect() {
         await this.db?.endConnection();
     }
     async find(id: number): Promise<GroupNotice | null | undefined> {
-        await this.connect();
+        // await this.connect();
         let groupNotice: GroupNotice | null = null;
         console.log(groupNotice);
         try {
@@ -41,32 +46,32 @@ class GroupNoticeDao extends Dao {
             });
         } catch (err) {
             logger.error(err);
-            await this.endConnect();
+            // await this.endConnect();
             return undefined;
         }
-        await this.endConnect();
+        // // await this.endConnect();
         return groupNotice;
     }
 
     async findAll(): Promise<GroupNotice[] | null | undefined> {
-        await this.connect();
+        // await this.connect();
         let groups: GroupNotice[] | null = null;
         console.log(groups);
         try {
             groups = await GroupNotice.findAll();
         } catch (err) {
             logger.error(err);
-            await this.endConnect();
+            // await this.endConnect();
             return undefined;
         }
-        await this.endConnect();
+        // // await this.endConnect();
         return groups;
     }
 
     async save(
         groupNoticeData: GroupNoticeTypes.GroupNoticePostBody
     ): Promise<GroupNotice | undefined> {
-        await this.connect();
+        // await this.connect();
         if (process.env.NODE_ENV === "test")
             await GroupNotice.sync({ force: true });
         // else await Group.sync();
@@ -78,7 +83,7 @@ class GroupNoticeDao extends Dao {
             logger.error(err);
             return undefined;
         }
-        await this.endConnect();
+        // // await this.endConnect();
         return newGroupNotice;
     }
 
@@ -86,7 +91,7 @@ class GroupNoticeDao extends Dao {
         groupNoticeData: GroupNoticeTypes.GroupNoticePostBody,
         afterGroupNoticeData: GroupNoticeTypes.GroupNoticePostBody
     ): Promise<any | null | undefined> {
-        await this.connect();
+        // await this.connect();
         if (process.env.NODE_ENV === "test")
             await GroupNotice.sync({ force: true });
         // else await Group.sync();
@@ -101,14 +106,14 @@ class GroupNoticeDao extends Dao {
             logger.error(err);
             return undefined;
         }
-        await this.endConnect();
+        // // await this.endConnect();
         return updateGroupNotice;
     }
 
     async delete(
         groupNoticeData: GroupNoticeTypes.GroupNoticePostBody
     ): Promise<number | undefined> {
-        await this.connect();
+        // await this.connect();
         if (process.env.NODE_ENV === "test")
             await GroupNotice.sync({ force: true });
         // else await Group.sync();
@@ -124,7 +129,7 @@ class GroupNoticeDao extends Dao {
             logger.error(err);
             return undefined;
         }
-        await this.endConnect();
+        // // await this.endConnect();
         return deleteNoticeGroup; //1 is success, 0 or undefined are fail
     }
 }
