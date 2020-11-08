@@ -30,6 +30,6 @@
         },
         "import/extensions": {
             ".ts": "never"
-        },
+        }
     }
 }
