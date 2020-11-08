@@ -4,7 +4,7 @@ export namespace GroupNoticeTypes {
         content: string;
         author: string;
         photo: string;
-        groupId: number;
+        groupName: string;
     }
     export interface GroupNoticeBody extends GroupNoticePostBody {
         id: number;

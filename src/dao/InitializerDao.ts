@@ -21,8 +21,6 @@ class InitializerDao extends Dao {
         this.db = GroupDBManager.getInstance();
         const firstInit = async () => await this.init();
         const firstSync = async () => await this.sync();
-        // const t = async () => await this.db.endConnection();
-        // t();
         firstInit();
         firstSync();
     }

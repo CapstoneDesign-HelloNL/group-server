@@ -14,16 +14,15 @@ import { GroupGalleryTypes } from "@src/vo/group/controllers/GroupGallery";
 import GroupGalleryPost from "../groupGalleryPost/GroupGalleryPostModel";
 
 interface GroupGalleryCreationAttributes
-    extends Optional<GroupGalleryTypes.GroupGalleryBody, "id"> {}
+    extends Optional<GroupGalleryTypes.GroupGalleryBody, "name"> {}
 class GroupGallery
     extends Model<
         GroupGalleryTypes.GroupGalleryBody,
         GroupGalleryCreationAttributes
     >
     implements GroupGalleryTypes.GroupGalleryBody {
-    public id!: number;
-    public title!: string;
-    public groupId!: number;
+    public name!: string;
+    public groupName!: string;
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
 

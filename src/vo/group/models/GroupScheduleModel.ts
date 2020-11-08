@@ -14,7 +14,7 @@ export namespace GroupScheduleModelTypes {
         author: IColumnOption;
         startDate: IColumnOption;
         endDate: IColumnOption;
-        groupId: IColumnOption;
+        groupName: IColumnOption;
     }
     export const attr: GroupScheduleModelTypes.IGroupScheduleScheme = {
         id: {
@@ -42,8 +42,8 @@ export namespace GroupScheduleModelTypes {
             type: DataTypes.DATE,
             allowNull: false
         },
-        groupId: {
-            type: DataTypes.INTEGER,
+        groupName: {
+            type: DataTypes.STRING,
             allowNull: false
         }
     };

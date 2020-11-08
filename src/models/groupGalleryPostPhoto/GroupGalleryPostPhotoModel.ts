@@ -28,9 +28,5 @@ class GroupGalleryPostPhoto
             opt
         );
     }
-    // static createUser(value: GroupTypes.GroupPostBody) {
-    //     return UserModel.create(value);
-    // }
 }
-// GroupGalleryPostPhoto.Group = GroupGalleryPostPhoto.belongsTo(Group);
 export default GroupGalleryPostPhoto;

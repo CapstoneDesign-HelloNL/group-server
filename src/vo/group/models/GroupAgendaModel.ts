@@ -10,7 +10,7 @@ export namespace GroupAgendaModelTypes {
     }
     export interface IGroupAgendaScheme extends ModelAttributes {
         content: IColumnOption;
-        groupId: IColumnOption;
+        groupName: IColumnOption;
     }
     export const attr: GroupAgendaModelTypes.IGroupAgendaScheme = {
         id: {
@@ -22,8 +22,8 @@ export namespace GroupAgendaModelTypes {
             type: DataTypes.STRING,
             allowNull: false
         },
-        groupId: {
-            type: DataTypes.INTEGER,
+        groupName: {
+            type: DataTypes.STRING,
             allowNull: false
         }
     };

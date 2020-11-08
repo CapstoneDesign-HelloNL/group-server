@@ -3,12 +3,11 @@ import { MemberModelTypes } from "@src/vo/group/models/MemberModel";
 import { MemberTypes } from "@src/vo/group/controllers/Member";
 
 interface MemberCreationAttributes
-    extends Optional<MemberTypes.MemberBody, "id"> {}
+    extends Optional<MemberTypes.MemberBody, "email"> {}
 class Member
     extends Model<MemberTypes.MemberBody, MemberCreationAttributes>
     implements MemberTypes.MemberBody {
-    public id!: number;
-    public memberId!: number;
+    public email!: string;
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
     static initiate(connection: Sequelize): Model {
@@ -18,9 +17,6 @@ class Member
         };
         return Member.init(MemberModelTypes.attr, opt);
     }
-    // static createUser(value: MemberTypes.SignUpPostBody) {
-    //     return UserModel.create(value);
-    // }
 }
 
 export default Member;

@@ -21,13 +21,13 @@ class GroupAgenda
     implements GroupAgendaTypes.GroupAgendaBody {
     public id!: number;
     public content!: string;
-    public groupId!: number;
+    public groupName!: string;
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
 
     public getGroupAgendas!: BelongsToGetAssociationMixin<Group>; // Note the null assertions!
     public createGroupAgenda!: BelongsToCreateAssociationMixin<Group>;
-    public setGroupAgenda!: BelongsToSetAssociationMixin<Group, "groupId">;
+    public setGroupAgenda!: BelongsToSetAssociationMixin<Group, "groupName">;
     public static associations: {
         agendasToGroups: Association<GroupAgenda, Group>;
     };
@@ -38,9 +38,5 @@ class GroupAgenda
         };
         return GroupAgenda.init(GroupAgendaModelTypes.attr, opt);
     }
-    // static createUser(value: GroupTypes.GroupPostBody) {
-    //     return UserModel.create(value);
-    // }
 }
-// GroupAgenda.Group = GroupAgenda.belongsTo(Group);
 export default GroupAgenda;

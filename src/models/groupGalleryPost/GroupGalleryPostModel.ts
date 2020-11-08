@@ -14,7 +14,7 @@ class GroupGalleryPost
     public title!: string;
     public content!: string;
     public author!: string;
-    public galleryId!: number;
+    public galleryName!: string;
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
 

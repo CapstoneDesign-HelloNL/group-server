@@ -1,7 +1,7 @@
 export namespace GroupAgendaTypes {
     export interface GroupAgendaPostBody {
         content: string;
-        groupId: number;
+        groupName: string;
     }
     export interface GroupAgendaBody extends GroupAgendaPostBody {
         id: number;

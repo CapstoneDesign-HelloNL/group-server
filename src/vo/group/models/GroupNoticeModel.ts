@@ -13,7 +13,7 @@ export namespace GroupNoticeModelTypes {
         content: IColumnOption;
         author: IColumnOption;
         photo: IColumnOption;
-        groupId: IColumnOption;
+        groupName: IColumnOption;
     }
     export const attr: GroupNoticeModelTypes.IGroupNoticeScheme = {
         id: {
@@ -37,8 +37,8 @@ export namespace GroupNoticeModelTypes {
             type: DataTypes.STRING,
             allowNull: false
         },
-        groupId: {
-            type: DataTypes.INTEGER,
+        groupName: {
+            type: DataTypes.STRING,
             allowNull: false
         }
     };

@@ -24,13 +24,13 @@ class GroupNotice
     public content!: string;
     public author!: string;
     public photo!: string;
-    public groupId!: number;
+    public groupName!: string;
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
 
     public getGroupNotices!: BelongsToGetAssociationMixin<Group>; // Note the null assertions!
     public createGroupNotice!: BelongsToCreateAssociationMixin<Group>;
-    public setGroupNotice!: BelongsToSetAssociationMixin<Group, "groupId">;
+    public setGroupNotice!: BelongsToSetAssociationMixin<Group, "groupName">;
     public static associations: {
         noticesToGroups: Association<GroupNotice, Group>;
     };
@@ -42,9 +42,5 @@ class GroupNotice
         };
         return GroupNotice.init(GroupNoticeModelTypes.attr, opt);
     }
-    // static createUser(value: GroupTypes.GroupPostBody) {
-    //     return UserModel.create(value);
-    // }
 }
-// GroupAgenda.Group = GroupAgenda.belongsTo(Group);
 export default GroupNotice;

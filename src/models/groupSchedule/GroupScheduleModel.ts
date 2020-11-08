@@ -25,13 +25,13 @@ class GroupSchedule
     public author!: string;
     public startDate!: Date;
     public endDate!: Date;
-    public groupId!: number;
+    public groupName!: string;
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
 
     public getGroupSchedules!: BelongsToGetAssociationMixin<Group>; // Note the null assertions!
     public createGroupSchedule!: BelongsToCreateAssociationMixin<Group>;
-    public setGroupSchedule!: BelongsToSetAssociationMixin<Group, "groupId">;
+    public setGroupSchedule!: BelongsToSetAssociationMixin<Group, "groupName">;
     public static associations: {
         schedulesToGroups: Association<GroupSchedule, Group>;
     };

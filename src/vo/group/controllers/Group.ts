@@ -1,10 +1,7 @@
 export namespace GroupTypes {
-    export interface GroupPostBody {
+    export interface GroupBody {
         name: string;
         admin: string;
         advisor: string;
-    }
-    export interface GroupBody extends GroupPostBody {
-        id: number;
     }
 }

@@ -2,12 +2,12 @@ import { Sequelize, DataTypes, InitOptions, ModelAttributes } from "sequelize";
 export namespace GroupModelTypes {
     export interface IBaseGroupTableOptions extends InitOptions {
         sequelize: Sequelize;
-
         tableName: string;
     }
     export interface IColumnOption {
         type: DataTypes.DataType;
         allowNull: boolean;
+        primaryKey?: true;
     }
     export interface IGroupScheme extends ModelAttributes {
         name: IColumnOption;
@@ -15,14 +15,10 @@ export namespace GroupModelTypes {
         advisor: IColumnOption;
     }
     export const attr: GroupModelTypes.IGroupScheme = {
-        id: {
-            type: DataTypes.INTEGER,
-            autoIncrement: true,
-            primaryKey: true
-        },
         name: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: false,
+            primaryKey: true
         },
         admin: {
             type: DataTypes.STRING,

@@ -12,7 +12,7 @@ export namespace GroupGalleryPostModelTypes {
         title: IColumnOption;
         content: IColumnOption;
         author: IColumnOption;
-        galleryId: IColumnOption;
+        galleryName: IColumnOption;
     }
     export const attr: GroupGalleryPostModelTypes.IGroupGalleryPostScheme = {
         id: {
@@ -32,8 +32,8 @@ export namespace GroupGalleryPostModelTypes {
             type: DataTypes.STRING,
             allowNull: false
         },
-        galleryId: {
-            type: DataTypes.INTEGER,
+        galleryName: {
+            type: DataTypes.STRING,
             allowNull: false
         }
     };

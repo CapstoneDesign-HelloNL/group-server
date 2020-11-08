@@ -7,23 +7,20 @@ export namespace GroupGalleryModelTypes {
     export interface IColumnOption {
         type: DataTypes.DataType;
         allowNull: boolean;
+        primaryKey?: boolean;
     }
     export interface IGroupGalleryScheme extends ModelAttributes {
-        title: IColumnOption;
-        groupId: IColumnOption;
+        name: IColumnOption;
+        groupName: IColumnOption;
     }
     export const attr: GroupGalleryModelTypes.IGroupGalleryScheme = {
-        id: {
-            type: DataTypes.INTEGER,
-            autoIncrement: true,
+        name: {
+            type: DataTypes.STRING,
+            allowNull: false,
             primaryKey: true
         },
-        title: {
+        groupName: {
             type: DataTypes.STRING,
-            allowNull: false
-        },
-        groupId: {
-            type: DataTypes.INTEGER,
             allowNull: false
         }
     };

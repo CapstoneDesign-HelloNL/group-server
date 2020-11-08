@@ -4,6 +4,7 @@ import { GroupToMemberTypes } from "@src/vo/group/controllers/GroupToMember";
 
 interface MemberCreationAttributes
     extends Optional<GroupToMemberTypes.GroupToMemberBody, "id"> {}
+
 class GroupToMember
     extends Model<
         GroupToMemberTypes.GroupToMemberBody,
@@ -11,8 +12,8 @@ class GroupToMember
     >
     implements GroupToMemberTypes.GroupToMemberBody {
     public id!: number;
-    public groupId!: number;
-    public memberId!: number;
+    public groupName!: string;
+    public memberEmail!: string;
     public memberRank!: string;
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;

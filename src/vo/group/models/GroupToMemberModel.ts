@@ -21,29 +21,31 @@ export namespace GroupToMemberModelTypes {
         type: DataTypes.DataType;
         allowNull: boolean;
         defaultValue?: any;
+        primaryKey?: boolean;
         references?: IForeignReferences;
     }
     export interface IGroupToMemberScheme extends ModelAttributes {
-        groupId: IColumnOption;
-        memberId: IColumnOption;
+        id: IColumnOption;
+        groupName: IColumnOption;
+        memberEmail: IColumnOption;
         memberRank: IColumnOption;
     }
     export const attr: GroupToMemberModelTypes.IGroupToMemberScheme = {
         id: {
             type: DataTypes.INTEGER,
-            autoIncrement: true,
+            allowNull: false,
             primaryKey: true
         },
-        groupId: {
-            type: DataTypes.INTEGER,
+        groupName: {
+            type: DataTypes.STRING,
             allowNull: false,
             references: {
                 model: "Group",
                 key: "id"
             }
         },
-        memberId: {
-            type: DataTypes.INTEGER,
+        memberEmail: {
+            type: DataTypes.STRING,
             allowNull: false,
             references: {
                 model: "Member",

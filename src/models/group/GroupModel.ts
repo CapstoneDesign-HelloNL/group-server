@@ -17,11 +17,10 @@ import GroupNotice from "@src/models/groupNotice/GroupNoticeModel";
 import GroupGallery from "../groupGallery/GroupGalleryModel";
 
 interface GroupCreationAttributes
-    extends Optional<GroupTypes.GroupBody, "id"> {}
+    extends Optional<GroupTypes.GroupBody, "name"> {}
 class Group
     extends Model<GroupTypes.GroupBody, GroupCreationAttributes>
     implements GroupTypes.GroupBody {
-    public id!: number;
     public name!: string;
     public admin!: string;
     public advisor!: string;
@@ -50,8 +49,8 @@ class Group
     public createGroupSchedule!: HasManyCreateAssociationMixin<GroupSchedule>;
 
     public getGroupGallery!: HasManyGetAssociationsMixin<GroupGallery>; // Note the null assertions!
-    public addGroupGallery!: HasManyAddAssociationMixin<GroupGallery, number>;
-    public hasGroupGallery!: HasManyHasAssociationMixin<GroupGallery, number>;
+    public addGroupGallery!: HasManyAddAssociationMixin<GroupGallery, string>;
+    public hasGroupGallery!: HasManyHasAssociationMixin<GroupGallery, string>;
     public countGroupGalleries!: HasManyCountAssociationsMixin;
     public createGroupGallery!: HasManyCreateAssociationMixin<GroupGallery>;
 

@@ -3,7 +3,7 @@ export namespace GroupGalleryPostTypes {
         title: string;
         content: string;
         author: string;
-        galleryId: number;
+        galleryName: string;
     }
     export interface GroupGalleryPostBody extends GroupGalleryPostPostBody {
         id: number;

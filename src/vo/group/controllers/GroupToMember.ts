@@ -1,7 +1,7 @@
 export namespace GroupToMemberTypes {
     export interface GroupToMemberPostBody {
-        groupId: number;
-        memberId: number;
+        groupName: string;
+        memberEmail: string;
         memberRank: string;
     }
     export interface GroupToMemberBody extends GroupToMemberPostBody {
