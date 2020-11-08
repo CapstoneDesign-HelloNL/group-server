@@ -11,22 +11,7 @@ const logger = LogService.getInstance();
 class GroupScheduleDao extends Dao {
     private constructor() {
         super();
-
         this.db = GroupDBManager.getInstance();
-        // GroupSchedule.initiate(this.db.getConnection());
-        // Group.initiate(this.db.getConnection());
-
-        // GroupSchedule.belongsTo(Group, {
-        //     targetKey: "groupId",
-        //     foreignKey: "id"
-        // });
-
-        // const firstSync = async () => {
-        //     await Group.sync();
-        //     await GroupSchedule.sync();
-        //     // await this.endConnect();
-        // };
-        // firstSync();
     }
     protected async connect() {
         this.db = GroupDBManager.getInstance();
@@ -36,7 +21,6 @@ class GroupScheduleDao extends Dao {
         await this.db?.endConnection();
     }
     async find(id: number): Promise<GroupSchedule | null | undefined> {
-        // await this.connect();
         let groupSchedule: GroupSchedule | null = null;
         console.log(groupSchedule);
         try {
@@ -47,35 +31,28 @@ class GroupScheduleDao extends Dao {
             });
         } catch (err) {
             logger.error(err);
-            // await this.endConnect();
             return undefined;
         }
-        // // await this.endConnect();
         return groupSchedule;
     }
 
     async findAll(): Promise<GroupSchedule[] | null | undefined> {
-        // await this.connect();
         let groups: GroupSchedule[] | null = null;
         console.log(groups);
         try {
             groups = await GroupSchedule.findAll();
         } catch (err) {
             logger.error(err);
-            // await this.endConnect();
             return undefined;
         }
-        // // await this.endConnect();
         return groups;
     }
 
     async save(
         groupScheduleData: GroupScheduleTypes.GroupSchedulePostBody
     ): Promise<GroupSchedule | undefined> {
-        // await this.connect();
         if (process.env.NODE_ENV === "test")
             await GroupSchedule.sync({ force: true });
-        // else await Group.sync();
 
         let newGroupSchedule: GroupSchedule | null = null;
         try {
@@ -84,7 +61,6 @@ class GroupScheduleDao extends Dao {
             logger.error(err);
             return undefined;
         }
-        // // await this.endConnect();
         return newGroupSchedule;
     }
 
@@ -92,10 +68,8 @@ class GroupScheduleDao extends Dao {
         groupScheduleData: GroupScheduleTypes.GroupSchedulePostBody,
         afterGroupScheduleData: GroupScheduleTypes.GroupSchedulePostBody
     ): Promise<any | null | undefined> {
-        // await this.connect();
         if (process.env.NODE_ENV === "test")
             await GroupSchedule.sync({ force: true });
-        // else await Group.sync();
 
         let updateGroupSchedule: any | null = null;
         try {
@@ -107,17 +81,14 @@ class GroupScheduleDao extends Dao {
             logger.error(err);
             return undefined;
         }
-        // // await this.endConnect();
         return updateGroupSchedule;
     }
 
     async delete(
         groupScheduleData: GroupScheduleTypes.GroupSchedulePostBody
     ): Promise<number | undefined> {
-        // await this.connect();
         if (process.env.NODE_ENV === "test")
             await GroupSchedule.sync({ force: true });
-        // else await Group.sync();
 
         let deleteScheduleGroup: number | null = null;
         try {
@@ -130,7 +101,6 @@ class GroupScheduleDao extends Dao {
             logger.error(err);
             return undefined;
         }
-        // // await this.endConnect();
         return deleteScheduleGroup; //1 is success, 0 or undefined are fail
     }
 }

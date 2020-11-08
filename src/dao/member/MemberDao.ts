@@ -11,35 +11,21 @@ const logger = LogService.getInstance();
 class MemberDao extends Dao {
     private constructor() {
         super();
-        this.db = new GroupDBManager();
-        Group.initiate(this.db.getConnection());
-        Member.belongsToMany(Group, { through: "GroupToMember" });
-        Group.belongsToMany(Member, { through: "GroupToMember" });
-
-        const firstSync = async () => {
-            await Group.sync();
-            await Member.sync();
-            await this.endConnect();
-        };
-        firstSync();
+        this.db = GroupDBManager.getInstance();
     }
     protected async connect() {
-        this.db = new GroupDBManager();
+        this.db = GroupDBManager.getInstance();
     }
 
     protected async endConnect() {
         await this.db?.endConnection();
     }
-    async find(id: number): Promise<Member | null | undefined> {
+    async find(email: string): Promise<Member | null | undefined> {
         await this.connect();
         let groupMember: Member | null = null;
         console.log(groupMember);
         try {
-            groupMember = await Member.findOne({
-                where: {
-                    id
-                }
-            });
+            groupMember = await Member.findByPk(email);
         } catch (err) {
             logger.error(err);
             await this.endConnect();
@@ -65,11 +51,10 @@ class MemberDao extends Dao {
     }
 
     async save(
-        groupMemberData: MemberTypes.MemberPostBody
+        groupMemberData: MemberTypes.MemberBody
     ): Promise<Member | undefined> {
         await this.connect();
         if (process.env.NODE_ENV === "test") await Member.sync({ force: true });
-        // else await Group.sync();
 
         let newMember: Member | null = null;
         try {
@@ -83,12 +68,11 @@ class MemberDao extends Dao {
     }
 
     async update(
-        groupMemberData: MemberTypes.MemberPostBody,
-        afterMemberData: MemberTypes.MemberPostBody
+        groupMemberData: MemberTypes.MemberBody,
+        afterMemberData: MemberTypes.MemberBody
     ): Promise<any | null | undefined> {
         await this.connect();
         if (process.env.NODE_ENV === "test") await Member.sync({ force: true });
-        // else await Group.sync();
 
         let updateMember: any | null = null;
         try {
@@ -105,11 +89,10 @@ class MemberDao extends Dao {
     }
 
     async delete(
-        groupMemberData: MemberTypes.MemberPostBody
+        groupMemberData: MemberTypes.MemberBody
     ): Promise<number | undefined> {
         await this.connect();
         if (process.env.NODE_ENV === "test") await Member.sync({ force: true });
-        // else await Group.sync();
 
         let deleteMemberGroup: number | null = null;
         try {
