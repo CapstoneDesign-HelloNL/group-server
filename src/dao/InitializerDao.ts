@@ -48,53 +48,61 @@ class InitializerDao extends Dao {
         GroupGalleryPostToPhoto.initiate(this.db.getConnection());
 
         Group.hasMany(GroupAgenda, {
-            sourceKey: "id",
-            foreignKey: "groupId",
+            sourceKey: "name",
+            foreignKey: "groupName",
             as: "agendas" // this determines the name in `associations`!
         });
 
         Group.hasMany(GroupNotice, {
-            sourceKey: "id",
-            foreignKey: "groupId",
+            sourceKey: "name",
+            foreignKey: "groupName",
             as: "notices" // this determines the name in `associations`!
         });
 
         Group.hasMany(GroupSchedule, {
-            sourceKey: "id",
-            foreignKey: "groupId",
+            sourceKey: "name",
+            foreignKey: "groupName",
             as: "schedules" // this determines the name in `associations`!
         });
 
         Group.hasMany(GroupGallery, {
-            sourceKey: "id",
-            foreignKey: "groupId",
+            sourceKey: "name",
+            foreignKey: "groupName",
             as: "galleries" // this determines the name in `associations`!
         });
 
-        Group.belongsToMany(Member, { through: "GroupToMember" });
-        Member.belongsToMany(Group, { through: "GroupToMember" });
+        Group.belongsToMany(Member, {
+            through: "GroupToMember",
+            foreignKey: "groupName", // replaces `productId`
+            otherKey: "memberEmail" // replaces `categoryId`
+        });
+        Member.belongsToMany(Group, {
+            through: "GroupToMember",
+            foreignKey: "memberEmail",
+            otherKey: "groupName"
+        });
 
         GroupAgenda.belongsTo(Group, {
-            targetKey: "id",
-            foreignKey: "groupId",
+            targetKey: "name",
+            foreignKey: "groupName",
             as: "agendasToGroups"
         });
 
         GroupNotice.belongsTo(Group, {
-            targetKey: "id",
-            foreignKey: "groupId",
+            targetKey: "name",
+            foreignKey: "groupName",
             as: "noticesToGroups"
         });
 
         GroupSchedule.belongsTo(Group, {
-            targetKey: "id",
-            foreignKey: "groupId",
+            targetKey: "name",
+            foreignKey: "groupName",
             as: "schedulesToGroups"
         });
 
         GroupGallery.belongsTo(Group, {
-            targetKey: "id",
-            foreignKey: "groupId",
+            targetKey: "name",
+            foreignKey: "groupName",
             as: "gallerysToGroups"
         });
 

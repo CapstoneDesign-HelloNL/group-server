@@ -31,20 +31,20 @@ class Group
     // we have to declare them here purely virtually
     // these will not exist until `Model.init` was called.
     public getGroupAgendas!: HasManyGetAssociationsMixin<GroupAgenda>; // Note the null assertions!
-    public addGroupAgenda!: HasManyAddAssociationMixin<GroupAgenda, number>;
-    public hasGroupAgenda!: HasManyHasAssociationMixin<GroupAgenda, number>;
+    public addGroupAgenda!: HasManyAddAssociationMixin<GroupAgenda, string>;
+    public hasGroupAgenda!: HasManyHasAssociationMixin<GroupAgenda, string>;
     public countGroupAgendas!: HasManyCountAssociationsMixin;
     public createGroupAgenda!: HasManyCreateAssociationMixin<GroupAgenda>;
 
     public getGroupNotices!: HasManyGetAssociationsMixin<GroupNotice>; // Note the null assertions!
-    public addGroupNotice!: HasManyAddAssociationMixin<GroupNotice, number>;
-    public hasGroupNotice!: HasManyHasAssociationMixin<GroupNotice, number>;
+    public addGroupNotice!: HasManyAddAssociationMixin<GroupNotice, string>;
+    public hasGroupNotice!: HasManyHasAssociationMixin<GroupNotice, string>;
     public countGroupNotices!: HasManyCountAssociationsMixin;
     public createGroupNotice!: HasManyCreateAssociationMixin<GroupNotice>;
 
     public getGroupSchedules!: HasManyGetAssociationsMixin<GroupSchedule>; // Note the null assertions!
-    public addGroupSchedule!: HasManyAddAssociationMixin<GroupSchedule, number>;
-    public hasGroupSchedule!: HasManyHasAssociationMixin<GroupSchedule, number>;
+    public addGroupSchedule!: HasManyAddAssociationMixin<GroupSchedule, string>;
+    public hasGroupSchedule!: HasManyHasAssociationMixin<GroupSchedule, string>;
     public countGroupSchedules!: HasManyCountAssociationsMixin;
     public createGroupSchedule!: HasManyCreateAssociationMixin<GroupSchedule>;
 

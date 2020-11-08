@@ -41,7 +41,7 @@ export namespace GroupToMemberModelTypes {
             allowNull: false,
             references: {
                 model: "Group",
-                key: "id"
+                key: "name"
             }
         },
         memberEmail: {
@@ -49,7 +49,7 @@ export namespace GroupToMemberModelTypes {
             allowNull: false,
             references: {
                 model: "Member",
-                key: "id"
+                key: "email"
             }
         },
         memberRank: {
