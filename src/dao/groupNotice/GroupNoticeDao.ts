@@ -3,7 +3,6 @@ import GroupNotice from "@src/models/groupNotice/GroupNoticeModel";
 import LogService from "@src/utils/LogService";
 import Dao from "@src/dao/Dao";
 import { GroupNoticeTypes } from "@src/vo/group/controllers/GroupNotice";
-import Group from "@src/models/group/GroupModel";
 /*
 update, delete logic need to change
 */

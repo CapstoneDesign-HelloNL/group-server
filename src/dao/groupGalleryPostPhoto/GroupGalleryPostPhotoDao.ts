@@ -3,7 +3,6 @@ import GroupGalleryPostPhoto from "@src/models/groupGalleryPostPhoto/GroupGaller
 import LogService from "@src/utils/LogService";
 import Dao from "@src/dao/Dao";
 import { GroupGalleryPostPhotoTypes } from "@src/vo/group/controllers/GroupGalleryPostPhoto";
-import Group from "@src/models/group/GroupModel";
 /*
 update, delete logic need to change
 */

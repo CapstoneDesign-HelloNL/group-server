@@ -3,7 +3,6 @@ import GroupGallery from "@src/models/groupGallery/GroupGalleryModel";
 import LogService from "@src/utils/LogService";
 import Dao from "@src/dao/Dao";
 import { GroupGalleryTypes } from "@src/vo/group/controllers/GroupGallery";
-import Group from "@src/models/group/GroupModel";
 /*
 update, delete logic need to change
 */

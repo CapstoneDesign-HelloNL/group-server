@@ -3,7 +3,6 @@ import GroupSchedule from "@src/models/groupSchedule/GroupScheduleModel";
 import LogService from "@src/utils/LogService";
 import Dao from "@src/dao/Dao";
 import { GroupScheduleTypes } from "@src/vo/group/controllers/GroupSchedule";
-import Group from "@src/models/group/GroupModel";
 /*
 update, delete logic need to change
 */

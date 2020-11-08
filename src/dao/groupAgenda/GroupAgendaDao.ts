@@ -3,7 +3,6 @@ import GroupAgenda from "@src/models/groupAgenda/GroupAgendaModel";
 import LogService from "@src/utils/LogService";
 import Dao from "@src/dao/Dao";
 import { GroupAgendaTypes } from "@src/vo/group/controllers/GroupAgenda";
-import Group from "@src/models/group/GroupModel";
 /*
 update, delete logic need to change
 */

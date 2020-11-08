@@ -2,7 +2,6 @@ import GroupDBManager from "@src/models/GroupDBManager";
 import LogService from "@src/utils/LogService";
 import Dao from "@src/dao/Dao";
 import { MemberTypes } from "@src/vo/group/controllers/Member";
-import Group from "@src/models/group/GroupModel";
 import Member from "@src/models/member/MemberModel";
 /*
 update, delete logic need to change
