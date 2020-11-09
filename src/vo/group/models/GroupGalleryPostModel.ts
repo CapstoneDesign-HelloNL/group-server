@@ -1,4 +1,10 @@
-import { Sequelize, DataTypes, InitOptions, ModelAttributes } from "sequelize";
+import {
+    Sequelize,
+    DataTypes,
+    InitOptions,
+    ModelAttributes,
+    ModelValidateOptions
+} from "sequelize";
 export namespace GroupGalleryPostModelTypes {
     export interface IBaseGroupGalleryPostTableOptions extends InitOptions {
         sequelize: Sequelize;
@@ -7,6 +13,7 @@ export namespace GroupGalleryPostModelTypes {
     export interface IColumnOption {
         type: DataTypes.DataType;
         allowNull: boolean;
+        validate?: ModelValidateOptions;
     }
     export interface IGroupGalleryPostScheme extends ModelAttributes {
         title: IColumnOption;
@@ -22,19 +29,31 @@ export namespace GroupGalleryPostModelTypes {
         },
         title: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: false,
+            validate: {
+                notEmpty: true
+            }
         },
         content: {
-            type: DataTypes.STRING,
-            allowNull: false
+            type: DataTypes.TEXT,
+            allowNull: false,
+            validate: {
+                notEmpty: true
+            }
         },
         author: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: false,
+            validate: {
+                notEmpty: true
+            }
         },
         galleryName: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: false,
+            validate: {
+                notEmpty: true
+            }
         }
     };
 }

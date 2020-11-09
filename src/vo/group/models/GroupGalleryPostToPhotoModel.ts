@@ -4,7 +4,8 @@ import {
     InitOptions,
     Model,
     ModelAttributes,
-    ModelAttributeColumnReferencesOptions
+    ModelAttributeColumnReferencesOptions,
+    ModelValidateOptions
 } from "sequelize";
 export namespace GroupGalleryPostToPhotoModelTypes {
     export interface IBaseGroupGalleryPostToPhotoTableOptions
@@ -21,6 +22,7 @@ export namespace GroupGalleryPostToPhotoModelTypes {
         type: DataTypes.DataType;
         allowNull: boolean;
         references?: IForeignReferences;
+        validate?: ModelValidateOptions;
     }
     export interface IGroupGalleryPostToPhotoScheme extends ModelAttributes {
         galleryPostId: IColumnOption;
@@ -35,6 +37,9 @@ export namespace GroupGalleryPostToPhotoModelTypes {
         galleryPostId: {
             type: DataTypes.INTEGER,
             allowNull: false,
+            validate: {
+                notEmpty: true
+            },
             references: {
                 model: "GroupGalleryPost",
                 key: "id"
@@ -43,6 +48,9 @@ export namespace GroupGalleryPostToPhotoModelTypes {
         galleryPhotoId: {
             type: DataTypes.INTEGER,
             allowNull: false,
+            validate: {
+                notEmpty: true
+            },
             references: {
                 model: "GroupGalleryPostPhoto",
                 key: "id"

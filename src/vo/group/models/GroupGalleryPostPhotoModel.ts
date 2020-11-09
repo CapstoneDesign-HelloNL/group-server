@@ -1,4 +1,10 @@
-import { Sequelize, DataTypes, InitOptions, ModelAttributes } from "sequelize";
+import {
+    Sequelize,
+    DataTypes,
+    InitOptions,
+    ModelAttributes,
+    ModelValidateOptions
+} from "sequelize";
 export namespace GroupGalleryPostPhotoModelTypes {
     export interface IBaseGroupGalleryPostPhotoTableOptions
         extends InitOptions {
@@ -8,6 +14,7 @@ export namespace GroupGalleryPostPhotoModelTypes {
     export interface IColumnOption {
         type: DataTypes.DataType;
         allowNull: boolean;
+        validate?: ModelValidateOptions;
     }
     export interface IGroupGalleryPostPhotoScheme extends ModelAttributes {
         galleryPostPhotoUrl: IColumnOption;
@@ -19,8 +26,12 @@ export namespace GroupGalleryPostPhotoModelTypes {
             primaryKey: true
         },
         galleryPostPhotoUrl: {
-            type: DataTypes.STRING,
-            allowNull: false
+            type: DataTypes.TEXT,
+            allowNull: false,
+            validate: {
+                isUrl: true,
+                notEmpty: true
+            }
         }
     };
 }

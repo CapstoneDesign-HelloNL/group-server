@@ -4,7 +4,8 @@ import {
     InitOptions,
     ModelAttributes,
     Model,
-    ModelAttributeColumnReferencesOptions
+    ModelAttributeColumnReferencesOptions,
+    ModelValidateOptions
 } from "sequelize";
 
 export namespace GroupToMemberModelTypes {
@@ -22,6 +23,7 @@ export namespace GroupToMemberModelTypes {
         allowNull: boolean;
         defaultValue?: any;
         primaryKey?: boolean;
+        validate?: ModelValidateOptions;
         references?: IForeignReferences;
     }
     export interface IGroupToMemberScheme extends ModelAttributes {
@@ -39,6 +41,9 @@ export namespace GroupToMemberModelTypes {
         groupName: {
             type: DataTypes.STRING,
             allowNull: false,
+            validate: {
+                notEmpty: true
+            },
             references: {
                 model: "Group",
                 key: "name"
@@ -47,6 +52,10 @@ export namespace GroupToMemberModelTypes {
         memberEmail: {
             type: DataTypes.STRING,
             allowNull: false,
+            validate: {
+                notEmpty: true,
+                isEmail: true
+            },
             references: {
                 model: "Member",
                 key: "email"
@@ -55,7 +64,11 @@ export namespace GroupToMemberModelTypes {
         memberRank: {
             type: DataTypes.STRING,
             allowNull: false,
-            defaultValue: "member"
+            validate: {
+                isIn: [["일반회원", "임원진", "관리자"]],
+                notEmpty: true
+            },
+            defaultValue: "일반회원"
         }
     };
 }

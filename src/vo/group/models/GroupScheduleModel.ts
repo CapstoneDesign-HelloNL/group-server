@@ -1,4 +1,10 @@
-import { Sequelize, DataTypes, InitOptions, ModelAttributes } from "sequelize";
+import {
+    Sequelize,
+    DataTypes,
+    InitOptions,
+    ModelAttributes,
+    ModelValidateOptions
+} from "sequelize";
 export namespace GroupScheduleModelTypes {
     export interface IBaseGroupScheduleTableOptions extends InitOptions {
         sequelize: Sequelize;
@@ -7,6 +13,7 @@ export namespace GroupScheduleModelTypes {
     export interface IColumnOption {
         type: DataTypes.DataType;
         allowNull: boolean;
+        validate?: ModelValidateOptions;
     }
     export interface IGroupScheduleScheme extends ModelAttributes {
         title: IColumnOption;
@@ -24,27 +31,47 @@ export namespace GroupScheduleModelTypes {
         },
         title: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: false,
+            validate: {
+                notEmpty: true
+            }
         },
         content: {
-            type: DataTypes.STRING,
-            allowNull: false
+            type: DataTypes.TEXT,
+            allowNull: true,
+            validate: {
+                notEmpty: true
+            }
         },
         author: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: false,
+            validate: {
+                notEmpty: true
+            }
         },
         startDate: {
             type: DataTypes.DATE,
-            allowNull: false
+            allowNull: false,
+            validate: {
+                isDate: true,
+                notEmpty: true
+            }
         },
         endDate: {
             type: DataTypes.DATE,
-            allowNull: false
+            allowNull: false,
+            validate: {
+                isDate: true,
+                notEmpty: true
+            }
         },
         groupName: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: false,
+            validate: {
+                notEmpty: true
+            }
         }
     };
 }

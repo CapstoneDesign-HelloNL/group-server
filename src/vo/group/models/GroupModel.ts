@@ -39,7 +39,10 @@ export namespace GroupModelTypes {
         },
         advisor: {
             type: DataTypes.STRING,
-            allowNull: true
+            allowNull: true,
+            validate: {
+                notEmpty: true
+            }
         }
     };
 }

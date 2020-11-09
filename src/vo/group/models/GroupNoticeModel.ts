@@ -1,4 +1,10 @@
-import { Sequelize, DataTypes, InitOptions, ModelAttributes } from "sequelize";
+import {
+    Sequelize,
+    DataTypes,
+    InitOptions,
+    ModelAttributes,
+    ModelValidateOptions
+} from "sequelize";
 export namespace GroupNoticeModelTypes {
     export interface IBaseGroupNoticeTableOptions extends InitOptions {
         sequelize: Sequelize;
@@ -7,6 +13,7 @@ export namespace GroupNoticeModelTypes {
     export interface IColumnOption {
         type: DataTypes.DataType;
         allowNull: boolean;
+        validate?: ModelValidateOptions;
     }
     export interface IGroupNoticeScheme extends ModelAttributes {
         title: IColumnOption;
@@ -23,23 +30,38 @@ export namespace GroupNoticeModelTypes {
         },
         title: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: false,
+            validate: {
+                notEmpty: true
+            }
         },
         content: {
-            type: DataTypes.STRING,
-            allowNull: false
+            type: DataTypes.TEXT,
+            allowNull: false,
+            validate: {
+                notEmpty: true
+            }
         },
         author: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: false,
+            validate: {
+                notEmpty: true
+            }
         },
         photo: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: true,
+            validate: {
+                isUrl: true
+            }
         },
         groupName: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: false,
+            validate: {
+                notEmpty: true
+            }
         }
     };
 }
