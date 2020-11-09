@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import InitDao from "@src/dao/InitializerDao";
 
 class InitService {

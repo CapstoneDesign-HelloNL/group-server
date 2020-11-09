@@ -1,4 +1,10 @@
-import { Sequelize, DataTypes, InitOptions, ModelAttributes } from "sequelize";
+import {
+    Sequelize,
+    DataTypes,
+    InitOptions,
+    ModelAttributes,
+    ModelValidateOptions
+} from "sequelize";
 export namespace GroupModelTypes {
     export interface IBaseGroupTableOptions extends InitOptions {
         sequelize: Sequelize;
@@ -8,6 +14,7 @@ export namespace GroupModelTypes {
         type: DataTypes.DataType;
         allowNull: boolean;
         primaryKey?: true;
+        validate?: ModelValidateOptions;
     }
     export interface IGroupScheme extends ModelAttributes {
         name: IColumnOption;
@@ -18,15 +25,21 @@ export namespace GroupModelTypes {
         name: {
             type: DataTypes.STRING,
             allowNull: false,
-            primaryKey: true
+            primaryKey: true,
+            validate: {
+                notEmpty: true
+            }
         },
         admin: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: false,
+            validate: {
+                notEmpty: true
+            }
         },
         advisor: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: true
         }
     };
 }

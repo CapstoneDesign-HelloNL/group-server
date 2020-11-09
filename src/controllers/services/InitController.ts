@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/require-await */
+/* eslint-disable @typescript-eslint/no-empty-function */
+/* eslint-disable @typescript-eslint/no-floating-promises */
 import { NextFunction, Request, Response } from "express";
 
 import Controller from "@src/controllers/Controller";

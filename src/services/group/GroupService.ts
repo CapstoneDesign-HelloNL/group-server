@@ -6,7 +6,7 @@ import GroupDao from "@src/dao/group/GroupDao";
 
 class GroupService {
     static async isAlreadyHaveGroup(req: Request): Promise<string> {
-        const groupBody: GroupTypes.GroupPostBody = req.body;
+        const groupBody: GroupTypes.GroupBody = req.body;
         if (!groupBody.name || !groupBody.admin) return "BadRequest";
         const find = await GroupDao.getInstance().find(groupBody.name);
         switch (find) {
@@ -19,7 +19,7 @@ class GroupService {
     }
 
     static async findAll(req: Request): Promise<Group | string> {
-        const groupBody: GroupTypes.GroupPostBody = req.body;
+        const groupBody: GroupTypes.GroupBody = req.body;
         if (!groupBody.name) return "BadRequest";
         const find = await GroupDao.getInstance().findAll(groupBody.name);
         switch (find) {
@@ -31,12 +31,27 @@ class GroupService {
                 return find;
         }
     }
+
+    static async findByPK(req: Request): Promise<Group | string> {
+        const groupBody: GroupTypes.GroupBody = req.body;
+        if (!groupBody.name) return "BadRequest";
+        const find = await GroupDao.getInstance().findByPK(groupBody.name);
+        switch (find) {
+            case undefined:
+                return "InternalServerError";
+            case null:
+                return "UnexpectedError";
+            default:
+                return find;
+        }
+    }
+
     static async create(
         req: Request,
         res: Response,
         next: NextFunction
     ): Promise<string> {
-        const groupBody: GroupTypes.GroupPostBody = req.body;
+        const groupBody: GroupTypes.GroupBody = req.body;
         if (!groupBody.name || !groupBody.admin) return "BadRequest";
 
         const group:
@@ -58,7 +73,7 @@ class GroupService {
         res: Response,
         next: NextFunction
     ): Promise<string> {
-        const groupBody: GroupTypes.GroupPostBody = req.body;
+        const groupBody: GroupTypes.GroupBody = req.body;
         if (!groupBody.name || !groupBody.admin) return "BadRequest";
 
         const group:
@@ -80,7 +95,7 @@ class GroupService {
         res: Response,
         next: NextFunction
     ): Promise<string> {
-        const groupBody: GroupTypes.GroupPostBody = req.body;
+        const groupBody: GroupTypes.GroupBody = req.body;
         if (!groupBody.name || !groupBody.admin) return "BadRequest";
 
         const group:

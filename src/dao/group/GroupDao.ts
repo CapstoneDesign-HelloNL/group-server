@@ -17,10 +17,8 @@ class GroupDao extends Dao {
     protected async endConnect() {
         await this.db?.endConnection();
     }
-    async find(name: string): Promise<Group | null | undefined> {
-        // await this.connect();
+    async find(name: string, email: string): Promise<Group | null | undefined> {
         let group: Group | null = null;
-        console.log(group);
         try {
             group = await Group.findOne({
                 where: {
@@ -29,15 +27,12 @@ class GroupDao extends Dao {
             });
         } catch (err) {
             logger.error(err);
-            // await this.endConnect();
             return undefined;
         }
-        // // await this.endConnect();
         return group;
     }
 
     async findAll(name: string): Promise<Group[] | null | undefined> {
-        // await this.connect();
         let groups: Group[] | null = null;
         console.log(groups);
         try {
@@ -48,17 +43,13 @@ class GroupDao extends Dao {
             });
         } catch (err) {
             logger.error(err);
-            // await this.endConnect();
             return undefined;
         }
-        // // await this.endConnect();
         return groups;
     }
 
     async save(groupData: GroupTypes.GroupBody): Promise<Group | undefined> {
-        // await this.connect();
         if (process.env.NODE_ENV === "test") await Group.sync({ force: true });
-        // else await Group.sync();
 
         let newGroup: Group | null = null;
         try {
@@ -67,7 +58,6 @@ class GroupDao extends Dao {
             logger.error(err);
             return undefined;
         }
-        // // await this.endConnect();
         return newGroup;
     }
 
@@ -75,9 +65,7 @@ class GroupDao extends Dao {
         groupData: GroupTypes.GroupBody,
         afterGroupData: GroupTypes.GroupBody
     ): Promise<any | null | undefined> {
-        // await this.connect();
         if (process.env.NODE_ENV === "test") await Group.sync({ force: true });
-        // else await Group.sync();
 
         let updateGroup: any | null = null;
         try {
@@ -89,14 +77,11 @@ class GroupDao extends Dao {
             logger.error(err);
             return undefined;
         }
-        // // await this.endConnect();
         return updateGroup;
     }
 
     async delete(groupData: GroupTypes.GroupBody): Promise<number | undefined> {
-        // await this.connect();
         if (process.env.NODE_ENV === "test") await Group.sync({ force: true });
-        // else await Group.sync();
 
         let deleteGroup: number | null = null;
         try {
@@ -109,7 +94,6 @@ class GroupDao extends Dao {
             logger.error(err);
             return undefined;
         }
-        // // await this.endConnect();
         return deleteGroup; //1 is success, 0 or undefined are fail
     }
 }
