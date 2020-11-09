@@ -77,12 +77,14 @@ class InitializerDao extends Dao {
         Group.belongsToMany(Member, {
             through: "GroupToMember",
             foreignKey: "groupName", // replaces `productId`
-            otherKey: "memberEmail" // replaces `categoryId`
+            otherKey: "memberEmail", // replaces `categoryId`
+            as: "members"
         });
         Member.belongsToMany(Group, {
             through: "GroupToMember",
             foreignKey: "memberEmail",
-            otherKey: "groupName"
+            otherKey: "groupName",
+            as: "memberToGroup"
         });
 
         GroupAgenda.belongsTo(Group, {

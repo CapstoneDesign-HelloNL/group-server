@@ -3,6 +3,8 @@ import Group from "@src/models/group/GroupModel";
 import LogService from "@src/utils/LogService";
 import Dao from "@src/dao/Dao";
 import { GroupTypes } from "@src/vo/group/controllers/Group";
+import Member from "@src/models/member/MemberModel";
+import { MemberTypes } from "@src/vo/group/controllers/Member";
 
 const logger = LogService.getInstance();
 class GroupDao extends Dao {
@@ -17,7 +19,39 @@ class GroupDao extends Dao {
     protected async endConnect() {
         await this.db?.endConnection();
     }
+
     async find(name: string, email: string): Promise<Group | null | undefined> {
+        let group: Group | null = null;
+        try {
+            group = await Group.findOne({
+                where: {
+                    name
+                }
+            });
+        } catch (err) {
+            logger.error(err);
+            return undefined;
+        }
+        return group;
+    }
+
+    async findSignUp(email: string): Promise<Member | null | undefined> {
+        let member: Member | null = null;
+        try {
+            member = await Member.findOne({
+                where: {
+                    email
+                },
+                include: [Group.associations.members]
+            });
+        } catch (err) {
+            logger.error(err);
+            return undefined;
+        }
+        return member;
+    }
+
+    async findByName(name: string): Promise<Group | null | undefined> {
         let group: Group | null = null;
         try {
             group = await Group.findOne({
@@ -39,7 +73,8 @@ class GroupDao extends Dao {
             groups = await Group.findAll({
                 where: {
                     name
-                }
+                },
+                include: [Member.associations.memberToGroup]
             });
         } catch (err) {
             logger.error(err);
@@ -48,12 +83,19 @@ class GroupDao extends Dao {
         return groups;
     }
 
-    async save(groupData: GroupTypes.GroupBody): Promise<Group | undefined> {
+    async save(
+        memberData: MemberTypes.MemberBody,
+        groupData: GroupTypes.GroupBody
+    ): Promise<Group | undefined> {
         if (process.env.NODE_ENV === "test") await Group.sync({ force: true });
 
         let newGroup: Group | null = null;
+        let newMember: Member | null = null;
         try {
             newGroup = await Group.create(groupData);
+            newMember = await Member.create(memberData);
+            await newGroup.addMember(newMember, "GroupToMember");
+            await newMember.addGroup(newGroup);
         } catch (err) {
             logger.error(err);
             return undefined;

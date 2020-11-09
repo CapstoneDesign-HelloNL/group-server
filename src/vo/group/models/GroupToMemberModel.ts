@@ -27,7 +27,6 @@ export namespace GroupToMemberModelTypes {
         references?: IForeignReferences;
     }
     export interface IGroupToMemberScheme extends ModelAttributes {
-        id: IColumnOption;
         groupName: IColumnOption;
         memberEmail: IColumnOption;
         memberRank: IColumnOption;
@@ -36,6 +35,7 @@ export namespace GroupToMemberModelTypes {
         id: {
             type: DataTypes.INTEGER,
             allowNull: false,
+            autoIncrement: true,
             primaryKey: true
         },
         groupName: {

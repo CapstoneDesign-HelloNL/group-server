@@ -3,6 +3,7 @@ import { Request, Response, NextFunction } from "express";
 import { GroupTypes } from "@src/vo/group/controllers/Group";
 import Group from "@src/models/group/GroupModel";
 import GroupDao from "@src/dao/group/GroupDao";
+import { MemberTypes } from "@src/vo/group/controllers/Member";
 
 class GroupService {
     static async isAlreadyHaveGroup(req: Request): Promise<string> {
@@ -52,12 +53,16 @@ class GroupService {
         next: NextFunction
     ): Promise<string> {
         const groupBody: GroupTypes.GroupBody = req.body;
+        const memberBody: MemberTypes.MemberBody = req.body.decoded;
         if (!groupBody.name || !groupBody.admin) return "BadRequest";
 
         const group:
             | Group
             | null
-            | undefined = await GroupDao.getInstance().save(groupBody);
+            | undefined = await GroupDao.getInstance().save(
+            memberBody,
+            groupBody
+        );
         switch (group) {
             case undefined:
                 return "InternalServerError";

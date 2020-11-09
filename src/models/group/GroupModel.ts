@@ -7,7 +7,17 @@ import {
     HasManyAddAssociationMixin,
     HasManyHasAssociationMixin,
     HasManyCountAssociationsMixin,
-    HasManyCreateAssociationMixin
+    HasManyCreateAssociationMixin,
+    BelongsToManyGetAssociationsMixin,
+    BelongsToManyAddAssociationMixin,
+    BelongsToManyAddAssociationsMixin,
+    BelongsToManyHasAssociationMixin,
+    BelongsToManyHasAssociationsMixin,
+    BelongsToManyCreateAssociationMixin,
+    BelongsToManyRemoveAssociationMixin,
+    BelongsToManyRemoveAssociationsMixin,
+    BelongsToManyCountAssociationsMixin,
+    BelongsToManyAddAssociationMixinOptions
 } from "sequelize";
 import { GroupModelTypes } from "@src/vo/group/models/GroupModel";
 import { GroupTypes } from "@src/vo/group/controllers/Group";
@@ -15,6 +25,7 @@ import GroupAgenda from "@src/models/groupAgenda/GroupAgendaModel";
 import GroupSchedule from "@src/models/groupSchedule/GroupScheduleModel";
 import GroupNotice from "@src/models/groupNotice/GroupNoticeModel";
 import GroupGallery from "../groupGallery/GroupGalleryModel";
+import Member from "@src/models/member/MemberModel";
 
 interface GroupCreationAttributes
     extends Optional<GroupTypes.GroupBody, "name"> {}
@@ -54,16 +65,28 @@ class Group
     public countGroupGalleries!: HasManyCountAssociationsMixin;
     public createGroupGallery!: HasManyCreateAssociationMixin<GroupGallery>;
 
+    public getMembers!: BelongsToManyGetAssociationsMixin<Member>; // Note the null assertions!
+    public addMember!: BelongsToManyAddAssociationMixin<Member, string>;
+    public addMembers!: BelongsToManyAddAssociationsMixin<Member, string>;
+    public hasMember!: BelongsToManyHasAssociationMixin<Member, string>;
+    public hasMembers!: BelongsToManyHasAssociationsMixin<Member, string>;
+    public createMember!: BelongsToManyCreateAssociationMixin<Member>;
+    public removeMember!: BelongsToManyRemoveAssociationMixin<Member, string>;
+    public removeMembers!: BelongsToManyRemoveAssociationsMixin<Member, string>;
+    public countMembers!: BelongsToManyCountAssociationsMixin;
+
     public readonly groupAgenda?: GroupAgenda[];
     public readonly groupNotice?: GroupNotice[];
     public readonly groupSchedule?: GroupSchedule[];
     public readonly groupGallery?: GroupGallery[];
+    public readonly member?: Member[];
 
     public static associations: {
         agendas: Association<Group, GroupAgenda>;
         notices: Association<Group, GroupNotice>;
         schedules: Association<Group, GroupSchedule>;
         galleries: Association<Group, GroupGallery>;
+        members: Association<Group, Member>;
     };
 
     static initiate(connection: Sequelize): Model {
