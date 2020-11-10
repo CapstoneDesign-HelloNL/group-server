@@ -52,10 +52,7 @@ class GroupService {
     static async findByName(req: Request): Promise<Group | string> {
         const groupBody: GroupTypes.GroupBody = req.body;
         if (!groupBody.name) return "BadRequest";
-        const find = await GroupDao.getInstance().findByName(
-            req.body.decoded.email,
-            groupBody.name
-        );
+        const find = await GroupDao.getInstance().findByName(groupBody.name);
         switch (find) {
             case undefined:
                 return "InternalServerError";

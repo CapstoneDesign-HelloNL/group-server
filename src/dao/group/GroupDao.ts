@@ -1,3 +1,4 @@
+import { Op } from "sequelize";
 import GroupDBManager from "@src/models/GroupDBManager";
 import Group from "@src/models/group/GroupModel";
 import LogService from "@src/utils/LogService";
@@ -62,7 +63,11 @@ class GroupDao extends Dao {
         try {
             group = await Group.findAll({
                 //Group이면 밑에 include에 group 클래스 내부에 정의한 association을 적어준다.
-                where: { name }
+                where: {
+                    name: {
+                        [Op.like]: `%${name}%`
+                    }
+                }
                 // include: [
                 //     {
                 //         model: Member,
@@ -106,6 +111,7 @@ class GroupDao extends Dao {
         let newMember: Member | null = null;
         let findMember: Member | null = null;
         let findGroup: Group | null = null;
+        groupData.advisor = "관리자";
         try {
             newGroup = await Group.create(groupData);
             findMember = await Member.findByPk(memberData.email);
