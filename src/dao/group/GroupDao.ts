@@ -10,7 +10,7 @@ import ReqData from "@src/vo/group/services/reqData";
 
 const logger = LogService.getInstance();
 class GroupDao extends Dao {
-    private constructor() {
+    protected constructor() {
         super();
         this.db = GroupDBManager.getInstance();
     }
@@ -61,7 +61,10 @@ class GroupDao extends Dao {
         return member;
     }
 
-    async findByName(name: string): Promise<Group[] | null | undefined> {
+    async findByName({
+        data: { name },
+        decoded: { email }
+    }: ReqData): Promise<Group[] | null | undefined> {
         let group: Group[] | null = null;
         try {
             group = await Group.findAll({

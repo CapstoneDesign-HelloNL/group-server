@@ -13,16 +13,20 @@ const serviceFactory = <T>(
             decoded: req.body.decoded,
             params: req.params
         };
-
-        // if (!groupBody.content) return "BadRequest";
-        const result = await dao.getInstance().daoFunc(reqData);
-        switch (result) {
-            case undefined:
-                return "InternalServerError";
-            case null:
-                return "UnexpectedError";
-            default:
-                return result;
+        try {
+            // if (!groupBody.content) return "BadRequest";
+            const result = await daoFunc(reqData);
+            switch (result) {
+                case undefined:
+                    return "InternalServerError";
+                case null:
+                    return "UnexpectedError";
+                default:
+                    return result;
+            }
+        } catch (e) {
+            console.log(e);
+            return "InternalServerError";
         }
     };
     return funcName;

@@ -19,7 +19,7 @@ import Dao from "@src/dao/Dao";
 
 class InitializerDao extends Dao {
     protected db: GroupDBManager;
-    constructor() {
+    protected constructor() {
         super();
         this.db = GroupDBManager.getInstance();
         const firstInit = async () => await this.init();

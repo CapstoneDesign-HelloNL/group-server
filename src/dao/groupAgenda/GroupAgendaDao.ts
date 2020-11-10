@@ -9,7 +9,7 @@ update, delete logic need to change
 */
 const logger = LogService.getInstance();
 class GroupAgendaDao extends Dao {
-    private constructor() {
+    protected constructor() {
         super();
         this.db = GroupDBManager.getInstance();
     }
