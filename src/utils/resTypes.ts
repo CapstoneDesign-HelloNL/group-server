@@ -27,6 +27,8 @@ const resTypes = {
         resData(res, 500, "Internal Server Error!"),
     unexpectedErrorRes: (res: Response) =>
         resData(res, 500, "Unexpected Error!"),
+    noItemDeletedRes: (res: Response, item: string) =>
+        resData(res, 404, `No ${item} delete!`),
     dbErrorRes: (res: Response) => resData(res, 502, "DB Error!")
 };
 

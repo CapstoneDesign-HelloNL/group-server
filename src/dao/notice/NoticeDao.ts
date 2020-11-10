@@ -37,18 +37,18 @@ class NoticeDao extends Dao {
 
     async findAllByGroup({
         data,
-        decoded
-    }: StrictReqData): Promise<Notice[] | string | null | undefined> {
+        decoded,
+        params
+    }: StrictReqData): Promise<Notice[] | null | undefined> {
         let result: Notice[] | null = null;
         try {
             result = await Notice.findAll({
                 where: {
-                    groupName: data.groupName
+                    groupName: params?.groupName
                 }
             });
         } catch (err) {
             logger.error(err);
-            if (err instanceof ValidationError) return `BadRequest`;
             return undefined;
         }
         return result;
@@ -58,16 +58,16 @@ class NoticeDao extends Dao {
         data,
         decoded
     }: StrictReqData): Promise<Notice | string | undefined> {
-        let newNotice: Notice | null = null;
+        let result: Notice | null = null;
         try {
-            newNotice = await Notice.create(data);
+            result = await Notice.create(data);
         } catch (err) {
             if (err instanceof UniqueConstraintError) return `AlreadyExistItem`;
             else if (err instanceof ValidationError) return `BadRequest`;
             logger.error(err);
             return undefined;
         }
-        return newNotice;
+        return result;
     }
 
     async update({
@@ -76,36 +76,40 @@ class NoticeDao extends Dao {
     }: StrictReqData): Promise<any | null | undefined> {
         if (process.env.NODE_ENV === "test") await Notice.sync({ force: true });
 
-        let updateNotice: any | null = null;
+        let result: any | null = null;
         try {
-            updateNotice = await Notice.update(data.afterNoticeData, {
-                where: { ...data.noticeData }
-            });
+            result = await Notice.update(
+                { ...data },
+                {
+                    where: { id: data.id }
+                }
+            );
         } catch (err) {
             logger.error(err);
             return undefined;
         }
-        return updateNotice;
+        return result;
     }
 
     async delete({
         data,
         decoded
-    }: StrictReqData): Promise<number | undefined> {
+    }: StrictReqData): Promise<number | string | undefined> {
         if (process.env.NODE_ENV === "test") await Notice.sync({ force: true });
 
-        let deleteNoticeGroup: number | null = null;
+        let result: number | null = null;
         try {
-            deleteNoticeGroup = await Notice.destroy({
+            result = await Notice.destroy({
                 where: {
-                    ...data.noticeData
+                    ...data
                 }
             });
         } catch (err) {
             logger.error(err);
+            if (err instanceof ValidationError) return `BadRequest`;
             return undefined;
         }
-        return deleteNoticeGroup; //1 is success, 0 or undefined are fail
+        return result; //1 is success, 0 or undefined are fail
     }
 }
 

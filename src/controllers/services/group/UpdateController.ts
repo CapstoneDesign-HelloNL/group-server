@@ -1,9 +1,10 @@
 import { NextFunction, Request, Response } from "express";
+
 import Controller from "@src/controllers/Controller";
-import NoticeService from "@src/services/notice/NoticeService";
+import GroupService from "@src/services/group/GroupService";
 import resTypes from "@src/utils/resTypes";
 
-class UpdateController extends Controller {
+class CreateController extends Controller {
     private result: string;
     constructor() {
         super();
@@ -14,7 +15,7 @@ class UpdateController extends Controller {
         res: Response,
         next: NextFunction
     ): Promise<void> {
-        this.result = await NoticeService.update(req);
+        this.result = await GroupService.create(req);
     }
     protected async doResolve(
         req: Request,
@@ -32,12 +33,12 @@ class UpdateController extends Controller {
                 resTypes.unexpectedErrorRes(res);
                 break;
             case "AlreadyExistItem":
-                resTypes.alreadyExistItemRes(res, "notice");
+                resTypes.alreadyExistItemRes(res, "group");
                 break;
             default:
-                resTypes.successRes(res, "Update notice");
+                resTypes.successRes(res, "Create Group");
         }
     }
 }
 
-export default UpdateController;
+export default CreateController;

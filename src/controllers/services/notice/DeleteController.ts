@@ -14,7 +14,8 @@ class UpdateController extends Controller {
         res: Response,
         next: NextFunction
     ): Promise<void> {
-        this.result = await NoticeService.update(req);
+        this.result = await NoticeService.delete(req);
+        console.log(this.result);
     }
     protected async doResolve(
         req: Request,
@@ -34,8 +35,11 @@ class UpdateController extends Controller {
             case "AlreadyExistItem":
                 resTypes.alreadyExistItemRes(res, "notice");
                 break;
+            case "NoItemDeleted":
+                resTypes.noItemDeletedRes(res, "notice");
+                break;
             default:
-                resTypes.successRes(res, "Update notice");
+                resTypes.successRes(res, "Delete notice");
         }
     }
 }
