@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import Controller from "@src/controllers/Controller";
-import GroupAgendaService from "@src/services/groupAgenda/GroupAgendaService";
+import GroupGalleryPostService from "@src/services/groupGalleryPost/GroupGalleryPostService";
 import resTypes from "@src/utils/resTypes";
 
 class CreateController extends Controller {
@@ -14,7 +14,7 @@ class CreateController extends Controller {
         res: Response,
         next: NextFunction
     ): Promise<void> {
-        this.result = await GroupAgendaService.create(req);
+        this.result = await GroupGalleryPostService.create(req);
     }
     protected async doResolve(
         req: Request,
