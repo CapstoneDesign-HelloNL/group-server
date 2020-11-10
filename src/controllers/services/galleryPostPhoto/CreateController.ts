@@ -32,10 +32,10 @@ class CreateController extends Controller {
                 resTypes.unexpectedErrorRes(res);
                 break;
             case "AlreadyExistItem":
-                resTypes.alreadyExistItemRes(res, "group agenda");
+                resTypes.alreadyExistItemRes(res, "gallery post photo");
                 break;
             default:
-                resTypes.successRes(res, "Create group agenda");
+                resTypes.successRes(res, "Create gallery post photo");
         }
     }
 }
