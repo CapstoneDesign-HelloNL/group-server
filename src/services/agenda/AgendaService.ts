@@ -3,7 +3,10 @@ import AgendaDao from "@src/dao/agenda/AgendaDao";
 import serviceFactory from "@src/vo/group/services/ServiceFactory";
 
 class AgendaService {
-    static findAllByName = serviceFactory.get<Agenda[]>(
+    static findOne = serviceFactory.get<Agenda>(
+        AgendaDao.getInstance().findOne
+    );
+    static findAll = serviceFactory.get<Agenda[]>(
         AgendaDao.getInstance().findAll
     );
     static create = serviceFactory.postOrUpdate<Agenda>(

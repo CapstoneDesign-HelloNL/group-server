@@ -4,7 +4,7 @@ import AgendaService from "@src/services/agenda/AgendaService";
 import resTypes from "@src/utils/resTypes";
 import Agenda from "@src/models/agenda/AgendaModel";
 
-class FindAllByGroupNameController extends Controller {
+class FindAllController extends Controller {
     private result: Agenda[] | string;
     constructor() {
         super();
@@ -15,7 +15,7 @@ class FindAllByGroupNameController extends Controller {
         res: Response,
         next: NextFunction
     ): Promise<void> {
-        this.result = await AgendaService.findAllByName(req);
+        this.result = await AgendaService.findAll(req);
     }
     protected async doResolve(
         req: Request,
@@ -38,4 +38,4 @@ class FindAllByGroupNameController extends Controller {
     }
 }
 
-export default FindAllByGroupNameController;
+export default FindAllController;

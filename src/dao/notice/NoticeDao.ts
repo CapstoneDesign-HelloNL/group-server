@@ -2,11 +2,12 @@ import GroupDBManager from "@src/models/GroupDBManager";
 import Notice from "@src/models/notice/NoticeModel";
 import LogService from "@src/utils/LogService";
 import Dao from "@src/dao/Dao";
-import { StrictReqData } from "@src/vo/group/services/reqData";
+import {
+    AllStrictReqData,
+    ParamsStrictReqData
+} from "@src/vo/group/services/reqData";
 import { UniqueConstraintError, ValidationError } from "sequelize";
-/*
-update, delete logic need to change
-*/
+
 const logger = LogService.getInstance();
 class NoticeDao extends Dao {
     private constructor() {
@@ -20,14 +21,17 @@ class NoticeDao extends Dao {
     protected async endConnect() {
         await this.db?.endConnection();
     }
+
     async findOne({
         data,
         decoded,
         params
-    }: StrictReqData): Promise<Notice | string | null | undefined> {
+    }: ParamsStrictReqData): Promise<Notice | string | null | undefined> {
         let result: Notice | null = null;
         try {
-            result = await Notice.findByPk(params?.id);
+            result = await Notice.findOne({
+                where: { id: params.id, groupName: params.groupName }
+            });
         } catch (err) {
             logger.error(err);
             if (err instanceof ValidationError) return `BadRequest`;
@@ -40,12 +44,12 @@ class NoticeDao extends Dao {
         data,
         decoded,
         params
-    }: StrictReqData): Promise<Notice[] | string | null | undefined> {
+    }: ParamsStrictReqData): Promise<Notice[] | string | null | undefined> {
         let result: Notice[] | null = null;
         try {
             result = await Notice.findAll({
                 where: {
-                    groupName: params?.groupName
+                    groupName: params.groupName
                 }
             });
         } catch (err) {
@@ -60,11 +64,13 @@ class NoticeDao extends Dao {
         data,
         decoded,
         params
-    }: StrictReqData): Promise<Notice | string | undefined> {
+    }: AllStrictReqData): Promise<Notice | string | undefined> {
         let result: Notice | null = null;
-        data.groupName = params?.groupName;
         try {
-            result = await Notice.create(data);
+            result = await Notice.create({
+                groupName: params.groupName,
+                ...data
+            });
         } catch (err) {
             if (err instanceof UniqueConstraintError) return `AlreadyExistItem`;
             else if (err instanceof ValidationError) return `BadRequest`;
@@ -78,7 +84,7 @@ class NoticeDao extends Dao {
         data,
         decoded,
         params
-    }: StrictReqData): Promise<unknown | null | undefined> {
+    }: AllStrictReqData): Promise<unknown | null | undefined> {
         if (process.env.NODE_ENV === "test") await Notice.sync({ force: true });
 
         let result: unknown | null = null;
@@ -101,7 +107,7 @@ class NoticeDao extends Dao {
         data,
         decoded,
         params
-    }: StrictReqData): Promise<number | string | undefined> {
+    }: ParamsStrictReqData): Promise<number | string | undefined> {
         if (process.env.NODE_ENV === "test") await Notice.sync({ force: true });
 
         let result: number | null = null;

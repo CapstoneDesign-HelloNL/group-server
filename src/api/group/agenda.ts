@@ -1,19 +1,26 @@
 import { Router } from "express";
 import CreateController from "@src/controllers/services/agenda/CreateController";
 import JwtVerifyAccessController from "@src/controllers/middlewares/jwt/JwtVerifyAccessController";
-import FindAllByGroupNameController from "@src/controllers/services/agenda/FindAllByGroupNameController";
+import FindAllController from "@src/controllers/services/agenda/FindAllByGroupNameController";
+import FindOneController from "@src/controllers/services/agenda/FindOneController";
 const router = Router();
-
-router.post(
-    "/",
-    new JwtVerifyAccessController().excute(),
-    new CreateController().excute()
-);
 
 router.get(
     "/:groupName",
     new JwtVerifyAccessController().excute(),
-    new FindAllByGroupNameController().excute()
+    new FindAllController().excute()
+);
+
+router.get(
+    "/:groupName/:id",
+    new JwtVerifyAccessController().excute(),
+    new FindOneController().excute()
+);
+
+router.post(
+    "/:groupName",
+    new JwtVerifyAccessController().excute(),
+    new CreateController().excute()
 );
 
 export default router;

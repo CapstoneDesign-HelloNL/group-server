@@ -4,14 +4,11 @@ import GroupDao from "@src/dao/group/GroupDao";
 import serviceFactory from "@src/vo/group/services/ServiceFactory";
 
 class GroupService {
+    static findOne = serviceFactory.get<Group>(GroupDao.getInstance().findOne);
     static findAll = serviceFactory.get<Group>(GroupDao.getInstance().findAll);
     static findSignUp = serviceFactory.get<Member>(
         GroupDao.getInstance().findSignUp
     );
-    static findByName = serviceFactory.get<Group>(
-        GroupDao.getInstance().findByName
-    );
-
     static create = serviceFactory.postOrUpdate<Group>(
         GroupDao.getInstance().save
     );

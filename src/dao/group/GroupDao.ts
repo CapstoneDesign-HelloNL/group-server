@@ -4,7 +4,10 @@ import Group from "@src/models/group/GroupModel";
 import LogService from "@src/utils/LogService";
 import Dao from "@src/dao/Dao";
 import Member from "@src/models/member/MemberModel";
-import { ReqData, StrictReqData } from "@src/vo/group/services/reqData";
+import {
+    AllStrictReqData,
+    ParamsStrictReqData
+} from "@src/vo/group/services/reqData";
 
 const logger = LogService.getInstance();
 class GroupDao extends Dao {
@@ -20,26 +23,29 @@ class GroupDao extends Dao {
         await this.db?.endConnection();
     }
 
-    async find({
+    async findOne({
         data,
-        decoded
-    }: StrictReqData): Promise<Group | null | undefined> {
+        decoded,
+        params
+    }: AllStrictReqData): Promise<Group | string | null | undefined> {
         let group: Group | null = null;
         try {
             group = await Group.findOne({
                 where: {
-                    name: data.name
+                    name: params.groupName
                 }
             });
         } catch (err) {
             logger.error(err);
+            if (err instanceof ValidationError) return `BadRequest`;
             return undefined;
         }
-        console.log(group);
         return group;
     }
 
-    async findSignUp({ decoded }: ReqData): Promise<Member | null | undefined> {
+    async findSignUp({
+        decoded
+    }: ParamsStrictReqData): Promise<Member | string | null | undefined> {
         let member: Member | null = null;
         try {
             member = await Member.findOne({
@@ -63,22 +69,24 @@ class GroupDao extends Dao {
             });
         } catch (err) {
             logger.error(err);
+            if (err instanceof ValidationError) return `BadRequest`;
             return undefined;
         }
         return member;
     }
 
-    async findByName({
+    async findAll({
         data,
-        decoded
-    }: ReqData): Promise<Group[] | null | undefined> {
+        decoded,
+        params
+    }: ParamsStrictReqData): Promise<Group[] | string | null | undefined> {
         let group: Group[] | null = null;
         try {
             group = await Group.findAll({
                 //Group이면 밑에 include에 group 클래스 내부에 정의한 association을 적어준다.
                 where: {
                     name: {
-                        [Op.like]: `%${data?.name}%`
+                        [Op.like]: `%${params?.name}%`
                     }
                 }
                 // include: [
@@ -92,32 +100,38 @@ class GroupDao extends Dao {
             });
         } catch (err) {
             logger.error(err);
+            if (err instanceof ValidationError) return `BadRequest`;
             return undefined;
         }
         return group;
     }
 
-    async findAll(name: string): Promise<Group[] | null | undefined> {
-        let groups: Group[] | null = null;
-        console.log(groups);
-        try {
-            groups = await Group.findAll({
-                where: {
-                    name
-                },
-                include: Member
-            });
-        } catch (err) {
-            logger.error(err);
-            return undefined;
-        }
-        return groups;
-    }
+    // async findAll({
+    //     data,
+    //     decoded,
+    //     params
+    // }: ParamsStrictReqData): Promise<Group[] | string | null | undefined> {
+    //     let groups: Group[] | null = null;
+    //     try {
+    //         groups = await Group.findAll({
+    //             where: {
+    //                 name: params.groupName
+    //             },
+    //             include: Member
+    //         });
+    //     } catch (err) {
+    //         logger.error(err);
+    //         if (err instanceof ValidationError) return `BadRequest`;
+    //         return undefined;
+    //     }
+    //     return groups;
+    // }
 
     async save({
         data,
-        decoded
-    }: StrictReqData): Promise<Group | string | undefined> {
+        decoded,
+        params
+    }: AllStrictReqData): Promise<Group | string | undefined> {
         if (process.env.NODE_ENV === "test") await Group.sync({ force: true });
 
         let newGroup: Group | null = null;
@@ -126,7 +140,7 @@ class GroupDao extends Dao {
         // const advisor = "관리자";
         try {
             newGroup = await Group.create({ ...data });
-            findMember = await Member.findByPk(decoded?.email);
+            findMember = await Member.findByPk(decoded.email);
             newMember = await Member.findOrCreate({
                 where: { email: decoded.email }
             });
@@ -144,15 +158,15 @@ class GroupDao extends Dao {
 
     async update({
         data,
-        decoded
-    }: ReqData): Promise<unknown | null | undefined> {
-        if (process.env.NODE_ENV === "test") await Group.sync({ force: true });
-
+        decoded,
+        params
+    }: AllStrictReqData): Promise<unknown | null | undefined> {
+        // if (process.env.NODE_ENV === "test") await Group.sync({ force: true });
         let updateGroup: unknown | null = null;
         try {
             updateGroup = await Group.update(
-                { ...data?.afterGroupData },
-                { where: { ...data?.groupData } }
+                { name: params.groupName, ...data },
+                { where: { ...data } }
             );
         } catch (err) {
             logger.error(err);
@@ -162,18 +176,21 @@ class GroupDao extends Dao {
         return updateGroup;
     }
 
-    async delete({ data, decoded }: ReqData): Promise<number | undefined> {
-        if (process.env.NODE_ENV === "test") await Group.sync({ force: true });
-
+    async delete({
+        data,
+        decoded,
+        params
+    }: AllStrictReqData): Promise<number | string | undefined> {
         let deleteGroup: number | null = null;
         try {
             deleteGroup = await Group.destroy({
                 where: {
-                    ...data
+                    name: params.groupName
                 }
             });
         } catch (err) {
             logger.error(err);
+            if (err instanceof ValidationError) return `BadRequest`;
             return undefined;
         }
         return deleteGroup; //1 is success, 0 or undefined are fail

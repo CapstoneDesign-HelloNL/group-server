@@ -1,11 +1,12 @@
 import { NextFunction, Request, Response } from "express";
 
+import Group from "@src/models/group/GroupModel";
 import Controller from "@src/controllers/Controller";
 import GroupService from "@src/services/group/GroupService";
 import resTypes from "@src/utils/resTypes";
 
-class DeleteController extends Controller {
-    private result: string;
+class FindAllController extends Controller {
+    private result: string | Group;
     constructor() {
         super();
         this.result = "";
@@ -15,7 +16,7 @@ class DeleteController extends Controller {
         res: Response,
         next: NextFunction
     ): Promise<void> {
-        this.result = await GroupService.delete(req);
+        this.result = await GroupService.findAll(req);
     }
     protected async doResolve(
         req: Request,
@@ -32,13 +33,10 @@ class DeleteController extends Controller {
             case "UnexpectedError":
                 resTypes.unexpectedErrorRes(res);
                 break;
-            case "AlreadyExistItem":
-                resTypes.alreadyExistItemRes(res, "group");
-                break;
             default:
-                resTypes.successRes(res, "Create Group");
+                resTypes.successRes(res, "Create Group", this.result);
         }
     }
 }
 
-export default DeleteController;
+export default FindAllController;

@@ -4,7 +4,7 @@ import Controller from "@src/controllers/Controller";
 import GroupService from "@src/services/group/GroupService";
 import resTypes from "@src/utils/resTypes";
 
-class CreateController extends Controller {
+class UpdateController extends Controller {
     private result: string;
     constructor() {
         super();
@@ -15,7 +15,7 @@ class CreateController extends Controller {
         res: Response,
         next: NextFunction
     ): Promise<void> {
-        this.result = await GroupService.create(req);
+        this.result = await GroupService.update(req);
     }
     protected async doResolve(
         req: Request,
@@ -36,9 +36,9 @@ class CreateController extends Controller {
                 resTypes.alreadyExistItemRes(res, "group");
                 break;
             default:
-                resTypes.successRes(res, "Create Group");
+                resTypes.successRes(res, "Update Group");
         }
     }
 }
 
-export default CreateController;
+export default UpdateController;

@@ -1,12 +1,11 @@
 import { NextFunction, Request, Response } from "express";
-
-import Group from "@src/models/group/GroupModel";
 import Controller from "@src/controllers/Controller";
-import GroupService from "@src/services/group/GroupService";
+import AgendaService from "@src/services/agenda/AgendaService";
 import resTypes from "@src/utils/resTypes";
+import Agenda from "@src/models/agenda/AgendaModel";
 
-class FindByNameController extends Controller {
-    private result: string | Group;
+class FindOneController extends Controller {
+    private result: Agenda | string;
     constructor() {
         super();
         this.result = "";
@@ -16,7 +15,7 @@ class FindByNameController extends Controller {
         res: Response,
         next: NextFunction
     ): Promise<void> {
-        this.result = await GroupService.findByName(req);
+        this.result = await AgendaService.findOne(req);
     }
     protected async doResolve(
         req: Request,
@@ -34,9 +33,9 @@ class FindByNameController extends Controller {
                 resTypes.unexpectedErrorRes(res);
                 break;
             default:
-                resTypes.successRes(res, "Create Group", this.result);
+                resTypes.successRes(res, "Find agenda", this.result);
         }
     }
 }
 
-export default FindByNameController;
+export default FindOneController;

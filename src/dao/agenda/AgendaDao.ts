@@ -1,17 +1,13 @@
-import { UniqueConstraintError } from "sequelize";
+import { UniqueConstraintError, ValidationError } from "sequelize";
 import GroupDBManager from "@src/models/GroupDBManager";
 import Agenda from "@src/models/agenda/AgendaModel";
 import LogService from "@src/utils/LogService";
 import Dao from "@src/dao/Dao";
-import { AgendaTypes } from "@src/vo/group/controllers/Agenda";
 import {
-    ParamsStrictReqData,
-    ReqData,
-    StrictReqData
+    AllStrictReqData,
+    ParamsStrictReqData
 } from "@src/vo/group/services/reqData";
-/*
-update, delete logic need to change
-*/
+
 const logger = LogService.getInstance();
 class AgendaDao extends Dao {
     protected constructor() {
@@ -25,16 +21,23 @@ class AgendaDao extends Dao {
     protected async endConnect() {
         await this.db?.endConnection();
     }
-    async find(id: number): Promise<Agenda | null | undefined> {
+
+    async findOne({
+        data,
+        decoded,
+        params
+    }: ParamsStrictReqData): Promise<Agenda | string | null | undefined> {
         let result: Agenda | null = null;
         try {
             result = await Agenda.findOne({
                 where: {
-                    id
+                    id: params.id,
+                    groupName: params.groupName
                 }
             });
         } catch (err) {
             logger.error(err);
+            if (err instanceof ValidationError) return `BadRequest`;
             return undefined;
         }
         return result;
@@ -44,7 +47,7 @@ class AgendaDao extends Dao {
         data,
         decoded,
         params
-    }: ParamsStrictReqData): Promise<Agenda[] | null | undefined> {
+    }: ParamsStrictReqData): Promise<Agenda[] | string | null | undefined> {
         let result: Agenda[] | null = null;
         try {
             result = await Agenda.findAll({
@@ -55,35 +58,48 @@ class AgendaDao extends Dao {
             });
         } catch (err) {
             logger.error(err);
+            if (err instanceof ValidationError) return `BadRequest`;
             return undefined;
         }
         return result;
     }
 
-    async save({ data, decoded }: StrictReqData): Promise<Agenda | undefined> {
-        if (process.env.NODE_ENV === "test") await Agenda.sync({ force: true });
-
+    async save({
+        data,
+        decoded,
+        params
+    }: AllStrictReqData): Promise<Agenda | string | undefined> {
         let result: Agenda | null = null;
         try {
-            result = await Agenda.create({ ...data });
+            result = await Agenda.create({
+                groupName: params.groupName,
+                ...data
+            });
         } catch (err) {
             logger.error(err);
+            if (err instanceof UniqueConstraintError) return `AlreadyExistItem`;
+            else if (err instanceof ValidationError) return `BadRequest`;
             return undefined;
         }
         return result;
     }
 
-    async update(
-        agendaData: AgendaTypes.AgendaPostBody,
-        afterAgendaData: AgendaTypes.AgendaPostBody
-    ): Promise<unknown | null | undefined> {
-        if (process.env.NODE_ENV === "test") await Agenda.sync({ force: true });
-
+    async update({
+        data,
+        decoded,
+        params
+    }: AllStrictReqData): Promise<unknown | null | undefined> {
         let result: unknown | null = null;
         try {
             result = await Agenda.update(
-                { ...afterAgendaData },
-                { where: { ...agendaData } }
+                { groupName: params.groupName, ...data, id: params.id },
+                {
+                    where: {
+                        groupName: params.groupName,
+                        ...data,
+                        id: params.id
+                    }
+                }
             );
         } catch (err) {
             logger.error(err);
@@ -93,19 +109,22 @@ class AgendaDao extends Dao {
         return result;
     }
 
-    async delete(
-        agendaData: AgendaTypes.AgendaPostBody
-    ): Promise<number | undefined> {
-        if (process.env.NODE_ENV === "test") await Agenda.sync({ force: true });
+    async delete({
+        data,
+        decoded,
+        params
+    }: AllStrictReqData): Promise<number | string | undefined> {
         let deleteAgenda: number | null = null;
         try {
             deleteAgenda = await Agenda.destroy({
                 where: {
-                    ...agendaData
+                    id: params?.id,
+                    groupName: params?.groupName
                 }
             });
         } catch (err) {
             logger.error(err);
+            if (err instanceof ValidationError) return `BadRequest`;
             return undefined;
         }
         return deleteAgenda; //1 is success, 0 or undefined are fail
