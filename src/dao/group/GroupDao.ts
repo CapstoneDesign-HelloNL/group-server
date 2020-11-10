@@ -5,8 +5,6 @@ import Dao from "@src/dao/Dao";
 import { GroupTypes } from "@src/vo/group/controllers/Group";
 import Member from "@src/models/member/MemberModel";
 import { MemberTypes } from "@src/vo/group/controllers/Member";
-import { Model } from "sequelize";
-import GroupToMember from "@src/models/groupToMember/GroupToMemberModel";
 
 const logger = LogService.getInstance();
 class GroupDao extends Dao {
@@ -43,8 +41,15 @@ class GroupDao extends Dao {
             member = await Member.findOne({
                 where: {
                     email
-                },
-                include: Group.associations.members
+                }
+                // include: [
+                //     {
+                //         model: Group,
+                //         where: { email },
+                //         as: "memberToGroup",
+                //         attributes: ["email"]
+                //     }
+                // ]
             });
         } catch (err) {
             logger.error(err);
@@ -60,6 +65,7 @@ class GroupDao extends Dao {
         let group: Group[] | null = null;
         try {
             group = await Group.findAll({
+                //Group이면 밑에 include에 group 클래스 내부에 정의한 association을 적어준다.
                 where: { name }
                 // include: [
                 //     {
