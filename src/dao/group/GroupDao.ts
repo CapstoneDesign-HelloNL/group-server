@@ -86,7 +86,7 @@ class GroupDao extends Dao {
                 //Group이면 밑에 include에 group 클래스 내부에 정의한 association을 적어준다.
                 where: {
                     name: {
-                        [Op.like]: `%${params?.name}%`
+                        [Op.like]: `%${params?.groupName}%`
                     }
                 }
                 // include: [
