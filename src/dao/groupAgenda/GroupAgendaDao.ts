@@ -3,6 +3,7 @@ import GroupAgenda from "@src/models/groupAgenda/GroupAgendaModel";
 import LogService from "@src/utils/LogService";
 import Dao from "@src/dao/Dao";
 import { GroupAgendaTypes } from "@src/vo/group/controllers/GroupAgenda";
+import Group from "@src/models/group/GroupModel";
 /*
 update, delete logic need to change
 */
@@ -21,7 +22,6 @@ class GroupAgendaDao extends Dao {
     }
     async find(id: number): Promise<GroupAgenda | null | undefined> {
         let groupAgenda: GroupAgenda | null = null;
-        console.log(groupAgenda);
         try {
             groupAgenda = await GroupAgenda.findOne({
                 where: {
@@ -35,16 +35,22 @@ class GroupAgendaDao extends Dao {
         return groupAgenda;
     }
 
-    async findAll(): Promise<GroupAgenda[] | null | undefined> {
-        let groups: GroupAgenda[] | null = null;
-        console.log(groups);
+    async findAll(
+        groupName: string
+    ): Promise<GroupAgenda[] | null | undefined> {
+        let result: GroupAgenda[] | null = null;
         try {
-            groups = await GroupAgenda.findAll();
+            result = await GroupAgenda.findAll({
+                order: [["createdAt", "DESC"]],
+                where: {
+                    groupName
+                }
+            });
         } catch (err) {
             logger.error(err);
             return undefined;
         }
-        return groups;
+        return result;
     }
 
     async save(

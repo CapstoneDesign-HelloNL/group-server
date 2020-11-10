@@ -5,12 +5,10 @@ import GroupAgenda from "@src/models/groupAgenda/GroupAgendaModel";
 import GroupAgendaDao from "@src/dao/groupAgenda/GroupAgendaDao";
 
 class GroupAgendaService {
-    static async findAll(req: Request): Promise<GroupAgenda | string> {
-        const groupBody: GroupAgendaTypes.GroupAgendaPostBody = req.body;
-        if (!groupBody.content) return "BadRequest";
-        const find = await GroupAgendaDao.getInstance().findAll(
-            groupBody.content
-        );
+    static async findAllByName(req: Request): Promise<GroupAgenda[] | string> {
+        const groupName = req.params.groupName;
+        if (!groupName) return "BadRequest";
+        const find = await GroupAgendaDao.getInstance().findAll(groupName);
         switch (find) {
             case undefined:
                 return "InternalServerError";

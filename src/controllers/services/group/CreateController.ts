@@ -1,12 +1,11 @@
 import { NextFunction, Request, Response } from "express";
 
-import Group from "@src/models/group/GroupModel";
 import Controller from "@src/controllers/Controller";
 import GroupService from "@src/services/group/GroupService";
 import resTypes from "@src/utils/resTypes";
 
-class GroupFindByNameController extends Controller {
-    private result: string | Group;
+class CreateController extends Controller {
+    private result: string;
     constructor() {
         super();
         this.result = "";
@@ -16,7 +15,7 @@ class GroupFindByNameController extends Controller {
         res: Response,
         next: NextFunction
     ): Promise<void> {
-        this.result = await GroupService.findByName(req);
+        this.result = await GroupService.create(req, res, next);
     }
     protected async doResolve(
         req: Request,
@@ -37,9 +36,9 @@ class GroupFindByNameController extends Controller {
                 resTypes.alreadyExistItemRes(res, "group");
                 break;
             default:
-                resTypes.successRes(res, "Create Group", this.result);
+                resTypes.successRes(res, "Create Group");
         }
     }
 }
 
-export default GroupFindByNameController;
+export default CreateController;

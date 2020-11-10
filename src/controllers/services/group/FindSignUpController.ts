@@ -6,7 +6,7 @@ import GroupService from "@src/services/group/GroupService";
 import resTypes from "@src/utils/resTypes";
 import Member from "@src/models/member/MemberModel";
 
-class GroupFindByNameController extends Controller {
+class FindByNameController extends Controller {
     private result: string | Member;
     constructor() {
         super();
@@ -43,4 +43,4 @@ class GroupFindByNameController extends Controller {
     }
 }
 
-export default GroupFindByNameController;
+export default FindByNameController;

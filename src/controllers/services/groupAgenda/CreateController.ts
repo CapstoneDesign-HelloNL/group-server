@@ -3,7 +3,7 @@ import Controller from "@src/controllers/Controller";
 import GroupAgendaService from "@src/services/groupAgenda/GroupAgendaService";
 import resTypes from "@src/utils/resTypes";
 
-class GroupAgendaCreateController extends Controller {
+class CreateController extends Controller {
     private result: string;
     constructor() {
         super();
@@ -37,4 +37,4 @@ class GroupAgendaCreateController extends Controller {
     }
 }
 
-export default GroupAgendaCreateController;
+export default CreateController;
