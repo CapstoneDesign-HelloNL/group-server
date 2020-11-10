@@ -29,6 +29,7 @@ export namespace GalleryModelTypes {
         groupName: {
             type: DataTypes.STRING,
             allowNull: false,
+            primaryKey: true,
             validate: {
                 notEmpty: true
             }

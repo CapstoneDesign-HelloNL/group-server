@@ -32,15 +32,16 @@ export namespace GroupToMemberModelTypes {
         memberRank: IColumnOption;
     }
     export const attr: GroupToMemberModelTypes.IGroupToMemberScheme = {
-        id: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            autoIncrement: true,
-            primaryKey: true
-        },
+        // id: {
+        //     type: DataTypes.INTEGER,
+        //     allowNull: false,
+        //     autoIncrement: true,
+        //     primaryKey: true
+        // },
         groupName: {
             type: DataTypes.STRING,
             allowNull: false,
+            primaryKey: true,
             validate: {
                 notEmpty: true
             },
@@ -52,6 +53,7 @@ export namespace GroupToMemberModelTypes {
         memberEmail: {
             type: DataTypes.STRING,
             allowNull: false,
+            primaryKey: true,
             validate: {
                 notEmpty: true,
                 isEmail: true

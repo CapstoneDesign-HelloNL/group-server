@@ -1,10 +1,10 @@
 export namespace GroupToMemberTypes {
-    export interface GroupToMemberPostBody {
+    export interface GroupToMemberBody {
         groupName: string;
         memberEmail: string;
         memberRank: string;
     }
-    export interface GroupToMemberBody extends GroupToMemberPostBody {
-        id: number;
-    }
+    // export interface GroupToMemberBody extends GroupToMemberPostBody {
+    //     id: number;
+    // }
 }
