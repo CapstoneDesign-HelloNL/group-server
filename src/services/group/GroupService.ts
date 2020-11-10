@@ -4,6 +4,7 @@ import { GroupTypes } from "@src/vo/group/controllers/Group";
 import Group from "@src/models/group/GroupModel";
 import GroupDao from "@src/dao/group/GroupDao";
 import { MemberTypes } from "@src/vo/group/controllers/Member";
+import Member from "@src/models/member/MemberModel";
 
 class GroupService {
     static async isAlreadyHaveGroup(req: Request): Promise<string> {
@@ -23,6 +24,21 @@ class GroupService {
         const groupBody: GroupTypes.GroupBody = req.body;
         if (!groupBody.name) return "BadRequest";
         const find = await GroupDao.getInstance().findAll(groupBody.name);
+        switch (find) {
+            case undefined:
+                return "InternalServerError";
+            case null:
+                return "UnexpectedError";
+            default:
+                return find;
+        }
+    }
+
+    static async findSignUp(req: Request): Promise<Member | string> {
+        // const groupBody: GroupTypes.GroupBody = req.body;
+        const memberBody: MemberTypes.MemberBody = req.body.decoded;
+        // if (!groupBody.name) return "BadRequest";
+        const find = await GroupDao.getInstance().findSignUp(memberBody.email);
         switch (find) {
             case undefined:
                 return "InternalServerError";

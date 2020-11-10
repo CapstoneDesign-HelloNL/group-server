@@ -41,15 +41,14 @@ class GroupDao extends Dao {
             member = await Member.findOne({
                 where: {
                     email
-                }
-                // include: [
-                //     {
-                //         model: Group,
-                //         where: { email },
-                //         as: "memberToGroup",
-                //         attributes: ["email"]
-                //     }
-                // ]
+                },
+                include: [
+                    {
+                        model: Group,
+                        as: "memberToGroup",
+                        attributes: ["name"]
+                    }
+                ]
             });
         } catch (err) {
             logger.error(err);
@@ -58,10 +57,7 @@ class GroupDao extends Dao {
         return member;
     }
 
-    async findByName(
-        email: string,
-        name: string
-    ): Promise<Group[] | null | undefined> {
+    async findByName(name: string): Promise<Group[] | null | undefined> {
         let group: Group[] | null = null;
         try {
             group = await Group.findAll({
