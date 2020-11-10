@@ -32,7 +32,7 @@ class CreateController extends Controller {
             case "UnexpectedError":
                 resTypes.unexpectedErrorRes(res);
                 break;
-            case "AlreadyExistGroup":
+            case "AlreadyExistItem":
                 resTypes.alreadyExistItemRes(res, "group");
                 break;
             default:

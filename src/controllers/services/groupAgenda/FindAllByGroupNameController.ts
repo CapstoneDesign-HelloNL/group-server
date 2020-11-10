@@ -33,7 +33,7 @@ class FindAllByGroupNameController extends Controller {
                 resTypes.unexpectedErrorRes(res);
                 break;
             default:
-                resTypes.successRes(res, "Find All Group Agenda", this.result);
+                resTypes.successRes(res, "Find all group agenda", this.result);
         }
     }
 }

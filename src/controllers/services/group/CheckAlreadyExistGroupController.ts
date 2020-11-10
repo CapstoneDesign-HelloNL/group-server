@@ -15,7 +15,7 @@ class CheckAlreadyExistGroupController extends Controller {
         res: Response,
         next: NextFunction
     ): Promise<void> {
-        this.result = await GroupService.isAlreadyHaveGroup(req);
+        // this.result = await GroupService.isAlreadyHaveGroup(req);
     }
     protected async doResolve(
         req: Request,
@@ -32,7 +32,7 @@ class CheckAlreadyExistGroupController extends Controller {
             case "UnexpectedError":
                 resTypes.unexpectedErrorRes(res);
                 break;
-            case "AlreadyExistGroup":
+            case "AlreadyExistItem":
                 resTypes.alreadyExistItemRes(res, "group");
                 break;
             default:

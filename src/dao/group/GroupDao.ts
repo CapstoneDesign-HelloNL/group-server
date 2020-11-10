@@ -1,4 +1,4 @@
-import { Op } from "sequelize";
+import { Op, UniqueConstraintError } from "sequelize";
 import GroupDBManager from "@src/models/GroupDBManager";
 import Group from "@src/models/group/GroupModel";
 import LogService from "@src/utils/LogService";
@@ -8,6 +8,7 @@ import { GroupTypes } from "@src/vo/group/controllers/Group";
 import { MemberTypes } from "@src/vo/group/controllers/Member";
 import { GroupModelTypes } from "@src/vo/group/models/GroupModel";
 import { ReqData, StrictReqData } from "@src/vo/group/services/reqData";
+import GroupToMember from "@src/models/groupToMember/GroupToMemberModel";
 
 const logger = LogService.getInstance();
 class GroupDao extends Dao {
@@ -54,6 +55,13 @@ class GroupDao extends Dao {
                         model: Group,
                         as: "memberToGroup",
                         attributes: ["name"]
+                        // include: [
+                        //     {
+                        //         model: GroupToMember,
+                        //         as: "members",
+                        //         attributes: []
+                        //     }
+                        // ]
                     }
                 ]
             });
@@ -110,31 +118,40 @@ class GroupDao extends Dao {
         return groups;
     }
 
-    async save({ data, decoded }: StrictReqData): Promise<Group | undefined> {
+    async save({
+        data,
+        decoded
+    }: StrictReqData): Promise<Group | string | undefined> {
         if (process.env.NODE_ENV === "test") await Group.sync({ force: true });
 
         let newGroup: Group | null = null;
-        let newMember: Member | null = null;
+        let newMember: [Member, boolean] | null = null;
         let findMember: Member | null = null;
         // const advisor = "관리자";
         try {
             newGroup = await Group.create({ ...data });
             findMember = await Member.findByPk(decoded?.email);
-            newMember =
-                findMember != null ? findMember : await Member.create(decoded);
-            await newGroup.addMember(newMember);
-            await newMember.addMemberToGroup(newGroup);
+            newMember = await Member.findOrCreate({
+                where: { email: decoded.email }
+            });
+
+            await newGroup.addMember(newMember[0]);
+            await newMember[0].addMemberToGroup(newGroup);
         } catch (err) {
             logger.error(err);
+            if (err instanceof UniqueConstraintError) return `AlreadyExistItem`;
             return undefined;
         }
         return newGroup;
     }
 
-    async update({ data, decoded }: ReqData): Promise<any | null | undefined> {
+    async update({
+        data,
+        decoded
+    }: ReqData): Promise<unknown | null | undefined> {
         if (process.env.NODE_ENV === "test") await Group.sync({ force: true });
 
-        let updateGroup: any | null = null;
+        let updateGroup: unknown | null = null;
         try {
             updateGroup = await Group.update(
                 { ...data?.afterGroupData },

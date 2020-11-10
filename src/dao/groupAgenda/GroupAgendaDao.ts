@@ -1,3 +1,4 @@
+import { UniqueConstraintError } from "sequelize";
 import GroupDBManager from "@src/models/GroupDBManager";
 import GroupAgenda from "@src/models/groupAgenda/GroupAgendaModel";
 import LogService from "@src/utils/LogService";
@@ -80,11 +81,11 @@ class GroupAgendaDao extends Dao {
     async update(
         groupAgendaData: GroupAgendaTypes.GroupAgendaPostBody,
         afterGroupAgendaData: GroupAgendaTypes.GroupAgendaPostBody
-    ): Promise<any | null | undefined> {
+    ): Promise<unknown | null | undefined> {
         if (process.env.NODE_ENV === "test")
             await GroupAgenda.sync({ force: true });
 
-        let result: any | null = null;
+        let result: unknown | null = null;
         try {
             result = await GroupAgenda.update(
                 { ...afterGroupAgendaData },
@@ -92,6 +93,7 @@ class GroupAgendaDao extends Dao {
             );
         } catch (err) {
             logger.error(err);
+            if (err instanceof UniqueConstraintError) return `AlreadyExistItem`;
             return undefined;
         }
         return result;

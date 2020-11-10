@@ -14,7 +14,7 @@ class CreateController extends Controller {
         res: Response,
         next: NextFunction
     ): Promise<void> {
-        this.result = await GroupAgendaService.create(req, res, next);
+        this.result = await GroupAgendaService.create(req);
     }
     protected async doResolve(
         req: Request,
@@ -30,6 +30,9 @@ class CreateController extends Controller {
                 break;
             case "UnexpectedError":
                 resTypes.unexpectedErrorRes(res);
+                break;
+            case "AlreadyExistItem":
+                resTypes.alreadyExistItemRes(res, "group agenda");
                 break;
             default:
                 resTypes.successRes(res, "Create group agenda");

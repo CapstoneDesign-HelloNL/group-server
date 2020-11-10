@@ -33,9 +33,6 @@ class FindByNameController extends Controller {
             case "UnexpectedError":
                 resTypes.unexpectedErrorRes(res);
                 break;
-            case "AlreadyExistGroup":
-                resTypes.alreadyExistItemRes(res, "group");
-                break;
             default:
                 resTypes.successRes(res, "Find SignUp Group", this.result);
         }
