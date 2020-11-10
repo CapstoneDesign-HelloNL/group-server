@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import Controller from "@src/controllers/Controller";
-import AgendaService from "@src/services/agenda/AgendaService";
+import ScheduleService from "@src/services/schedule/ScheduleService";
 import resTypes from "@src/utils/resTypes";
 
 class CreateController extends Controller {
@@ -14,7 +14,7 @@ class CreateController extends Controller {
         res: Response,
         next: NextFunction
     ): Promise<void> {
-        this.result = await AgendaService.create(req);
+        this.result = await ScheduleService.create(req);
     }
     protected async doResolve(
         req: Request,
@@ -32,10 +32,10 @@ class CreateController extends Controller {
                 resTypes.unexpectedErrorRes(res);
                 break;
             case "AlreadyExistItem":
-                resTypes.alreadyExistItemRes(res, "group agenda");
+                resTypes.alreadyExistItemRes(res, "schedule");
                 break;
             default:
-                resTypes.successRes(res, "Create group agenda");
+                resTypes.successRes(res, "Create schedule");
         }
     }
 }

@@ -1,16 +1,16 @@
 import { Router } from "express";
-import groupMainRouter from "@src/api/group/group";
-import groupAgendaRouter from "@src/api/group/groupAgenda";
-import groupNoticeRouter from "@src/api/group/groupNotice";
-import groupGalleryRouter from "@src/api/group/groupGallery";
-import groupScheduleRouter from "@src/api/group/groupSchedule";
+import mainRouter from "@src/api/group/group";
+import agendaRouter from "@src/api/group/agenda";
+import noticeRouter from "@src/api/group/notice";
+import galleryRouter from "@src/api/group/gallery";
+import scheduleRouter from "@src/api/group/schedule";
 
 const router = Router();
 
-router.use("/", groupMainRouter);
-router.use("/agenda", groupAgendaRouter);
-router.use("/notice", groupNoticeRouter);
-router.use("/gallery", groupGalleryRouter);
-router.use("/schedule", groupScheduleRouter);
+router.use("/", mainRouter);
+router.use("/agenda", agendaRouter);
+router.use("/notice", noticeRouter);
+router.use("/gallery", galleryRouter);
+router.use("/schedule", scheduleRouter);
 
 export default router;

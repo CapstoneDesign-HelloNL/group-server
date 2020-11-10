@@ -2,9 +2,10 @@ import { NextFunction, Request, Response } from "express";
 import Controller from "@src/controllers/Controller";
 import AgendaService from "@src/services/agenda/AgendaService";
 import resTypes from "@src/utils/resTypes";
+import Agenda from "@src/models/agenda/AgendaModel";
 
-class CreateController extends Controller {
-    private result: string;
+class FindAllByGroupNameController extends Controller {
+    private result: Agenda[] | string;
     constructor() {
         super();
         this.result = "";
@@ -14,7 +15,7 @@ class CreateController extends Controller {
         res: Response,
         next: NextFunction
     ): Promise<void> {
-        this.result = await AgendaService.create(req);
+        this.result = await AgendaService.findAllByName(req);
     }
     protected async doResolve(
         req: Request,
@@ -31,13 +32,10 @@ class CreateController extends Controller {
             case "UnexpectedError":
                 resTypes.unexpectedErrorRes(res);
                 break;
-            case "AlreadyExistItem":
-                resTypes.alreadyExistItemRes(res, "group agenda");
-                break;
             default:
-                resTypes.successRes(res, "Create group agenda");
+                resTypes.successRes(res, "Find all agenda", this.result);
         }
     }
 }
 
-export default CreateController;
+export default FindAllByGroupNameController;
