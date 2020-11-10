@@ -54,10 +54,7 @@ class GroupAgendaDao extends Dao {
         return result;
     }
 
-    async save({
-        data: { content, groupName },
-        decoded: { email }
-    }: ReqData): Promise<GroupAgenda | undefined> {
+    async save({ data, decoded }: ReqData): Promise<GroupAgenda | undefined> {
         if (process.env.NODE_ENV === "test")
             await GroupAgenda.sync({ force: true });
 

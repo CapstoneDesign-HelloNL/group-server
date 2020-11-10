@@ -1,7 +1,26 @@
 import { Request } from "express";
-import ReqData from "@src/vo/group/services/reqData";
+import { ReqData, StrictReqData } from "@src/vo/group/services/reqData";
 
 const serviceReturn = {
+    checkAlreadyHave: async <T>(
+        reqData: StrictReqData,
+        daoFunc: Function
+    ): Promise<string> => {
+        try {
+            const result = await daoFunc(reqData);
+            if (!reqData.data || !reqData.decoded) return "BadRequest";
+            switch (result) {
+                case undefined:
+                    return "InternalServerError";
+                default:
+                    if (result !== null) return "AlreadyExistGroup";
+                    else return "Success";
+            }
+        } catch (e) {
+            console.log(e);
+            return "InternalServerError";
+        }
+    },
     get: async <T>(
         reqData: ReqData,
         daoFunc: Function
@@ -60,6 +79,21 @@ const serviceReturn = {
     }
 };
 const serviceFactory = {
+    checkAlreadyHave: <T>(daoFunc: Function) => {
+        const func = async (req: Request): Promise<string> => {
+            const reqData: StrictReqData = {
+                data: req.body.data,
+                decoded: req.body.decoded,
+                params: req.params
+            };
+            const result = await serviceReturn.checkAlreadyHave<T>(
+                reqData,
+                daoFunc
+            );
+            return result;
+        };
+        return func;
+    },
     get: <T>(daoFunc: Function) => {
         const func = async (req: Request): Promise<T | string> => {
             const reqData: ReqData = {

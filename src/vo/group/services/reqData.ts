@@ -1,7 +1,24 @@
-interface ReqData {
-    data?: any;
-    decoded?: any;
-    params?: any;
+interface data {
+    [attr: string]: any;
 }
-
-export default ReqData;
+interface decoded {
+    email: string;
+}
+interface params {
+    [attr: string]: any;
+}
+export interface ReqData {
+    data?: data;
+    decoded?: decoded;
+    params?: params;
+}
+export interface ParamsStrictReqData extends ReqData {
+    params: params;
+}
+export interface StrictReqData extends ReqData {
+    data: data;
+    decoded: decoded;
+}
+export interface AllStrictReqData extends StrictReqData {
+    params: params;
+}
