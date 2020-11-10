@@ -4,7 +4,11 @@ import LogService from "@src/utils/LogService";
 import Dao from "@src/dao/Dao";
 import { GroupAgendaTypes } from "@src/vo/group/controllers/GroupAgenda";
 import Group from "@src/models/group/GroupModel";
-import ReqData from "@src/vo/group/services/reqData";
+import {
+    ParamsStrictReqData,
+    ReqData,
+    StrictReqData
+} from "@src/vo/group/services/reqData";
 /*
 update, delete logic need to change
 */
@@ -36,15 +40,17 @@ class GroupAgendaDao extends Dao {
         return result;
     }
 
-    async findAll(
-        groupName: string
-    ): Promise<GroupAgenda[] | null | undefined> {
+    async findAll({
+        data,
+        decoded,
+        params
+    }: ParamsStrictReqData): Promise<GroupAgenda[] | null | undefined> {
         let result: GroupAgenda[] | null = null;
         try {
             result = await GroupAgenda.findAll({
                 order: [["createdAt", "DESC"]],
                 where: {
-                    groupName
+                    groupName: params.groupName
                 }
             });
         } catch (err) {
@@ -54,13 +60,16 @@ class GroupAgendaDao extends Dao {
         return result;
     }
 
-    async save({ data, decoded }: ReqData): Promise<GroupAgenda | undefined> {
+    async save({
+        data,
+        decoded
+    }: StrictReqData): Promise<GroupAgenda | undefined> {
         if (process.env.NODE_ENV === "test")
             await GroupAgenda.sync({ force: true });
 
         let result: GroupAgenda | null = null;
         try {
-            result = await GroupAgenda.create({ content, groupName });
+            result = await GroupAgenda.create({ ...data });
         } catch (err) {
             logger.error(err);
             return undefined;

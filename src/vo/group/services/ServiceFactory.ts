@@ -8,7 +8,7 @@ const serviceReturn = {
     ): Promise<string> => {
         try {
             const result = await daoFunc(reqData);
-            if (!reqData.data || !reqData.decoded) return "BadRequest";
+            // if (!reqData.data || !reqData.decoded) return "BadRequest";
             switch (result) {
                 case undefined:
                     return "InternalServerError";

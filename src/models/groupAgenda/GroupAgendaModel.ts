@@ -14,10 +14,11 @@ import Group from "@src/models/group/GroupModel";
 interface GroupAgendaCreationAttributes
     extends Optional<GroupAgendaTypes.GroupAgendaBody, "id"> {}
 class GroupAgenda
-    extends Model<
-        GroupAgendaTypes.GroupAgendaBody,
-        GroupAgendaCreationAttributes
-    >
+    extends Model
+    // extends Model<
+    //     GroupAgendaTypes.GroupAgendaBody,
+    //     GroupAgendaCreationAttributes
+    // >
     implements GroupAgendaTypes.GroupAgendaBody {
     public id!: number;
     public content!: string;

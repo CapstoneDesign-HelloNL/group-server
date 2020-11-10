@@ -7,7 +7,7 @@ import Member from "@src/models/member/MemberModel";
 import { GroupTypes } from "@src/vo/group/controllers/Group";
 import { MemberTypes } from "@src/vo/group/controllers/Member";
 import { GroupModelTypes } from "@src/vo/group/models/GroupModel";
-import ReqData from "@src/vo/group/services/reqData";
+import { ReqData, StrictReqData } from "@src/vo/group/services/reqData";
 
 const logger = LogService.getInstance();
 class GroupDao extends Dao {
@@ -23,18 +23,22 @@ class GroupDao extends Dao {
         await this.db?.endConnection();
     }
 
-    async find(name: string, email: string): Promise<Group | null | undefined> {
+    async find({
+        data,
+        decoded
+    }: StrictReqData): Promise<Group | null | undefined> {
         let group: Group | null = null;
         try {
             group = await Group.findOne({
                 where: {
-                    name
+                    name: data.name
                 }
             });
         } catch (err) {
             logger.error(err);
             return undefined;
         }
+        console.log(group);
         return group;
     }
 
@@ -106,15 +110,15 @@ class GroupDao extends Dao {
         return groups;
     }
 
-    async save({ data, decoded }: ReqData): Promise<Group | undefined> {
+    async save({ data, decoded }: StrictReqData): Promise<Group | undefined> {
         if (process.env.NODE_ENV === "test") await Group.sync({ force: true });
 
         let newGroup: Group | null = null;
         let newMember: Member | null = null;
         let findMember: Member | null = null;
-        const advisor = "관리자";
+        // const advisor = "관리자";
         try {
-            newGroup = await Group.create({ ...data?.groupData, advisor });
+            newGroup = await Group.create({ ...data });
             findMember = await Member.findByPk(decoded?.email);
             newMember =
                 findMember != null ? findMember : await Member.create(decoded);

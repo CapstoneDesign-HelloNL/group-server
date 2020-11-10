@@ -7,7 +7,7 @@ import serviceFactory from "@src/vo/group/services/ServiceFactory";
 
 class GroupService {
     static isAlreadyHaveGroup = serviceFactory.checkAlreadyHave<Group>(
-        GroupDao.getInstance().isAlreadyHaveGroup
+        GroupDao.getInstance().find
     );
 
     static findAll = serviceFactory.get<Group>(GroupDao.getInstance().findAll);

@@ -3,7 +3,7 @@ import GroupAgendaDao from "@src/dao/groupAgenda/GroupAgendaDao";
 import serviceFactory from "@src/vo/group/services/ServiceFactory";
 
 class GroupAgendaService {
-    static findAllByName = serviceFactory.get<GroupAgenda>(
+    static findAllByName = serviceFactory.get<GroupAgenda[]>(
         GroupAgendaDao.getInstance().findAll
     );
     static create = serviceFactory.postOrUpdate<GroupAgenda>(
