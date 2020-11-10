@@ -15,7 +15,7 @@ class CreateController extends Controller {
         res: Response,
         next: NextFunction
     ): Promise<void> {
-        this.result = await GroupService.create(req, res, next);
+        this.result = await GroupService.create(req);
     }
     protected async doResolve(
         req: Request,

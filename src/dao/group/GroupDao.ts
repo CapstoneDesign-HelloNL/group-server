@@ -7,6 +7,7 @@ import { GroupTypes } from "@src/vo/group/controllers/Group";
 import Member from "@src/models/member/MemberModel";
 import { MemberTypes } from "@src/vo/group/controllers/Member";
 import ReqData from "@src/vo/group/services/reqData";
+import { GroupModelTypes } from "@src/vo/group/models/GroupModel";
 
 const logger = LogService.getInstance();
 class GroupDao extends Dao {
@@ -107,24 +108,26 @@ class GroupDao extends Dao {
         return groups;
     }
 
-    async save(
-        memberData: MemberTypes.MemberBody,
-        groupData: GroupTypes.GroupBody
-    ): Promise<Group | undefined> {
+    async save({
+        data: { name, admin, advisor },
+        decoded: { email }
+    }: ReqData): Promise<Group | undefined> {
         if (process.env.NODE_ENV === "test") await Group.sync({ force: true });
 
         let newGroup: Group | null = null;
         let newMember: Member | null = null;
         let findMember: Member | null = null;
-        let findGroup: Group | null = null;
-        groupData.advisor = "관리자";
+        advisor = "관리자";
         try {
-            newGroup = await Group.create(groupData);
-            findMember = await Member.findByPk(memberData.email);
+            const groupInput: GroupTypes.GroupBody = { name, admin, advisor };
+            const memberInput: MemberTypes.MemberBody = { email };
+            console.log("IS HERE?");
+            newGroup = await Group.create(groupInput);
+            findMember = await Member.findByPk(email);
             newMember =
                 findMember != null
                     ? findMember
-                    : await Member.create(memberData);
+                    : await Member.create(memberInput);
             await newGroup.addMember(newMember);
             await newMember.addMemberToGroup(newGroup);
         } catch (err) {
@@ -134,10 +137,10 @@ class GroupDao extends Dao {
         return newGroup;
     }
 
-    async update(
-        groupData: GroupTypes.GroupBody,
-        afterGroupData: GroupTypes.GroupBody
-    ): Promise<any | null | undefined> {
+    async update({
+        data: { groupData, afterGroupData },
+        decoded: { email }
+    }: ReqData): Promise<any | null | undefined> {
         if (process.env.NODE_ENV === "test") await Group.sync({ force: true });
 
         let updateGroup: any | null = null;
@@ -153,14 +156,19 @@ class GroupDao extends Dao {
         return updateGroup;
     }
 
-    async delete(groupData: GroupTypes.GroupBody): Promise<number | undefined> {
+    async delete({
+        data: { name, admin, advisor },
+        decoded: { email }
+    }: ReqData): Promise<number | undefined> {
         if (process.env.NODE_ENV === "test") await Group.sync({ force: true });
 
         let deleteGroup: number | null = null;
         try {
             deleteGroup = await Group.destroy({
                 where: {
-                    ...groupData
+                    name,
+                    admin,
+                    advisor
                 }
             });
         } catch (err) {

@@ -4,6 +4,7 @@ import LogService from "@src/utils/LogService";
 import Dao from "@src/dao/Dao";
 import { GroupAgendaTypes } from "@src/vo/group/controllers/GroupAgenda";
 import Group from "@src/models/group/GroupModel";
+import ReqData from "@src/vo/group/services/reqData";
 /*
 update, delete logic need to change
 */
@@ -53,15 +54,16 @@ class GroupAgendaDao extends Dao {
         return result;
     }
 
-    async save(
-        groupAgendaData: GroupAgendaTypes.GroupAgendaPostBody
-    ): Promise<GroupAgenda | undefined> {
+    async save({
+        data: { content, groupName },
+        decoded: { email }
+    }: ReqData): Promise<GroupAgenda | undefined> {
         if (process.env.NODE_ENV === "test")
             await GroupAgenda.sync({ force: true });
 
         let result: GroupAgenda | null = null;
         try {
-            result = await GroupAgenda.create(groupAgendaData);
+            result = await GroupAgenda.create({ content, groupName });
         } catch (err) {
             logger.error(err);
             return undefined;

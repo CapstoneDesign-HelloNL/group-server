@@ -19,7 +19,7 @@ router.get(
 router.post(
     "/",
     new JwtVerifyAccessController().excute(),
-    new CheckAlreadyExistGroupController().excute(),
+    // new CheckAlreadyExistGroupController().excute(),
     new CreateController().excute()
 );
 

@@ -1,12 +1,9 @@
-import { Request, Response, NextFunction } from "express";
-import { GroupTypes } from "@src/vo/group/controllers/Group";
-import { MemberTypes } from "@src/vo/group/controllers/Member";
+import { Request } from "express";
 import Group from "@src/models/group/GroupModel";
-import GroupDao from "@src/dao/group/GroupDao";
 import Member from "@src/models/member/MemberModel";
+import GroupDao from "@src/dao/group/GroupDao";
 import ReqData from "@src/vo/group/services/reqData";
 import serviceFactory from "@src/vo/group/services/ServiceFactory";
-import Dao from "@src/dao/Dao";
 
 class GroupService {
     static async isAlreadyHaveGroup(req: Request): Promise<string> {
@@ -25,151 +22,100 @@ class GroupService {
                 else return "Success";
         }
     }
-    static findAll = serviceFactory(
-        "findAll",
-        GroupDao,
-        GroupDao.getInstance().findAll
-    );
-    // static async findAll(req: Request): Promise<Group | string> {
-    //     const reqData: ReqData = {
-    //         data: req.body.data,
-    //         decoded: req.body.decoded,
-    //         params: req.params
-    //     };
-    //     if (!reqData.data.name) return "BadRequest";
-    //     const find = await GroupDao.getInstance().findAll(reqData);
-    //     switch (find) {
-    //         case undefined:
-    //             return "InternalServerError";
-    //         case null:
-    //             return "UnexpectedError";
-    //         default:
-    //             return find;
-    //     }
-    // }
-    static findSignUp = serviceFactory(
-        "findAll",
-        GroupDao,
+    static findAll = serviceFactory.get<Group>(GroupDao.getInstance().findAll);
+    static findSignUp = serviceFactory.get<Member>(
         GroupDao.getInstance().findSignUp
     );
-    // static async findSignUp(req: Request): Promise<Member | string> {
-    //     const reqData: ReqData = {
-    //         data: req.body.data,
-    //         decoded: req.body.decoded,
-    //         params: req.params
-    //     };
-    //     const find = await GroupDao.getInstance().findSignUp(reqData);
-    //     switch (find) {
-    //         case undefined:
-    //             return "InternalServerError";
-    //         case null:
-    //             return "UnexpectedError";
-    //         default:
-    //             return find;
-    //     }
-    // }
-
-    static findByName = serviceFactory(
-        "findByName",
-        GroupDao,
+    static findByName = serviceFactory.get<Group>(
         GroupDao.getInstance().findByName
     );
-    // static async findByName(req: Request): Promise<Group | string> {
+
+    static create = serviceFactory.postOrUpdate<Group>(
+        GroupDao.getInstance().save
+    );
+
+    static update = serviceFactory.postOrUpdate<Group>(
+        GroupDao.getInstance().update
+    );
+    static delete = serviceFactory.delete<Group>(GroupDao.getInstance().delete);
+    // static async create(
+    //     req: Request,
+    //     res: Response,
+    //     next: NextFunction
+    // ): Promise<string> {
     //     const reqData: ReqData = {
     //         data: req.body.data,
     //         decoded: req.body.decoded,
     //         params: req.params
     //     };
-    //     if (!reqData.data.name) return "BadRequest";
-    //     const find = await GroupDao.getInstance().findByName(reqData);
-    //     switch (find) {
+    //     if (!reqData.data.name || !reqData.data.admin) return "BadRequest";
+    //     const group:
+    //         | Group
+    //         | null
+    //         | undefined = await GroupDao.getInstance().save(reqData);
+    //     switch (group) {
     //         case undefined:
     //             return "InternalServerError";
     //         case null:
     //             return "UnexpectedError";
     //         default:
-    //             return find;
+    //             return "Success";
     //     }
     // }
 
-    static async create(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): Promise<string> {
-        const reqData: ReqData = {
-            data: req.body.data,
-            decoded: req.body.decoded,
-            params: req.params
-        };
-        if (!reqData.data.name || !reqData.data.admin) return "BadRequest";
-        const group:
-            | Group
-            | null
-            | undefined = await GroupDao.getInstance().save(reqData);
-        switch (group) {
-            case undefined:
-                return "InternalServerError";
-            case null:
-                return "UnexpectedError";
-            default:
-                return "Success";
-        }
-    }
+    // static async update(
+    //     req: Request,
+    //     res: Response,
+    //     next: NextFunction
+    // ): Promise<string> {
+    //     const reqData: ReqData = {
+    //         data: req.body.data,
+    //         decoded: req.body.decoded,
+    //         params: req.params
+    //     };
+    //     if (!reqData.data.name || !reqData.data.admin) return "BadRequest";
 
-    static async update(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): Promise<string> {
-        const reqData: ReqData = {
-            data: req.body.data,
-            decoded: req.body.decoded,
-            params: req.params
-        };
-        if (!reqData.data.name || !reqData.data.admin) return "BadRequest";
+    //     const group:
+    //         | any
+    //         | null
+    //         | undefined = await GroupDao.getInstance().update(reqData);
+    //     switch (group) {
+    //         case undefined:
+    //             return "InternalServerError";
+    //         case null:
+    //             return "UnexpectedError";
+    //         default:
+    //             return "Success";
+    //     }
+    // }
 
-        const group:
-            | any
-            | null
-            | undefined = await GroupDao.getInstance().update(reqData);
-        switch (group) {
-            case undefined:
-                return "InternalServerError";
-            case null:
-                return "UnexpectedError";
-            default:
-                return "Success";
-        }
-    }
+    // static async delete(
+    //     req: Request,
+    //     res: Response,
+    //     next: NextFunction
+    // ): Promise<string> {
+    //     const reqData: ReqData = {
+    //         data: req.body.data,
+    //         decoded: req.body.decoded,
+    //         params: req.params
+    //     };
+    //     if (!reqData.data.name || !reqData.data.admin) return "BadRequest";
 
-    static async delete(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): Promise<string> {
-        const reqData: ReqData = {
-            data: req.body.data,
-            decoded: req.body.decoded,
-            params: req.params
-        };
-        if (!reqData.data.name || !reqData.data.admin) return "BadRequest";
-
-        const group:
-            | number
-            | null
-            | undefined = await GroupDao.getInstance().destroy(reqData);
-        switch (group) {
-            case undefined:
-                return "InternalServerError";
-            case null:
-                return "UnexpectedError";
-            case 0:
-                return "NoItemDeleted";
-            default:
-                return "Success";
-        }
-    }
+    //     const group:
+    //         | number
+    //         | null
+    //         | undefined = await GroupDao.getInstance().destroy(reqData);
+    //     switch (group) {
+    //         case undefined:
+    //             return "InternalServerError";
+    //         case null:
+    //             return "UnexpectedError";
+    //         case 0:
+    //             return "NoItemDeleted";
+    //         default:
+    //             return "Success";
+    //     }
+    // }
 }
 
 export default GroupService;

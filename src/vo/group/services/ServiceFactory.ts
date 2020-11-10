@@ -1,20 +1,12 @@
 import { Request } from "express";
 import ReqData from "@src/vo/group/services/reqData";
-import Dao from "@src/dao/Dao";
 
-const serviceFactory = <T>(
-    funcName: string | Function,
-    dao: typeof Dao,
-    daoFunc: Function
-) => {
-    funcName = async (req: Request): Promise<T | string> => {
-        const reqData: ReqData = {
-            data: req.body.data,
-            decoded: req.body.decoded,
-            params: req.params
-        };
+const serviceReturn = {
+    get: async <T>(
+        reqData: ReqData,
+        daoFunc: Function
+    ): Promise<T | string> => {
         try {
-            // if (!groupBody.content) return "BadRequest";
             const result = await daoFunc(reqData);
             switch (result) {
                 case undefined:
@@ -28,8 +20,95 @@ const serviceFactory = <T>(
             console.log(e);
             return "InternalServerError";
         }
-    };
-    return funcName;
+    },
+    postOrUpdate: async <T>(
+        reqData: ReqData,
+        daoFunc: Function
+    ): Promise<string> => {
+        try {
+            const result = await daoFunc(reqData);
+            switch (result) {
+                case undefined:
+                    return "InternalServerError";
+                case null:
+                    return "UnexpectedError";
+                default:
+                    return "Success";
+            }
+        } catch (e) {
+            console.log(e);
+            return "InternalServerError";
+        }
+    },
+    delete: async <T>(reqData: ReqData, daoFunc: Function): Promise<string> => {
+        try {
+            const result = await daoFunc(reqData);
+            switch (result) {
+                case undefined:
+                    return "InternalServerError";
+                case null:
+                    return "UnexpectedError";
+                case 0:
+                    return "NoItemDeleted";
+                default:
+                    return "Success";
+            }
+        } catch (e) {
+            console.log(e);
+            return "InternalServerError";
+        }
+    }
+};
+const serviceFactory = {
+    get: <T>(daoFunc: Function) => {
+        const func = async (req: Request): Promise<T | string> => {
+            const reqData: ReqData = {
+                data: req.body.data,
+                decoded: req.body.decoded,
+                params: req.params
+            };
+            //if -> return "BadRequest"
+            const result: T | string = await serviceReturn.get<T>(
+                reqData,
+                daoFunc
+            );
+            return result;
+        };
+        return func;
+    },
+
+    postOrUpdate: <T>(daoFunc: Function) => {
+        const func = async (req: Request): Promise<string> => {
+            const reqData: ReqData = {
+                data: req.body.data,
+                decoded: req.body.decoded,
+                params: req.params
+            };
+            //if -> return "BadRequest"
+            const result: string = await serviceReturn.postOrUpdate<T>(
+                reqData,
+                daoFunc
+            );
+            return result;
+        };
+        return func;
+    },
+    delete: <T>(daoFunc: Function) => {
+        const func = async (req: Request): Promise<string> => {
+            const reqData: ReqData = {
+                data: req.body.data,
+                decoded: req.body.decoded,
+                params: req.params
+            };
+            //if -> return "BadRequest"
+            const result: string = await serviceReturn.delete<T>(
+                reqData,
+                daoFunc
+            );
+            return result;
+        };
+        return func;
+    }
 };
 
 export default serviceFactory;

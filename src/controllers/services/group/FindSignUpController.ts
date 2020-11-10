@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from "express";
 
-import Group from "@src/models/group/GroupModel";
 import Controller from "@src/controllers/Controller";
 import GroupService from "@src/services/group/GroupService";
 import resTypes from "@src/utils/resTypes";
