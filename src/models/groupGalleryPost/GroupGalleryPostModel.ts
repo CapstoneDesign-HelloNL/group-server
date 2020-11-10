@@ -5,10 +5,11 @@ import { GroupGalleryPostTypes } from "@src/vo/group/controllers/GroupGalleryPos
 interface GroupGalleryPostCreationAttributes
     extends Optional<GroupGalleryPostTypes.GroupGalleryPostBody, "id"> {}
 class GroupGalleryPost
-    extends Model<
-        GroupGalleryPostTypes.GroupGalleryPostBody,
-        GroupGalleryPostCreationAttributes
-    >
+    extends Model
+    // extends Model<
+    //     GroupGalleryPostTypes.GroupGalleryPostBody,
+    //     GroupGalleryPostCreationAttributes
+    // >
     implements GroupGalleryPostTypes.GroupGalleryPostBody {
     public id!: number;
     public title!: string;

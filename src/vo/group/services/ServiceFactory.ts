@@ -1,4 +1,3 @@
-import { UniqueConstraintError } from "sequelize";
 import { Request } from "express";
 import { ReqData, StrictReqData } from "@src/vo/group/services/reqData";
 

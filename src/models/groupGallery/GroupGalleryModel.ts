@@ -16,10 +16,11 @@ import GroupGalleryPost from "../groupGalleryPost/GroupGalleryPostModel";
 interface GroupGalleryCreationAttributes
     extends Optional<GroupGalleryTypes.GroupGalleryBody, "name"> {}
 class GroupGallery
-    extends Model<
-        GroupGalleryTypes.GroupGalleryBody,
-        GroupGalleryCreationAttributes
-    >
+    extends Model
+    // extends Model<
+    //     GroupGalleryTypes.GroupGalleryBody,
+    //     GroupGalleryCreationAttributes
+    // >
     implements GroupGalleryTypes.GroupGalleryBody {
     public name!: string;
     public groupName!: string;

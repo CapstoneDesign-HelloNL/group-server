@@ -14,10 +14,11 @@ import Group from "@src/models/group/GroupModel";
 interface GroupScheduleCreationAttributes
     extends Optional<GroupScheduleTypes.GroupScheduleBody, "id"> {}
 class GroupSchedule
-    extends Model<
-        GroupScheduleTypes.GroupScheduleBody,
-        GroupScheduleCreationAttributes
-    >
+    extends Model
+    // extends Model<
+    //     GroupScheduleTypes.GroupScheduleBody,
+    //     GroupScheduleCreationAttributes
+    // >
     implements GroupScheduleTypes.GroupScheduleBody {
     public id!: number;
     public title!: string;

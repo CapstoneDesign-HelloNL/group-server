@@ -1,10 +1,9 @@
 import { NextFunction, Request, Response } from "express";
-
 import Controller from "@src/controllers/Controller";
-import GroupService from "@src/services/group/GroupService";
+import GroupAgendaService from "@src/services/groupAgenda/GroupAgendaService";
 import resTypes from "@src/utils/resTypes";
 
-class CheckAlreadyExistGroupController extends Controller {
+class CreateController extends Controller {
     private result: string;
     constructor() {
         super();
@@ -15,7 +14,7 @@ class CheckAlreadyExistGroupController extends Controller {
         res: Response,
         next: NextFunction
     ): Promise<void> {
-        // this.result = await GroupService.isAlreadyHaveGroup(req);
+        this.result = await GroupAgendaService.create(req);
     }
     protected async doResolve(
         req: Request,
@@ -33,12 +32,12 @@ class CheckAlreadyExistGroupController extends Controller {
                 resTypes.unexpectedErrorRes(res);
                 break;
             case "AlreadyExistItem":
-                resTypes.alreadyExistItemRes(res, "group");
+                resTypes.alreadyExistItemRes(res, "group agenda");
                 break;
             default:
-                next();
+                resTypes.successRes(res, "Create group agenda");
         }
     }
 }
 
-export default CheckAlreadyExistGroupController;
+export default CreateController;

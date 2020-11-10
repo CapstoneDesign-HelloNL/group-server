@@ -14,10 +14,11 @@ import Group from "@src/models/group/GroupModel";
 interface GroupNoticeCreationAttributes
     extends Optional<GroupNoticeTypes.GroupNoticeBody, "id"> {}
 class GroupNotice
-    extends Model<
-        GroupNoticeTypes.GroupNoticeBody,
-        GroupNoticeCreationAttributes
-    >
+    extends Model
+    // extends Model<
+    //     GroupNoticeTypes.GroupNoticeBody,
+    //     GroupNoticeCreationAttributes
+    // >
     implements GroupNoticeTypes.GroupNoticeBody {
     public id!: number;
     public title!: string;

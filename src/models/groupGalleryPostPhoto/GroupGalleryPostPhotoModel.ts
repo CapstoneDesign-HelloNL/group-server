@@ -8,10 +8,11 @@ interface GroupGalleryPostPhotoCreationAttributes
         "id"
     > {}
 class GroupGalleryPostPhoto
-    extends Model<
-        GroupGalleryPostPhotoTypes.GroupGalleryPostPhotoBody,
-        GroupGalleryPostPhotoCreationAttributes
-    >
+    extends Model
+    // extends Model<
+    //     GroupGalleryPostPhotoTypes.GroupGalleryPostPhotoBody,
+    //     GroupGalleryPostPhotoCreationAttributes
+    // >
     implements GroupGalleryPostPhotoTypes.GroupGalleryPostPhotoBody {
     public id!: number;
     public galleryPostPhotoUrl!: string;
