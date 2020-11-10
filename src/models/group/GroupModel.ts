@@ -16,8 +16,7 @@ import {
     BelongsToManyCreateAssociationMixin,
     BelongsToManyRemoveAssociationMixin,
     BelongsToManyRemoveAssociationsMixin,
-    BelongsToManyCountAssociationsMixin,
-    BelongsToManyAddAssociationMixinOptions
+    BelongsToManyCountAssociationsMixin
 } from "sequelize";
 import { GroupModelTypes } from "@src/vo/group/models/GroupModel";
 import { GroupTypes } from "@src/vo/group/controllers/Group";
@@ -30,7 +29,8 @@ import Member from "@src/models/member/MemberModel";
 interface GroupCreationAttributes
     extends Optional<GroupTypes.GroupBody, "name"> {}
 class Group
-    extends Model<GroupTypes.GroupBody, GroupCreationAttributes>
+    extends Model
+    // extends Model<GroupTypes.GroupBody, GroupCreationAttributes>
     implements GroupTypes.GroupBody {
     public name!: string;
     public admin!: string;

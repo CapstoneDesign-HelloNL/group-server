@@ -11,8 +11,7 @@ import {
     BelongsToManyCreateAssociationMixin,
     BelongsToManyRemoveAssociationMixin,
     BelongsToManyCountAssociationsMixin,
-    Association,
-    BelongsToManyAddAssociationMixinOptions
+    Association
 } from "sequelize";
 import { MemberModelTypes } from "@src/vo/group/models/MemberModel";
 import { MemberTypes } from "@src/vo/group/controllers/Member";
@@ -21,7 +20,8 @@ import Group from "../group/GroupModel";
 interface MemberCreationAttributes
     extends Optional<MemberTypes.MemberBody, "email"> {}
 class Member
-    extends Model<MemberTypes.MemberBody, MemberCreationAttributes>
+    extends Model
+    // extends Model<MemberTypes.MemberBody, MemberCreationAttributes>
     implements MemberTypes.MemberBody {
     public email!: string;
     public readonly createdAt!: Date;
@@ -33,15 +33,21 @@ class Member
         memberToGroup: Association<Member, Group>;
     };
 
-    public getGroups!: BelongsToManyGetAssociationsMixin<Group>; // Note the null assertions!
-    public addGroup!: BelongsToManyAddAssociationMixin<Group, string>;
-    public addGroups!: BelongsToManyAddAssociationsMixin<Group, string>;
-    public hasGroup!: BelongsToManyHasAssociationMixin<Group, string>;
-    public hasGroups!: BelongsToManyHasAssociationsMixin<Group, string>;
-    public createGroup!: BelongsToManyCreateAssociationMixin<Group>;
-    public removeGroup!: BelongsToManyRemoveAssociationMixin<Group, string>;
-    public removeGroups!: BelongsToManyRemoveAssociationsMixin<Group, string>;
-    public countGroups!: BelongsToManyCountAssociationsMixin;
+    public getMemberToGroups!: BelongsToManyGetAssociationsMixin<Group>; // Note the null assertions!
+    public addMemberToGroup!: BelongsToManyAddAssociationMixin<Group, string>;
+    public addMemberToGroups!: BelongsToManyAddAssociationsMixin<Group, string>;
+    public hasMemberToGroup!: BelongsToManyHasAssociationMixin<Group, string>;
+    public hasMemberToGroups!: BelongsToManyHasAssociationsMixin<Group, string>;
+    public createMemberToGroup!: BelongsToManyCreateAssociationMixin<Group>;
+    public removeMemberToGroup!: BelongsToManyRemoveAssociationMixin<
+        Group,
+        string
+    >;
+    public removeMemberToGroups!: BelongsToManyRemoveAssociationsMixin<
+        Group,
+        string
+    >;
+    public countMemberToGroups!: BelongsToManyCountAssociationsMixin;
 
     static initiate(connection: Sequelize): Model {
         const opt: MemberModelTypes.IBaseMemberTableOptions = {

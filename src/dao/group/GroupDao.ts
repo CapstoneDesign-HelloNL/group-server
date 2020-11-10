@@ -5,6 +5,8 @@ import Dao from "@src/dao/Dao";
 import { GroupTypes } from "@src/vo/group/controllers/Group";
 import Member from "@src/models/member/MemberModel";
 import { MemberTypes } from "@src/vo/group/controllers/Member";
+import { Model } from "sequelize";
+import GroupToMember from "@src/models/groupToMember/GroupToMemberModel";
 
 const logger = LogService.getInstance();
 class GroupDao extends Dao {
@@ -42,7 +44,7 @@ class GroupDao extends Dao {
                 where: {
                     email
                 },
-                include: [Group.associations.members]
+                include: Group.associations.members
             });
         } catch (err) {
             logger.error(err);
@@ -51,13 +53,22 @@ class GroupDao extends Dao {
         return member;
     }
 
-    async findByName(name: string): Promise<Group | null | undefined> {
-        let group: Group | null = null;
+    async findByName(
+        email: string,
+        name: string
+    ): Promise<Group[] | null | undefined> {
+        let group: Group[] | null = null;
         try {
-            group = await Group.findOne({
-                where: {
-                    name
-                }
+            group = await Group.findAll({
+                where: { name }
+                // include: [
+                //     {
+                //         model: Member,
+                //         where: { email },
+                //         as: "members",
+                //         attributes: ["email"]
+                //     }
+                // ]
             });
         } catch (err) {
             logger.error(err);
@@ -74,7 +85,7 @@ class GroupDao extends Dao {
                 where: {
                     name
                 },
-                include: [Member.associations.memberToGroup]
+                include: Member
             });
         } catch (err) {
             logger.error(err);
@@ -91,11 +102,17 @@ class GroupDao extends Dao {
 
         let newGroup: Group | null = null;
         let newMember: Member | null = null;
+        let findMember: Member | null = null;
+        let findGroup: Group | null = null;
         try {
             newGroup = await Group.create(groupData);
-            newMember = await Member.create(memberData);
-            await newGroup.addMember(newMember, "GroupToMember");
-            await newMember.addGroup(newGroup);
+            findMember = await Member.findByPk(memberData.email);
+            newMember =
+                findMember != null
+                    ? findMember
+                    : await Member.create(memberData);
+            await newGroup.addMember(newMember);
+            await newMember.addMemberToGroup(newGroup);
         } catch (err) {
             logger.error(err);
             return undefined;

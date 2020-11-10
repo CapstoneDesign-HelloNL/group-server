@@ -6,10 +6,11 @@ interface MemberCreationAttributes
     extends Optional<GroupToMemberTypes.GroupToMemberBody, "id"> {}
 
 class GroupToMember
-    extends Model<
-        GroupToMemberTypes.GroupToMemberBody,
-        MemberCreationAttributes
-    >
+    extends Model
+    // extends Model<
+    //     GroupToMemberTypes.GroupToMemberBody,
+    //     MemberCreationAttributes
+    // >
     implements GroupToMemberTypes.GroupToMemberBody {
     public id!: number;
     public groupName!: string;
