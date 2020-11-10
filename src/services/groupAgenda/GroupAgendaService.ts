@@ -3,12 +3,17 @@ import { Request, Response, NextFunction } from "express";
 import { GroupAgendaTypes } from "@src/vo/group/controllers/GroupAgenda";
 import GroupAgenda from "@src/models/groupAgenda/GroupAgendaModel";
 import GroupAgendaDao from "@src/dao/groupAgenda/GroupAgendaDao";
+import ReqData from "@src/vo/group/services/reqData";
 
 class GroupAgendaService {
     static async findAllByName(req: Request): Promise<GroupAgenda[] | string> {
-        const groupName = req.params.groupName;
-        if (!groupName) return "BadRequest";
-        const find = await GroupAgendaDao.getInstance().findAll(groupName);
+        const reqData: ReqData = {
+            data: req.body.data,
+            decoded: req.body.decoded,
+            params: req.params
+        };
+        if (!reqData.params.groupName) return "BadRequest";
+        const find = await GroupAgendaDao.getInstance().findAll(reqData);
         switch (find) {
             case undefined:
                 return "InternalServerError";
@@ -23,15 +28,17 @@ class GroupAgendaService {
         res: Response,
         next: NextFunction
     ): Promise<string> {
-        const groupAgedaBody: GroupAgendaTypes.GroupAgendaPostBody = req.body;
-        if (!groupAgedaBody.content) return "BadRequest";
+        const reqData: ReqData = {
+            data: req.body.data,
+            decoded: req.body.decoded,
+            params: req.params
+        };
+        if (!reqData.data.content) return "BadRequest";
 
         const groupAgenda:
             | GroupAgenda
             | null
-            | undefined = await GroupAgendaDao.getInstance().save(
-            groupAgedaBody
-        );
+            | undefined = await GroupAgendaDao.getInstance().save(reqData);
         switch (groupAgenda) {
             case undefined:
                 return "InternalServerError";
@@ -47,15 +54,17 @@ class GroupAgendaService {
         res: Response,
         next: NextFunction
     ): Promise<string> {
-        const groupAgendaBody: GroupAgendaTypes.GroupAgendaPostBody = req.body;
-        if (!groupAgendaBody.content) return "BadRequest";
+        const reqData: ReqData = {
+            data: req.body.data,
+            decoded: req.body.decoded,
+            params: req.params
+        };
+        if (!reqData.data.content) return "BadRequest";
 
         const group:
             | any
             | null
-            | undefined = await GroupAgendaDao.getInstance().update(
-            groupAgendaBody
-        );
+            | undefined = await GroupAgendaDao.getInstance().update(reqData);
         switch (group) {
             case undefined:
                 return "InternalServerError";
@@ -71,13 +80,17 @@ class GroupAgendaService {
         res: Response,
         next: NextFunction
     ): Promise<string> {
-        const groupBody: GroupAgendaTypes.GroupAgendaPostBody = req.body;
-        if (!groupBody.content) return "BadRequest";
+        const reqData: ReqData = {
+            data: req.body.data,
+            decoded: req.body.decoded,
+            params: req.params
+        };
+        if (!reqData.data.content) return "BadRequest";
 
         const group:
             | number
             | null
-            | undefined = await GroupAgendaDao.getInstance().destroy(groupBody);
+            | undefined = await GroupAgendaDao.getInstance().destroy(reqData);
         switch (group) {
             case undefined:
                 return "InternalServerError";

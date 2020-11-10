@@ -1,16 +1,20 @@
 import { Request, Response, NextFunction } from "express";
-
 import { GroupTypes } from "@src/vo/group/controllers/Group";
+import { MemberTypes } from "@src/vo/group/controllers/Member";
 import Group from "@src/models/group/GroupModel";
 import GroupDao from "@src/dao/group/GroupDao";
-import { MemberTypes } from "@src/vo/group/controllers/Member";
 import Member from "@src/models/member/MemberModel";
+import ReqData from "@src/vo/group/services/reqData";
 
 class GroupService {
     static async isAlreadyHaveGroup(req: Request): Promise<string> {
-        const groupBody: GroupTypes.GroupBody = req.body;
-        if (!groupBody.name || !groupBody.admin) return "BadRequest";
-        const find = await GroupDao.getInstance().find(groupBody.name);
+        const reqData: ReqData = {
+            data: req.body.data,
+            decoded: req.body.decoded,
+            params: req.params
+        };
+        if (!reqData.data.name || !reqData.data.admin) return "BadRequest";
+        const find = await GroupDao.getInstance().find(reqData);
         switch (find) {
             case undefined:
                 return "InternalServerError";
@@ -21,9 +25,13 @@ class GroupService {
     }
 
     static async findAll(req: Request): Promise<Group | string> {
-        const groupBody: GroupTypes.GroupBody = req.body;
-        if (!groupBody.name) return "BadRequest";
-        const find = await GroupDao.getInstance().findAll(groupBody.name);
+        const reqData: ReqData = {
+            data: req.body.data,
+            decoded: req.body.decoded,
+            params: req.params
+        };
+        if (!reqData.data.name) return "BadRequest";
+        const find = await GroupDao.getInstance().findAll(reqData);
         switch (find) {
             case undefined:
                 return "InternalServerError";
@@ -35,10 +43,12 @@ class GroupService {
     }
 
     static async findSignUp(req: Request): Promise<Member | string> {
-        // const groupBody: GroupTypes.GroupBody = req.body;
-        const memberBody: MemberTypes.MemberBody = req.body.decoded;
-        // if (!groupBody.name) return "BadRequest";
-        const find = await GroupDao.getInstance().findSignUp(memberBody.email);
+        const reqData: ReqData = {
+            data: req.body.data,
+            decoded: req.body.decoded,
+            params: req.params
+        };
+        const find = await GroupDao.getInstance().findSignUp(reqData);
         switch (find) {
             case undefined:
                 return "InternalServerError";
@@ -50,9 +60,13 @@ class GroupService {
     }
 
     static async findByName(req: Request): Promise<Group | string> {
-        const groupBody: GroupTypes.GroupBody = req.body;
-        if (!groupBody.name) return "BadRequest";
-        const find = await GroupDao.getInstance().findByName(groupBody.name);
+        const reqData: ReqData = {
+            data: req.body.data,
+            decoded: req.body.decoded,
+            params: req.params
+        };
+        if (!reqData.data.name) return "BadRequest";
+        const find = await GroupDao.getInstance().findByName(reqData);
         switch (find) {
             case undefined:
                 return "InternalServerError";
@@ -68,17 +82,16 @@ class GroupService {
         res: Response,
         next: NextFunction
     ): Promise<string> {
-        const groupBody: GroupTypes.GroupBody = req.body;
-        const memberBody: MemberTypes.MemberBody = req.body.decoded;
-        if (!groupBody.name || !groupBody.admin) return "BadRequest";
-
+        const reqData: ReqData = {
+            data: req.body.data,
+            decoded: req.body.decoded,
+            params: req.params
+        };
+        if (!reqData.data.name || !reqData.data.admin) return "BadRequest";
         const group:
             | Group
             | null
-            | undefined = await GroupDao.getInstance().save(
-            memberBody,
-            groupBody
-        );
+            | undefined = await GroupDao.getInstance().save(reqData);
         switch (group) {
             case undefined:
                 return "InternalServerError";
@@ -94,13 +107,17 @@ class GroupService {
         res: Response,
         next: NextFunction
     ): Promise<string> {
-        const groupBody: GroupTypes.GroupBody = req.body;
-        if (!groupBody.name || !groupBody.admin) return "BadRequest";
+        const reqData: ReqData = {
+            data: req.body.data,
+            decoded: req.body.decoded,
+            params: req.params
+        };
+        if (!reqData.data.name || !reqData.data.admin) return "BadRequest";
 
         const group:
             | any
             | null
-            | undefined = await GroupDao.getInstance().update(groupBody);
+            | undefined = await GroupDao.getInstance().update(reqData);
         switch (group) {
             case undefined:
                 return "InternalServerError";
@@ -116,13 +133,17 @@ class GroupService {
         res: Response,
         next: NextFunction
     ): Promise<string> {
-        const groupBody: GroupTypes.GroupBody = req.body;
-        if (!groupBody.name || !groupBody.admin) return "BadRequest";
+        const reqData: ReqData = {
+            data: req.body.data,
+            decoded: req.body.decoded,
+            params: req.params
+        };
+        if (!reqData.data.name || !reqData.data.admin) return "BadRequest";
 
         const group:
             | number
             | null
-            | undefined = await GroupDao.getInstance().destroy(groupBody);
+            | undefined = await GroupDao.getInstance().destroy(reqData);
         switch (group) {
             case undefined:
                 return "InternalServerError";

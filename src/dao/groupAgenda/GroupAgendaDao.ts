@@ -21,9 +21,9 @@ class GroupAgendaDao extends Dao {
         await this.db?.endConnection();
     }
     async find(id: number): Promise<GroupAgenda | null | undefined> {
-        let groupAgenda: GroupAgenda | null = null;
+        let result: GroupAgenda | null = null;
         try {
-            groupAgenda = await GroupAgenda.findOne({
+            result = await GroupAgenda.findOne({
                 where: {
                     id
                 }
@@ -32,7 +32,7 @@ class GroupAgendaDao extends Dao {
             logger.error(err);
             return undefined;
         }
-        return groupAgenda;
+        return result;
     }
 
     async findAll(
@@ -59,14 +59,14 @@ class GroupAgendaDao extends Dao {
         if (process.env.NODE_ENV === "test")
             await GroupAgenda.sync({ force: true });
 
-        let newGroupAgenda: GroupAgenda | null = null;
+        let result: GroupAgenda | null = null;
         try {
-            newGroupAgenda = await GroupAgenda.create(groupAgendaData);
+            result = await GroupAgenda.create(groupAgendaData);
         } catch (err) {
             logger.error(err);
             return undefined;
         }
-        return newGroupAgenda;
+        return result;
     }
 
     async update(
@@ -76,9 +76,9 @@ class GroupAgendaDao extends Dao {
         if (process.env.NODE_ENV === "test")
             await GroupAgenda.sync({ force: true });
 
-        let updateGroupAgenda: any | null = null;
+        let result: any | null = null;
         try {
-            updateGroupAgenda = await GroupAgenda.update(
+            result = await GroupAgenda.update(
                 { ...afterGroupAgendaData },
                 { where: { ...groupAgendaData } }
             );
@@ -86,7 +86,7 @@ class GroupAgendaDao extends Dao {
             logger.error(err);
             return undefined;
         }
-        return updateGroupAgenda;
+        return result;
     }
 
     async delete(

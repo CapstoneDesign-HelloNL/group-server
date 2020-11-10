@@ -6,6 +6,7 @@ import Dao from "@src/dao/Dao";
 import { GroupTypes } from "@src/vo/group/controllers/Group";
 import Member from "@src/models/member/MemberModel";
 import { MemberTypes } from "@src/vo/group/controllers/Member";
+import ReqData from "@src/vo/group/services/reqData";
 
 const logger = LogService.getInstance();
 class GroupDao extends Dao {
@@ -36,7 +37,9 @@ class GroupDao extends Dao {
         return group;
     }
 
-    async findSignUp(email: string): Promise<Member | null | undefined> {
+    async findSignUp({
+        decoded: { email }
+    }: ReqData): Promise<Member | null | undefined> {
         let member: Member | null = null;
         try {
             member = await Member.findOne({
