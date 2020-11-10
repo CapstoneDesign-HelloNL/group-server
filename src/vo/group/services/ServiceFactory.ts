@@ -19,8 +19,6 @@ const serviceReturn = {
             }
         } catch (e) {
             console.log(e);
-            if (typeof e === typeof UniqueConstraintError)
-                return `AlreadyExistItem`;
             return "InternalServerError";
         }
     },
