@@ -9,6 +9,8 @@ const serviceReturn = {
         try {
             const result = await daoFunc(reqData);
             switch (result) {
+                case "BadRequest":
+                    return "BadRequest";
                 case undefined:
                     return "InternalServerError";
                 case null:
@@ -28,6 +30,8 @@ const serviceReturn = {
         try {
             const result = await daoFunc(reqData);
             switch (result) {
+                case "BadRequest":
+                    return "BadRequest";
                 case undefined:
                     return "InternalServerError";
                 case null:
@@ -46,6 +50,8 @@ const serviceReturn = {
         try {
             const result = await daoFunc(reqData);
             switch (result) {
+                case "BadRequest":
+                    return "BadRequest";
                 case undefined:
                     return "InternalServerError";
                 case null:

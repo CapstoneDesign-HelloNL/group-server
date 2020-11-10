@@ -1,4 +1,4 @@
-import { Op, UniqueConstraintError } from "sequelize";
+import { Op, UniqueConstraintError, ValidationError } from "sequelize";
 import GroupDBManager from "@src/models/GroupDBManager";
 import Group from "@src/models/group/GroupModel";
 import LogService from "@src/utils/LogService";
@@ -136,6 +136,7 @@ class GroupDao extends Dao {
         } catch (err) {
             logger.error(err);
             if (err instanceof UniqueConstraintError) return `AlreadyExistItem`;
+            else if (err instanceof ValidationError) return `BadRequest`;
             return undefined;
         }
         return newGroup;
@@ -155,6 +156,7 @@ class GroupDao extends Dao {
             );
         } catch (err) {
             logger.error(err);
+            if (err instanceof ValidationError) return `BadRequest`;
             return undefined;
         }
         return updateGroup;

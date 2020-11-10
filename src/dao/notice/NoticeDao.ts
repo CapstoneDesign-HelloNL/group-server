@@ -2,7 +2,8 @@ import GroupDBManager from "@src/models/GroupDBManager";
 import Notice from "@src/models/notice/NoticeModel";
 import LogService from "@src/utils/LogService";
 import Dao from "@src/dao/Dao";
-import { NoticeTypes } from "@src/vo/group/controllers/Notice";
+import { StrictReqData } from "@src/vo/group/services/reqData";
+import { UniqueConstraintError, ValidationError } from "sequelize";
 /*
 update, delete logic need to change
 */
@@ -19,61 +20,67 @@ class NoticeDao extends Dao {
     protected async endConnect() {
         await this.db?.endConnection();
     }
-    async find(id: number): Promise<Notice | null | undefined> {
-        let notice: Notice | null = null;
-        console.log(notice);
+    async findOne({
+        data,
+        decoded
+    }: StrictReqData): Promise<Notice | string | null | undefined> {
+        let result: Notice | null = null;
         try {
-            notice = await Notice.findOne({
+            result = await Notice.findByPk(data.id);
+        } catch (err) {
+            logger.error(err);
+            if (err instanceof ValidationError) return `BadRequest`;
+            return undefined;
+        }
+        return result;
+    }
+
+    async findAllByGroup({
+        data,
+        decoded
+    }: StrictReqData): Promise<Notice[] | string | null | undefined> {
+        let result: Notice[] | null = null;
+        try {
+            result = await Notice.findAll({
                 where: {
-                    id
+                    groupName: data.groupName
                 }
             });
         } catch (err) {
             logger.error(err);
+            if (err instanceof ValidationError) return `BadRequest`;
             return undefined;
         }
-        return notice;
+        return result;
     }
 
-    async findAll(): Promise<Notice[] | null | undefined> {
-        let groups: Notice[] | null = null;
-        console.log(groups);
-        try {
-            groups = await Notice.findAll();
-        } catch (err) {
-            logger.error(err);
-            return undefined;
-        }
-        return groups;
-    }
-
-    async save(
-        noticeData: NoticeTypes.NoticePostBody
-    ): Promise<Notice | undefined> {
-        if (process.env.NODE_ENV === "test") await Notice.sync({ force: true });
-
+    async save({
+        data,
+        decoded
+    }: StrictReqData): Promise<Notice | string | undefined> {
         let newNotice: Notice | null = null;
         try {
-            newNotice = await Notice.create(noticeData);
+            newNotice = await Notice.create(data);
         } catch (err) {
+            if (err instanceof UniqueConstraintError) return `AlreadyExistItem`;
+            else if (err instanceof ValidationError) return `BadRequest`;
             logger.error(err);
             return undefined;
         }
         return newNotice;
     }
 
-    async update(
-        noticeData: NoticeTypes.NoticePostBody,
-        afterNoticeData: NoticeTypes.NoticePostBody
-    ): Promise<any | null | undefined> {
+    async update({
+        data,
+        decoded
+    }: StrictReqData): Promise<any | null | undefined> {
         if (process.env.NODE_ENV === "test") await Notice.sync({ force: true });
 
         let updateNotice: any | null = null;
         try {
-            updateNotice = await Notice.update(
-                { ...afterNoticeData },
-                { where: { ...noticeData } }
-            );
+            updateNotice = await Notice.update(data.afterNoticeData, {
+                where: { ...data.noticeData }
+            });
         } catch (err) {
             logger.error(err);
             return undefined;
@@ -81,16 +88,17 @@ class NoticeDao extends Dao {
         return updateNotice;
     }
 
-    async delete(
-        noticeData: NoticeTypes.NoticePostBody
-    ): Promise<number | undefined> {
+    async delete({
+        data,
+        decoded
+    }: StrictReqData): Promise<number | undefined> {
         if (process.env.NODE_ENV === "test") await Notice.sync({ force: true });
 
         let deleteNoticeGroup: number | null = null;
         try {
             deleteNoticeGroup = await Notice.destroy({
                 where: {
-                    ...noticeData
+                    ...data.noticeData
                 }
             });
         } catch (err) {

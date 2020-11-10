@@ -13,7 +13,7 @@ import Group from "@src/models/group/GroupModel";
 
 interface ScheduleCreationAttributes
     extends Optional<ScheduleTypes.ScheduleBody, "id"> {}
-class GroupSchedule
+class Schedule
     extends Model
     // extends Model<
     //     GroupScheduleTypes.GroupScheduleBody,
@@ -30,22 +30,22 @@ class GroupSchedule
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
 
-    public getSchedules!: BelongsToGetAssociationMixin<Group>; // Note the null assertions!
-    public createSchedule!: BelongsToCreateAssociationMixin<Group>;
-    public setSchedule!: BelongsToSetAssociationMixin<Group, "groupName">;
+    public getGroups!: BelongsToGetAssociationMixin<Group>; // Note the null assertions!
+    public createGroup!: BelongsToCreateAssociationMixin<Group>;
+    public setGroup!: BelongsToSetAssociationMixin<Group, "groupName">;
     public static associations: {
-        schedulesToGroups: Association<GroupSchedule, Group>;
+        schedulesToGroups: Association<Schedule, Group>;
     };
     static initiate(connection: Sequelize): Model {
         const opt: ScheduleModelTypes.IBaseScheduleTableOptions = {
             sequelize: connection,
             tableName: "Schedule"
         };
-        return GroupSchedule.init(ScheduleModelTypes.attr, opt);
+        return Schedule.init(ScheduleModelTypes.attr, opt);
     }
     // static createUser(value: GroupTypes.GroupPostBody) {
     //     return UserModel.create(value);
     // }
 }
 // GroupSchedule.Group = GroupSchedule.belongsTo(Group);
-export default GroupSchedule;
+export default Schedule;

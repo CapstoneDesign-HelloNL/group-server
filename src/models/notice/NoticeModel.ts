@@ -13,7 +13,7 @@ import Group from "@src/models/group/GroupModel";
 
 interface NoticeCreationAttributes
     extends Optional<NoticeTypes.NoticeBody, "id"> {}
-class GroupNotice
+class Notice
     extends Model
     // extends Model<
     //     GroupNoticeTypes.GroupNoticeBody,
@@ -29,11 +29,11 @@ class GroupNotice
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
 
-    public getNotices!: BelongsToGetAssociationMixin<Group>; // Note the null assertions!
-    public createNotice!: BelongsToCreateAssociationMixin<Group>;
-    public setNotice!: BelongsToSetAssociationMixin<Group, "groupName">;
+    public getGroups!: BelongsToGetAssociationMixin<Group>; // Note the null assertions!
+    public createGroup!: BelongsToCreateAssociationMixin<Group>;
+    public setGroup!: BelongsToSetAssociationMixin<Group, "groupName">;
     public static associations: {
-        noticesToGroups: Association<GroupNotice, Group>;
+        noticesToGroups: Association<Notice, Group>;
     };
 
     static initiate(connection: Sequelize): Model {
@@ -41,7 +41,7 @@ class GroupNotice
             sequelize: connection,
             tableName: "Notice"
         };
-        return GroupNotice.init(NoticeModelTypes.attr, opt);
+        return Notice.init(NoticeModelTypes.attr, opt);
     }
 }
-export default GroupNotice;
+export default Notice;

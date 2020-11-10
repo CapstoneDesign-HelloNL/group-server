@@ -3,8 +3,11 @@ import NoticeDao from "@src/dao/notice/NoticeDao";
 import serviceFactory from "@src/vo/group/services/ServiceFactory";
 
 class NoticeService {
-    static findAll = serviceFactory.get<Notice>(
-        NoticeDao.getInstance().findAll
+    static findOne = serviceFactory.get<Notice>(
+        NoticeDao.getInstance().findOne
+    );
+    static findAllByGroup = serviceFactory.get<Notice[]>(
+        NoticeDao.getInstance().findAllByGroup
     );
     static create = serviceFactory.postOrUpdate<Notice>(
         NoticeDao.getInstance().save
