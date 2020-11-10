@@ -1,5 +1,6 @@
 import { Router } from "express";
-import FindAllByGroupNameController from "@src/controllers/services/notice/FindAllByGroupNameController";
+import FindOneController from "@src/controllers/services/notice/FindOneController";
+import FindAllController from "@src/controllers/services/notice/FindAllController";
 import CreateController from "@src/controllers/services/notice/CreateController";
 import UpdateController from "@src/controllers/services/notice/UpdateController";
 import DeleteController from "@src/controllers/services/notice/DeleteController";
@@ -7,23 +8,29 @@ import JwtVerifyAccessController from "@src/controllers/middlewares/jwt/JwtVerif
 const router = Router();
 
 router.get(
+    "/:groupName/:id",
+    new JwtVerifyAccessController().excute(),
+    new FindOneController().excute()
+);
+router.get(
     "/:groupName",
     new JwtVerifyAccessController().excute(),
-    new FindAllByGroupNameController().excute()
+    new FindAllController().excute()
 );
 
 router.post(
-    "/",
+    "/:groupName",
     new JwtVerifyAccessController().excute(),
     new CreateController().excute()
 );
+
 router.put(
-    "/",
+    "/:groupName/:id",
     new JwtVerifyAccessController().excute(),
     new UpdateController().excute()
 );
 router.delete(
-    "/",
+    "/:groupName/:id",
     new JwtVerifyAccessController().excute(),
     new DeleteController().excute()
 );

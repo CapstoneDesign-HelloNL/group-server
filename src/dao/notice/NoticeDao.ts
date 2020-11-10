@@ -22,11 +22,12 @@ class NoticeDao extends Dao {
     }
     async findOne({
         data,
-        decoded
+        decoded,
+        params
     }: StrictReqData): Promise<Notice | string | null | undefined> {
         let result: Notice | null = null;
         try {
-            result = await Notice.findByPk(data.id);
+            result = await Notice.findByPk(params?.id);
         } catch (err) {
             logger.error(err);
             if (err instanceof ValidationError) return `BadRequest`;
@@ -35,11 +36,11 @@ class NoticeDao extends Dao {
         return result;
     }
 
-    async findAllByGroup({
+    async findAll({
         data,
         decoded,
         params
-    }: StrictReqData): Promise<Notice[] | null | undefined> {
+    }: StrictReqData): Promise<Notice[] | string | null | undefined> {
         let result: Notice[] | null = null;
         try {
             result = await Notice.findAll({
@@ -49,6 +50,7 @@ class NoticeDao extends Dao {
             });
         } catch (err) {
             logger.error(err);
+            if (err instanceof ValidationError) return `BadRequest`;
             return undefined;
         }
         return result;
@@ -56,9 +58,11 @@ class NoticeDao extends Dao {
 
     async save({
         data,
-        decoded
+        decoded,
+        params
     }: StrictReqData): Promise<Notice | string | undefined> {
         let result: Notice | null = null;
+        data.groupName = params?.groupName;
         try {
             result = await Notice.create(data);
         } catch (err) {
@@ -72,20 +76,22 @@ class NoticeDao extends Dao {
 
     async update({
         data,
-        decoded
-    }: StrictReqData): Promise<any | null | undefined> {
+        decoded,
+        params
+    }: StrictReqData): Promise<unknown | null | undefined> {
         if (process.env.NODE_ENV === "test") await Notice.sync({ force: true });
 
-        let result: any | null = null;
+        let result: unknown | null = null;
         try {
             result = await Notice.update(
-                { ...data },
+                { groupName: params?.groupName, ...data, id: params?.id },
                 {
-                    where: { id: data.id }
+                    where: { groupName: params?.groupName, id: params?.id }
                 }
             );
         } catch (err) {
             logger.error(err);
+            if (err instanceof ValidationError) return `BadRequest`;
             return undefined;
         }
         return result;
@@ -93,7 +99,8 @@ class NoticeDao extends Dao {
 
     async delete({
         data,
-        decoded
+        decoded,
+        params
     }: StrictReqData): Promise<number | string | undefined> {
         if (process.env.NODE_ENV === "test") await Notice.sync({ force: true });
 
@@ -101,7 +108,8 @@ class NoticeDao extends Dao {
         try {
             result = await Notice.destroy({
                 where: {
-                    ...data
+                    id: params?.id,
+                    groupName: params?.groupName
                 }
             });
         } catch (err) {

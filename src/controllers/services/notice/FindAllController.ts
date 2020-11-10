@@ -4,7 +4,7 @@ import NoticeService from "@src/services/notice/NoticeService";
 import resTypes from "@src/utils/resTypes";
 import Notice from "@src/models/notice/NoticeModel";
 
-class FindAllByGroupNameController extends Controller {
+class FindAllController extends Controller {
     private result: Notice[] | string;
     constructor() {
         super();
@@ -15,7 +15,7 @@ class FindAllByGroupNameController extends Controller {
         res: Response,
         next: NextFunction
     ): Promise<void> {
-        this.result = await NoticeService.findAllByGroup(req);
+        this.result = await NoticeService.findAll(req);
     }
     protected async doResolve(
         req: Request,
@@ -38,4 +38,4 @@ class FindAllByGroupNameController extends Controller {
     }
 }
 
-export default FindAllByGroupNameController;
+export default FindAllController;
