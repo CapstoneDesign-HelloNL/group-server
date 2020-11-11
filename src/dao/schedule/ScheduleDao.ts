@@ -2,10 +2,12 @@ import GroupDBManager from "@src/models/GroupDBManager";
 import Schedule from "@src/models/schedule/ScheduleModel";
 import LogService from "@src/utils/LogService";
 import Dao from "@src/dao/Dao";
-import { ScheduleTypes } from "@src/vo/group/controllers/Schedule";
-/*
-update, delete logic need to change
-*/
+import {
+    AllStrictReqData,
+    ParamsStrictReqData
+} from "@src/vo/group/services/reqData";
+import { UniqueConstraintError, ValidationError } from "sequelize";
+
 const logger = LogService.getInstance();
 class ScheduleDao extends Dao {
     private constructor() {
@@ -19,88 +21,111 @@ class ScheduleDao extends Dao {
     protected async endConnect() {
         await this.db?.endConnection();
     }
-    async find(id: number): Promise<Schedule | null | undefined> {
-        let schedule: Schedule | null = null;
-        console.log(schedule);
+
+    async findOne({
+        data,
+        decoded,
+        params
+    }: ParamsStrictReqData): Promise<Schedule | string | null | undefined> {
+        let result: Schedule | null = null;
         try {
-            schedule = await Schedule.findOne({
+            result = await Schedule.findOne({
+                where: { id: params.id, groupName: params.groupName }
+            });
+        } catch (err) {
+            logger.error(err);
+            if (err instanceof ValidationError) return `BadRequest`;
+            return undefined;
+        }
+        return result;
+    }
+
+    async findAll({
+        data,
+        decoded,
+        params
+    }: ParamsStrictReqData): Promise<Schedule[] | string | null | undefined> {
+        let result: Schedule[] | null = null;
+        try {
+            result = await Schedule.findAll({
                 where: {
-                    id
+                    groupName: params.groupName
                 }
             });
         } catch (err) {
             logger.error(err);
+            if (err instanceof ValidationError) return `BadRequest`;
             return undefined;
         }
-        return schedule;
+        return result;
     }
 
-    async findAll(): Promise<Schedule[] | null | undefined> {
-        let groups: Schedule[] | null = null;
-        console.log(groups);
+    async save({
+        data,
+        decoded,
+        params
+    }: AllStrictReqData): Promise<Schedule | string | undefined> {
+        let result: Schedule | null = null;
         try {
-            groups = await Schedule.findAll();
+            result = await Schedule.create({
+                groupName: params.groupName,
+                ...data
+            });
         } catch (err) {
+            if (err instanceof UniqueConstraintError) return `AlreadyExistItem`;
+            else if (err instanceof ValidationError) return `BadRequest`;
             logger.error(err);
             return undefined;
         }
-        return groups;
+        return result;
     }
 
-    async save(
-        scheduleData: ScheduleTypes.SchedulePostBody
-    ): Promise<Schedule | undefined> {
+    async update({
+        data,
+        decoded,
+        params
+    }: AllStrictReqData): Promise<unknown | null | undefined> {
         if (process.env.NODE_ENV === "test")
             await Schedule.sync({ force: true });
 
-        let newSchedule: Schedule | null = null;
+        let result: unknown | null = null;
         try {
-            newSchedule = await Schedule.create(scheduleData);
-        } catch (err) {
-            logger.error(err);
-            return undefined;
-        }
-        return newSchedule;
-    }
-
-    async update(
-        scheduleData: ScheduleTypes.SchedulePostBody,
-        afterScheduleData: ScheduleTypes.SchedulePostBody
-    ): Promise<any | null | undefined> {
-        if (process.env.NODE_ENV === "test")
-            await Schedule.sync({ force: true });
-
-        let updateSchedule: any | null = null;
-        try {
-            updateSchedule = await Schedule.update(
-                { ...afterScheduleData },
-                { where: { ...scheduleData } }
+            result = await Schedule.update(
+                { ...data },
+                {
+                    where: { groupName: params.groupName, id: params.id }
+                }
             );
         } catch (err) {
             logger.error(err);
+            if (err instanceof ValidationError) return `BadRequest`;
             return undefined;
         }
-        return updateSchedule;
+        return result;
     }
 
-    async delete(
-        scheduleData: ScheduleTypes.SchedulePostBody
-    ): Promise<number | undefined> {
+    async delete({
+        data,
+        decoded,
+        params
+    }: ParamsStrictReqData): Promise<number | string | undefined> {
         if (process.env.NODE_ENV === "test")
             await Schedule.sync({ force: true });
 
-        let deleteSchedule: number | null = null;
+        let result: number | null = null;
         try {
-            deleteSchedule = await Schedule.destroy({
+            result = await Schedule.destroy({
                 where: {
-                    ...scheduleData
+                    id: params?.id,
+                    groupName: params?.groupName
                 }
             });
         } catch (err) {
             logger.error(err);
+            if (err instanceof ValidationError) return `BadRequest`;
             return undefined;
         }
-        return deleteSchedule; //1 is success, 0 or undefined are fail
+        return result; //1 is success, 0 or undefined are fail
     }
 }
 

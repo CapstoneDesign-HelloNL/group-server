@@ -3,7 +3,10 @@ import ScheduleDao from "@src/dao/schedule/ScheduleDao";
 import serviceFactory from "@src/vo/group/services/ServiceFactory";
 
 class ScheduleService {
-    static findAll = serviceFactory.get<Schedule>(
+    static findOne = serviceFactory.get<Schedule>(
+        ScheduleDao.getInstance().findOne
+    );
+    static findAll = serviceFactory.get<Schedule[]>(
         ScheduleDao.getInstance().findAll
     );
     static create = serviceFactory.postOrUpdate<Schedule>(
