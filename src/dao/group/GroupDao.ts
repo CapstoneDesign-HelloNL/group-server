@@ -8,6 +8,7 @@ import {
     AllStrictReqData,
     ParamsStrictReqData
 } from "@src/vo/group/services/reqData";
+import GroupToMember from "@src/models/groupToMember/GroupToMemberModel";
 
 const logger = LogService.getInstance();
 class GroupDao extends Dao {
@@ -165,8 +166,8 @@ class GroupDao extends Dao {
         let updateGroup: unknown | null = null;
         try {
             updateGroup = await Group.update(
-                { name: params.groupName, ...data },
-                { where: { ...data } }
+                { ...data },
+                { where: { name: params.groupName } }
             );
         } catch (err) {
             logger.error(err);
@@ -180,20 +181,42 @@ class GroupDao extends Dao {
         data,
         decoded,
         params
-    }: AllStrictReqData): Promise<number | string | undefined> {
+    }: AllStrictReqData): Promise<number | string | null | undefined> {
+        const t = await this.db?.getConnection().transaction();
         let deleteGroup: number | null = null;
         try {
+            // deleteGroup = await GroupToMember.destroy({
+            //     where: {
+            //         groupName: params.groupName
+            //     }
+            // }).then((result) =>
+            //     Group.destroy({
+            //         where: {
+            //             name: params.groupName
+            //         }
+            //     })
+            // );
+            let test = await GroupToMember.destroy({
+                where: {
+                    groupName: params.groupName
+                },
+                transaction: t
+            });
             deleteGroup = await Group.destroy({
                 where: {
                     name: params.groupName
-                }
+                },
+                transaction: t
             });
+
+            await t.commit();
         } catch (err) {
             logger.error(err);
+            await t.rollback();
             if (err instanceof ValidationError) return `BadRequest`;
             return undefined;
         }
-        return deleteGroup; //1 is success, 0 or undefined are fail
+        return deleteGroup;
     }
 }
 
