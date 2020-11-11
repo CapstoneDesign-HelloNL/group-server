@@ -7,7 +7,7 @@ services:
         env_file:
             - ./envs/.env.production
         networks:
-            - auth
+            - group
             - default
 
     postgres:
@@ -17,27 +17,18 @@ services:
         env_file:
             - ../.db.auth.docker.env
         volumes:
-            - "postgres_data:/var/lib/postgresql/data"
+            - "group_data:/var/lib/postgresql/data"
         networks:
-            - auth
+            - group
             - default
-
-    # redis:
-    #     image: "redis:alpine"
-    #     ports:
-    #         - "6381:6379"
-    #     networks:
-    #         - auth
-    #         - default
-
 networks:
     default:
         external:
             name: messageQ
         driver: bridge
-    auth:
+    group:
         external: true
         driver: bridge
 
 volumes:
-    postgres_data:
+    group_data:
