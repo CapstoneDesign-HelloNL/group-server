@@ -20,6 +20,8 @@ export namespace GalleryPostToPhotoModelTypes {
     export interface IColumnOption {
         type: DataTypes.DataType;
         allowNull: boolean;
+        onDelete?: string;
+        onUpdate?: string;
         references?: IForeignReferences;
         validate?: ModelValidateOptions;
     }
@@ -37,6 +39,8 @@ export namespace GalleryPostToPhotoModelTypes {
         galleryPostId: {
             type: DataTypes.INTEGER,
             allowNull: false,
+            onDelete: "CASCADE",
+            onUpdate: "CASCADE",
             validate: {
                 notEmpty: true
             },
@@ -48,6 +52,8 @@ export namespace GalleryPostToPhotoModelTypes {
         galleryPhotoId: {
             type: DataTypes.INTEGER,
             allowNull: false,
+            onDelete: "CASCADE",
+            onUpdate: "CASCADE",
             validate: {
                 notEmpty: true
             },

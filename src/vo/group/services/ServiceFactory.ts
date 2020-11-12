@@ -1,5 +1,5 @@
 import { Request } from "express";
-import { ReqData, StrictReqData } from "@src/vo/group/services/reqData";
+import { ReqData } from "@src/vo/group/services/reqData";
 
 const serviceReturn = {
     get: async <T>(
