@@ -26,6 +26,10 @@ class Agenda extends Model implements AgendaTypes.AgendaBody {
     public static associations: {
         agendasToGroups: Association<Agenda, Group>;
     };
+
+    findOne(opt: any) {
+        return Agenda.findOne(opt);
+    }
     static initiate(connection: Sequelize): Model {
         const opt: AgendaModelTypes.IBaseAgendaTableOptions = {
             sequelize: connection,

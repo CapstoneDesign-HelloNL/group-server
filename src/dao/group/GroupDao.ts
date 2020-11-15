@@ -23,7 +23,6 @@ class GroupDao extends Dao {
     protected async endConnect() {
         await this.db?.endConnection();
     }
-
     async findOne({
         data,
         decoded,
