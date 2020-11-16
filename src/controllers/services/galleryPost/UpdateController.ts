@@ -31,9 +31,6 @@ class UpdateController extends Controller {
             case "UnexpectedError":
                 resTypes.unexpectedErrorRes(res);
                 break;
-            case "AlreadyExistItem":
-                resTypes.alreadyExistItemRes(res, "gallery post");
-                break;
             default:
                 resTypes.successRes(res, "Update gallery post");
         }

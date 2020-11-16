@@ -29,6 +29,9 @@ class FindOneController extends Controller {
             case "InternalServerError":
                 resTypes.internalErrorRes(res);
                 break;
+            case "CannotFindItem":
+                resTypes.cannotFindItemRes(res, "postToPhoto");
+                break;
             case "UnexpectedError":
                 resTypes.unexpectedErrorRes(res);
                 break;

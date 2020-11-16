@@ -32,11 +32,11 @@ class DeleteController extends Controller {
             case "UnexpectedError":
                 resTypes.unexpectedErrorRes(res);
                 break;
-            case "AlreadyExistItem":
-                resTypes.alreadyExistItemRes(res, "group");
+            case "NoItemDeleted":
+                resTypes.noItemDeletedRes(res, "group");
                 break;
             default:
-                resTypes.successRes(res, "Create Group");
+                resTypes.successRes(res, "Delete Group");
         }
     }
 }

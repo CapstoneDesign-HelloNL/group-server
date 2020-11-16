@@ -29,6 +29,9 @@ class FindAllController extends Controller {
             case "InternalServerError":
                 resTypes.internalErrorRes(res);
                 break;
+            case "CannotFindItem":
+                resTypes.cannotFindItemRes(res, "agendas");
+                break;
             case "UnexpectedError":
                 resTypes.unexpectedErrorRes(res);
                 break;

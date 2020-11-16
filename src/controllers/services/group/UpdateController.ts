@@ -32,9 +32,6 @@ class UpdateController extends Controller {
             case "UnexpectedError":
                 resTypes.unexpectedErrorRes(res);
                 break;
-            case "AlreadyExistItem":
-                resTypes.alreadyExistItemRes(res, "group");
-                break;
             default:
                 resTypes.successRes(res, "Update Group");
         }

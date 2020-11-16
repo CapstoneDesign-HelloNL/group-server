@@ -32,9 +32,6 @@ class UpdateController extends Controller {
             case "UnexpectedError":
                 resTypes.unexpectedErrorRes(res);
                 break;
-            case "AlreadyExistItem":
-                resTypes.alreadyExistItemRes(res, "notice");
-                break;
             case "NoItemDeleted":
                 resTypes.noItemDeletedRes(res, "notice");
                 break;

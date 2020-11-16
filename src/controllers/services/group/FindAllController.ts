@@ -30,11 +30,14 @@ class FindAllController extends Controller {
             case "InternalServerError":
                 resTypes.internalErrorRes(res);
                 break;
+            case "CannotFindItem":
+                resTypes.cannotFindItemRes(res, "group");
+                break;
             case "UnexpectedError":
                 resTypes.unexpectedErrorRes(res);
                 break;
             default:
-                resTypes.successRes(res, "Create Group", this.result);
+                resTypes.successRes(res, "Find All Group", this.result);
         }
     }
 }

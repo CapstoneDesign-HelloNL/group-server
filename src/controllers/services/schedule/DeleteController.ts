@@ -15,7 +15,6 @@ class UpdateController extends Controller {
         next: NextFunction
     ): Promise<void> {
         this.result = await ScheduleService.delete(req);
-        console.log(this.result);
     }
     protected async doResolve(
         req: Request,
@@ -31,9 +30,6 @@ class UpdateController extends Controller {
                 break;
             case "UnexpectedError":
                 resTypes.unexpectedErrorRes(res);
-                break;
-            case "AlreadyExistItem":
-                resTypes.alreadyExistItemRes(res, "schedule");
                 break;
             case "NoItemDeleted":
                 resTypes.noItemDeletedRes(res, "schedule");

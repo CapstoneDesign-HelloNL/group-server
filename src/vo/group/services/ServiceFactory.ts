@@ -14,7 +14,8 @@ const serviceReturn = {
                 case undefined:
                     return "InternalServerError";
                 case null:
-                    return "UnexpectedError";
+                    return "CannotFindItem";
+                // return "UnexpectedError";
                 default:
                     return result;
             }

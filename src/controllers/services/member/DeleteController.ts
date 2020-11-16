@@ -31,6 +31,9 @@ class DeleteController extends Controller {
             case "UnexpectedError":
                 resTypes.unexpectedErrorRes(res);
                 break;
+            case "NoItemDeleted":
+                resTypes.noItemDeletedRes(res, "member");
+                break;
             default:
                 resTypes.successRes(res, "Delete member");
         }
