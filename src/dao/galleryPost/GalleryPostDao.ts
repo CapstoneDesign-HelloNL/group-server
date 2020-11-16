@@ -3,9 +3,9 @@ import GalleryPost from "@src/models/galleryPost/GalleryPostModel";
 import LogService from "@src/utils/LogService";
 import Dao from "@src/dao/Dao";
 import { GalleryPostTypes } from "@src/vo/group/controllers/GalleryPost";
-/*
-update, delete logic need to change
-*/
+import { AllStrictReqData } from "@src/vo/group/services/reqData";
+import { ValidationError } from "sequelize";
+
 const logger = LogService.getInstance();
 class GalleryPostDao extends Dao {
     protected constructor() {
@@ -19,27 +19,36 @@ class GalleryPostDao extends Dao {
     protected async endConnect() {
         await this.db?.endConnection();
     }
-    async find(id: number): Promise<GalleryPost | null | undefined> {
+    async findOne({
+        data,
+        decoded,
+        params
+    }: AllStrictReqData): Promise<GalleryPost | string | null | undefined> {
         let galleryPost: GalleryPost | null = null;
-        console.log(galleryPost);
         try {
             galleryPost = await GalleryPost.findOne({
-                where: {
-                    id
-                }
+                where: { id: params.id }
             });
         } catch (err) {
             logger.error(err);
+            if (err instanceof ValidationError) return "BadRequest";
             return undefined;
         }
         return galleryPost;
     }
 
-    async findAll(): Promise<GalleryPost[] | null | undefined> {
+    async findAll({
+        data,
+        decoded,
+        params
+    }: AllStrictReqData): Promise<GalleryPost[] | string | null | undefined> {
         let groups: GalleryPost[] | null = null;
-        console.log(groups);
         try {
-            groups = await GalleryPost.findAll();
+            groups = await GalleryPost.findAll({
+                where: {
+                    groupName: params.galleryName
+                }
+            });
         } catch (err) {
             logger.error(err);
             return undefined;

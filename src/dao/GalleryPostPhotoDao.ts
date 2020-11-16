@@ -1,11 +1,9 @@
 import GroupDBManager from "@src/models/GroupDBManager";
-import GalleryPostPhoto from "@src/models/galleryPostPhoto/GalleryPostPhotoModel";
+import GalleryPhoto from "@src/models/galleryPhoto/GalleryPhotoModel";
 import LogService from "@src/utils/LogService";
 import Dao from "@src/dao/Dao";
-import { GalleryPostPhotoTypes } from "@src/vo/group/controllers/GalleryPostPhoto";
-/*
-update, delete logic need to change
-*/
+import { GalleryPhotoTypes } from "@src/vo/group/controllers/GalleryPostPhoto";
+
 const logger = LogService.getInstance();
 class GalleryPostPhotoDao extends Dao {
     protected constructor() {
@@ -19,11 +17,11 @@ class GalleryPostPhotoDao extends Dao {
     protected async endConnect() {
         await this.db?.endConnection();
     }
-    async find(id: number): Promise<GalleryPostPhoto | null | undefined> {
-        let galleryPostPhoto: GalleryPostPhoto | null = null;
+    async find(id: number): Promise<GalleryPhoto | null | undefined> {
+        let galleryPostPhoto: GalleryPhoto | null = null;
         console.log(galleryPostPhoto);
         try {
-            galleryPostPhoto = await GalleryPostPhoto.findOne({
+            galleryPostPhoto = await GalleryPhoto.findOne({
                 where: {
                     id
                 }
@@ -35,11 +33,11 @@ class GalleryPostPhotoDao extends Dao {
         return galleryPostPhoto;
     }
 
-    async findAll(): Promise<GalleryPostPhoto[] | null | undefined> {
-        let groups: GalleryPostPhoto[] | null = null;
+    async findAll(): Promise<GalleryPhoto[] | null | undefined> {
+        let groups: GalleryPhoto[] | null = null;
         console.log(groups);
         try {
-            groups = await GalleryPostPhoto.findAll();
+            groups = await GalleryPhoto.findAll();
         } catch (err) {
             logger.error(err);
             return undefined;
@@ -48,14 +46,14 @@ class GalleryPostPhotoDao extends Dao {
     }
 
     async save(
-        galleryPostPhotoData: GalleryPostPhotoTypes.GalleryPostPhotoPostBody
-    ): Promise<GalleryPostPhoto | undefined> {
+        galleryPostPhotoData: GalleryPhotoTypes.GalleryPhotoPostBody
+    ): Promise<GalleryPhoto | undefined> {
         if (process.env.NODE_ENV === "test")
-            await GalleryPostPhoto.sync({ force: true });
+            await GalleryPhoto.sync({ force: true });
 
-        let newGalleryPostPhoto: GalleryPostPhoto | null = null;
+        let newGalleryPostPhoto: GalleryPhoto | null = null;
         try {
-            newGalleryPostPhoto = await GalleryPostPhoto.create(
+            newGalleryPostPhoto = await GalleryPhoto.create(
                 galleryPostPhotoData
             );
         } catch (err) {
@@ -66,15 +64,15 @@ class GalleryPostPhotoDao extends Dao {
     }
 
     async update(
-        galleryPostPhotoData: GalleryPostPhotoTypes.GalleryPostPhotoPostBody,
-        afterGalleryPostPhotoData: GalleryPostPhotoTypes.GalleryPostPhotoPostBody
+        galleryPostPhotoData: GalleryPhotoTypes.GalleryPhotoPostBody,
+        afterGalleryPostPhotoData: GalleryPhotoTypes.GalleryPhotoPostBody
     ): Promise<any | null | undefined> {
         if (process.env.NODE_ENV === "test")
-            await GalleryPostPhoto.sync({ force: true });
+            await GalleryPhoto.sync({ force: true });
 
         let updateGalleryPostPhoto: any | null = null;
         try {
-            updateGalleryPostPhoto = await GalleryPostPhoto.update(
+            updateGalleryPostPhoto = await GalleryPhoto.update(
                 { ...afterGalleryPostPhotoData },
                 { where: { ...galleryPostPhotoData } }
             );
@@ -86,14 +84,14 @@ class GalleryPostPhotoDao extends Dao {
     }
 
     async delete(
-        galleryPostPhotoData: GalleryPostPhotoTypes.GalleryPostPhotoPostBody
+        galleryPostPhotoData: GalleryPhotoTypes.GalleryPhotoPostBody
     ): Promise<number | undefined> {
         if (process.env.NODE_ENV === "test")
-            await GalleryPostPhoto.sync({ force: true });
+            await GalleryPhoto.sync({ force: true });
 
         let deleteGalleryPostPhoto: number | null = null;
         try {
-            deleteGalleryPostPhoto = await GalleryPostPhoto.destroy({
+            deleteGalleryPostPhoto = await GalleryPhoto.destroy({
                 where: {
                     ...galleryPostPhotoData
                 }

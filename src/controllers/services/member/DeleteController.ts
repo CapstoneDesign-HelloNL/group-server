@@ -3,7 +3,7 @@ import Controller from "@src/controllers/Controller";
 import MemberService from "@src/services/member/MemberService";
 import resTypes from "@src/utils/resTypes";
 
-class CreateController extends Controller {
+class DeleteController extends Controller {
     private result: string;
     constructor() {
         super();
@@ -14,7 +14,7 @@ class CreateController extends Controller {
         res: Response,
         next: NextFunction
     ): Promise<void> {
-        this.result = await MemberService.create(req);
+        this.result = await MemberService.delete(req);
     }
     protected async doResolve(
         req: Request,
@@ -31,13 +31,10 @@ class CreateController extends Controller {
             case "UnexpectedError":
                 resTypes.unexpectedErrorRes(res);
                 break;
-            case "AlreadyExistItem":
-                resTypes.alreadyExistItemRes(res, "member");
-                break;
             default:
-                resTypes.successRes(res, "Create member");
+                resTypes.successRes(res, "Delete member");
         }
     }
 }
 
-export default CreateController;
+export default DeleteController;

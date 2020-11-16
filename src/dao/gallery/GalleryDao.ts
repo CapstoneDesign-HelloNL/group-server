@@ -2,7 +2,8 @@ import GroupDBManager from "@src/models/GroupDBManager";
 import Gallery from "@src/models/gallery/GalleryModel";
 import LogService from "@src/utils/LogService";
 import Dao from "@src/dao/Dao";
-import { GalleryTypes } from "@src/vo/group/controllers/Gallery";
+import { AllStrictReqData } from "@src/vo/group/services/reqData";
+import { UniqueConstraintError, ValidationError } from "sequelize";
 /*
 update, delete logic need to change
 */
@@ -19,81 +20,102 @@ class GalleryDao extends Dao {
     protected async endConnect() {
         await this.db?.endConnection();
     }
-    async find(name: string): Promise<Gallery | null | undefined> {
+    async findOne({
+        data,
+        decoded,
+        params
+    }: AllStrictReqData): Promise<Gallery | string | null | undefined> {
         let gallery: Gallery | null = null;
-        console.log(gallery);
         try {
-            gallery = await Gallery.findByPk(name);
+            gallery = await Gallery.findOne({
+                where: { name: params.galleryName }
+            });
         } catch (err) {
             logger.error(err);
+            if (err instanceof ValidationError) return "BadRequest";
             return undefined;
         }
         return gallery;
     }
 
-    async findAll(): Promise<Gallery[] | null | undefined> {
+    async findAll({
+        data,
+        decoded,
+        params
+    }: AllStrictReqData): Promise<Gallery[] | string | null | undefined> {
         let groups: Gallery[] | null = null;
-        console.log(groups);
         try {
-            groups = await Gallery.findAll();
+            groups = await Gallery.findAll({
+                where: { groupName: params.groupName }
+            });
         } catch (err) {
             logger.error(err);
+            if (err instanceof ValidationError) return "BadRequest";
             return undefined;
         }
         return groups;
     }
 
-    async save(
-        galleryData: GalleryTypes.GalleryBody
-    ): Promise<Gallery | undefined> {
-        if (process.env.NODE_ENV === "test")
-            await Gallery.sync({ force: true });
-
+    async save({
+        data,
+        decoded,
+        params
+    }: AllStrictReqData): Promise<Gallery | string | null | undefined> {
         let newGallery: Gallery | null = null;
         try {
-            newGallery = await Gallery.create(galleryData);
+            newGallery = await Gallery.create({
+                name: data.name,
+                groupName: params.groupName
+            });
         } catch (err) {
             logger.error(err);
+            if (err instanceof UniqueConstraintError) return `AlreadyExistItem`;
+            else if (err instanceof ValidationError) return `BadRequest`;
             return undefined;
         }
         return newGallery;
     }
 
-    async update(
-        galleryData: GalleryTypes.GalleryBody,
-        afterGalleryData: GalleryTypes.GalleryBody
-    ): Promise<any | null | undefined> {
-        if (process.env.NODE_ENV === "test")
-            await Gallery.sync({ force: true });
-
-        let updateGallery: any | null = null;
+    async update({
+        data,
+        decoded,
+        params
+    }: AllStrictReqData): Promise<unknown | string | null | undefined> {
+        let updateGallery: unknown | null = null;
         try {
             updateGallery = await Gallery.update(
-                { ...afterGalleryData },
-                { where: { ...galleryData } }
+                { groupName: params.groupName, name: data.name },
+                {
+                    where: {
+                        groupName: params.groupName,
+                        name: params.galleryName
+                    }
+                }
             );
         } catch (err) {
             logger.error(err);
+            if (err instanceof ValidationError) return `BadRequest`;
             return undefined;
         }
         return updateGallery;
     }
 
-    async delete(
-        galleryData: GalleryTypes.GalleryBody
-    ): Promise<number | undefined> {
-        if (process.env.NODE_ENV === "test")
-            await Gallery.sync({ force: true });
-
+    async delete({
+        data,
+        decoded,
+        params
+    }: AllStrictReqData): Promise<number | string | null | undefined> {
         let deleteGallery: number | null = null;
         try {
             deleteGallery = await Gallery.destroy({
                 where: {
-                    ...galleryData
+                    name: params.galleryName,
+                    groupName: params.groupName
                 }
             });
         } catch (err) {
             logger.error(err);
+            if (err instanceof ValidationError) return `BadRequest`;
             return undefined;
         }
         return deleteGallery; //1 is success, 0 or undefined are fail

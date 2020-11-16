@@ -1,8 +1,8 @@
-export namespace GalleryPostPhotoTypes {
-    export interface GalleryPostPhotoPostBody {
-        galleryPostPhotoUrl: string;
+export namespace GalleryPhotoTypes {
+    export interface GalleryPhotoPostBody {
+        galleryPhotoUrl: string;
     }
-    export interface GalleryPostPhotoBody extends GalleryPostPhotoPostBody {
+    export interface GalleryPhotoBody extends GalleryPhotoPostBody {
         id: number;
     }
 }

@@ -11,7 +11,7 @@ import Notice from "@src/models/notice/NoticeModel";
 import Gallery from "@src/models/gallery/GalleryModel";
 
 import GalleryPost from "@src/models/galleryPost/GalleryPostModel";
-import GalleryPostPhoto from "@src/models/galleryPostPhoto/GalleryPostPhotoModel";
+import GalleryPhoto from "@src/models/galleryPhoto/GalleryPhotoModel";
 import GalleryPostToPhoto from "@src/models/galleryPostToPhoto/GalleryPostToPhotoModel";
 
 import GroupDBManager from "@src/models/GroupDBManager";
@@ -47,7 +47,7 @@ class InitializerDao extends Dao {
         Gallery.initiate(this.db.getConnection());
 
         GalleryPost.initiate(this.db.getConnection());
-        GalleryPostPhoto.initiate(this.db.getConnection());
+        GalleryPhoto.initiate(this.db.getConnection());
         GalleryPostToPhoto.initiate(this.db.getConnection());
 
         Group.hasMany(Agenda, {
@@ -109,12 +109,16 @@ class InitializerDao extends Dao {
             as: "gallerysToGroups"
         });
 
-        GalleryPost.belongsToMany(GalleryPostPhoto, {
-            through: "GalleryPostToPhoto"
+        GalleryPost.belongsToMany(GalleryPhoto, {
+            through: "GalleryPostToPhoto",
+            foreignKey: "galleryPostId",
+            as: "PostToPhoto"
         });
 
-        GalleryPostPhoto.belongsToMany(GalleryPost, {
-            through: "GalleryPostToPhoto"
+        GalleryPhoto.belongsToMany(GalleryPost, {
+            through: "GalleryPostToPhoto",
+            foreignKey: "galleryPhotoId",
+            as: "PhotoToPost"
         });
     }
 
@@ -129,7 +133,7 @@ class InitializerDao extends Dao {
         await Gallery.sync();
 
         await GalleryPost.sync();
-        await GalleryPostPhoto.sync();
+        await GalleryPhoto.sync();
         await GalleryPostToPhoto.sync();
         // await this.endConnect();
     }

@@ -8,7 +8,6 @@ import {
     AllStrictReqData,
     ParamsStrictReqData
 } from "@src/vo/group/services/reqData";
-import GroupToMember from "@src/models/groupToMember/GroupToMemberModel";
 
 const logger = LogService.getInstance();
 class GroupDao extends Dao {
@@ -57,13 +56,6 @@ class GroupDao extends Dao {
                         model: Group,
                         as: "memberToGroup",
                         attributes: ["name"]
-                        // include: [
-                        //     {
-                        //         model: GroupToMember,
-                        //         as: "members",
-                        //         attributes: []
-                        //     }
-                        // ]
                     }
                 ]
             });
@@ -89,14 +81,6 @@ class GroupDao extends Dao {
                         [Op.like]: `%${params?.groupName}%`
                     }
                 }
-                // include: [
-                //     {
-                //         model: Member,
-                //         where: { email },
-                //         as: "members",
-                //         attributes: ["email"]
-                //     }
-                // ]
             });
         } catch (err) {
             logger.error(err);
@@ -132,21 +116,18 @@ class GroupDao extends Dao {
         decoded,
         params
     }: AllStrictReqData): Promise<Group | string | undefined> {
-        if (process.env.NODE_ENV === "test") await Group.sync({ force: true });
-
+        const transaction = await this.db?.getConnection().transaction();
         let newGroup: Group | null = null;
         let newMember: [Member, boolean] | null = null;
-        let findMember: Member | null = null;
-        // const advisor = "관리자";
         try {
-            newGroup = await Group.create({ ...data });
-            findMember = await Member.findByPk(decoded.email);
+            newGroup = await Group.create({ ...data }, { transaction });
             newMember = await Member.findOrCreate({
-                where: { email: decoded.email }
+                where: { email: decoded.email },
+                transaction
             });
 
-            await newGroup.addMember(newMember[0]);
-            await newMember[0].addMemberToGroup(newGroup);
+            await newGroup.addMember(newMember[0], { transaction });
+            await newMember[0].addMemberToGroup(newGroup, { transaction });
         } catch (err) {
             logger.error(err);
             if (err instanceof UniqueConstraintError) return `AlreadyExistItem`;
@@ -161,7 +142,6 @@ class GroupDao extends Dao {
         decoded,
         params
     }: AllStrictReqData): Promise<unknown | null | undefined> {
-        // if (process.env.NODE_ENV === "test") await Group.sync({ force: true });
         let updateGroup: unknown | null = null;
         try {
             updateGroup = await Group.update(
@@ -181,37 +161,15 @@ class GroupDao extends Dao {
         decoded,
         params
     }: AllStrictReqData): Promise<number | string | null | undefined> {
-        const t = await this.db?.getConnection().transaction();
         let deleteGroup: number | null = null;
         try {
-            // deleteGroup = await GroupToMember.destroy({
-            //     where: {
-            //         groupName: params.groupName
-            //     }
-            // }).then((result) =>
-            //     Group.destroy({
-            //         where: {
-            //             name: params.groupName
-            //         }
-            //     })
-            // );
-            let test = await GroupToMember.destroy({
-                where: {
-                    groupName: params.groupName
-                },
-                transaction: t
-            });
             deleteGroup = await Group.destroy({
                 where: {
                     name: params.groupName
-                },
-                transaction: t
+                }
             });
-
-            await t.commit();
         } catch (err) {
             logger.error(err);
-            await t.rollback();
             if (err instanceof ValidationError) return `BadRequest`;
             return undefined;
         }
