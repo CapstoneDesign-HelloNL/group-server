@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import Controller from "@src/controllers/Controller";
-import GalleryService from "@src/services/gallery/GalleryService";
+import GalleryPhotoService from "@src/services/galleryPhoto/GalleryPhotoService";
 import resTypes from "@src/utils/resTypes";
 
 class UpdateController extends Controller {
@@ -14,8 +14,7 @@ class UpdateController extends Controller {
         res: Response,
         next: NextFunction
     ): Promise<void> {
-        this.result = await GalleryService.delete(req);
-        console.log(this.result);
+        this.result = await GalleryPhotoService.update(req);
     }
     protected async doResolve(
         req: Request,
@@ -32,11 +31,11 @@ class UpdateController extends Controller {
             case "UnexpectedError":
                 resTypes.unexpectedErrorRes(res);
                 break;
-            case "NoItemDeleted":
-                resTypes.noItemDeletedRes(res, "gallery photo");
+            case "AlreadyExistItem":
+                resTypes.alreadyExistItemRes(res, "gallery photo");
                 break;
             default:
-                resTypes.successRes(res, "Delete gallery photo");
+                resTypes.successRes(res, "Update gallery photo");
         }
     }
 }

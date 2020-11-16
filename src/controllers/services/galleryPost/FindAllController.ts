@@ -1,10 +1,11 @@
 import { NextFunction, Request, Response } from "express";
 import Controller from "@src/controllers/Controller";
-import GalleryService from "@src/services/gallery/GalleryService";
+import GalleryPostService from "@src/services/galleryPost/GalleryPostService";
 import resTypes from "@src/utils/resTypes";
+import GalleryPost from "@src/models/galleryPost/GalleryPostModel";
 
-class UpdateController extends Controller {
-    private result: string;
+class FindAllController extends Controller {
+    private result: GalleryPost[] | string;
     constructor() {
         super();
         this.result = "";
@@ -14,8 +15,7 @@ class UpdateController extends Controller {
         res: Response,
         next: NextFunction
     ): Promise<void> {
-        this.result = await GalleryService.delete(req);
-        console.log(this.result);
+        this.result = await GalleryPostService.findAll(req);
     }
     protected async doResolve(
         req: Request,
@@ -32,13 +32,10 @@ class UpdateController extends Controller {
             case "UnexpectedError":
                 resTypes.unexpectedErrorRes(res);
                 break;
-            case "NoItemDeleted":
-                resTypes.noItemDeletedRes(res, "gallery photo");
-                break;
             default:
-                resTypes.successRes(res, "Delete gallery photo");
+                resTypes.successRes(res, "Find all gallery post", this.result);
         }
     }
 }
 
-export default UpdateController;
+export default FindAllController;

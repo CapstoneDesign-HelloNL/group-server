@@ -3,7 +3,10 @@ import GalleryPostDao from "@src/dao/galleryPost/GalleryPostDao";
 import serviceFactory from "@src/vo/group/services/ServiceFactory";
 
 class GalleryPostService {
-    static findAllByName = serviceFactory.get<GalleryPost[]>(
+    static findOne = serviceFactory.get<GalleryPost>(
+        GalleryPostDao.getInstance().findOne
+    );
+    static findAll = serviceFactory.get<GalleryPost[]>(
         GalleryPostDao.getInstance().findAll
     );
     static create = serviceFactory.postOrUpdate<GalleryPost>(
@@ -12,7 +15,6 @@ class GalleryPostService {
     static update = serviceFactory.postOrUpdate<GalleryPost>(
         GalleryPostDao.getInstance().update
     );
-
     static delete = serviceFactory.delete<GalleryPost>(
         GalleryPostDao.getInstance().delete
     );
