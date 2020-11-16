@@ -128,8 +128,10 @@ class GroupDao extends Dao {
 
             await newGroup.addMember(newMember[0], { transaction });
             await newMember[0].addMemberToGroup(newGroup, { transaction });
+            await transaction.commit();
         } catch (err) {
             logger.error(err);
+            await transaction.rollback();
             if (err instanceof UniqueConstraintError) return `AlreadyExistItem`;
             else if (err instanceof ValidationError) return `BadRequest`;
             return undefined;

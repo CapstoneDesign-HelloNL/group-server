@@ -1,6 +1,6 @@
 import { Op, UniqueConstraintError, ValidationError } from "sequelize";
 import GroupDBManager from "@src/models/GroupDBManager";
-import GalleryPostPhoto from "@src/models/group/GroupModel";
+import GalleryPhoto from "@src/models/galleryPhoto/GalleryPhotoModel";
 import LogService from "@src/utils/LogService";
 import Dao from "@src/dao/Dao";
 import GalleryPost from "@src/models/galleryPost/GalleryPostModel";
@@ -10,7 +10,7 @@ import {
 } from "@src/vo/group/services/reqData";
 
 const logger = LogService.getInstance();
-class GalleryPostPhotoDao extends Dao {
+class GalleryPhotoDao extends Dao {
     protected constructor() {
         super();
         this.db = GroupDBManager.getInstance();
@@ -26,12 +26,10 @@ class GalleryPostPhotoDao extends Dao {
         data,
         decoded,
         params
-    }: AllStrictReqData): Promise<
-        GalleryPostPhoto | string | null | undefined
-    > {
-        let photo: GalleryPostPhoto | null = null;
+    }: AllStrictReqData): Promise<GalleryPhoto | string | null | undefined> {
+        let photo: GalleryPhoto | null = null;
         try {
-            photo = await GalleryPostPhoto.findOne({
+            photo = await GalleryPhoto.findOne({
                 where: {
                     id: params.id
                 }
@@ -55,7 +53,7 @@ class GalleryPostPhotoDao extends Dao {
     //             },
     //             include: [
     //                 {
-    //                     model: GalleryPostPhoto,
+    //                     model: GalleryPhoto,
     //                     as: "memberToGroup",
     //                     attributes: ["name"]
     //                 }
@@ -75,11 +73,11 @@ class GalleryPostPhotoDao extends Dao {
         decoded,
         params
     }: ParamsStrictReqData): Promise<
-        GalleryPostPhoto[] | string | null | undefined
+        GalleryPhoto[] | string | null | undefined
     > {
-        let photo: GalleryPostPhoto[] | null = null;
+        let photo: GalleryPhoto[] | null = null;
         try {
-            photo = await GalleryPostPhoto.findAll({
+            photo = await GalleryPhoto.findAll({
                 where: {
                     name: {
                         [Op.like]: `%${params?.groupName}%`
@@ -119,29 +117,33 @@ class GalleryPostPhotoDao extends Dao {
         data,
         decoded,
         params
-    }: AllStrictReqData): Promise<GalleryPostPhoto | string | undefined> {
+    }: AllStrictReqData): Promise<GalleryPhoto | string | null | undefined> {
         const transaction = await this.db?.getConnection().transaction();
-        let newPhoto: GalleryPostPhoto | null = null;
+        let newPhoto: [GalleryPhoto, boolean] | null = null;
         let newPost: GalleryPost | null = null;
         try {
-            newPhoto = await GalleryPostPhoto.create(
-                { ...data },
-                { transaction }
-            );
-            newPost = await GalleryPost.findOne({
-                where: { email: decoded.email },
+            newPhoto = await GalleryPhoto.findOrCreate({
+                ...data,
                 transaction
             });
+            newPost = await GalleryPost.findOne({
+                where: { id: params.id },
+                transaction
+            });
+            if (newPost == null) throw Error;
 
-            await newPhoto.addPost(newPost, { transaction });
-            await newPost.addMemberToGroup(newPhoto, { transaction });
+            await newPhoto[0].addPhotoToPost(newPost, { transaction });
+            await newPost.addPostToPhoto(newPhoto[0], { transaction });
+
+            await transaction.commit();
         } catch (err) {
             logger.error(err);
+            await transaction.rollback();
             if (err instanceof UniqueConstraintError) return `AlreadyExistItem`;
             else if (err instanceof ValidationError) return `BadRequest`;
             return undefined;
         }
-        return newPhoto;
+        return newPhoto[0];
     }
 
     async update({
@@ -151,7 +153,7 @@ class GalleryPostPhotoDao extends Dao {
     }: AllStrictReqData): Promise<unknown | null | undefined> {
         let updateGroup: unknown | null = null;
         try {
-            updateGroup = await GalleryPostPhoto.update(
+            updateGroup = await GalleryPhoto.update(
                 { ...data },
                 { where: { name: params.groupName } }
             );
@@ -170,7 +172,7 @@ class GalleryPostPhotoDao extends Dao {
     }: AllStrictReqData): Promise<number | string | null | undefined> {
         let deleteGroup: number | null = null;
         try {
-            deleteGroup = await GalleryPostPhoto.destroy({
+            deleteGroup = await GalleryPhoto.destroy({
                 where: {
                     name: params.groupName
                 }
@@ -184,4 +186,4 @@ class GalleryPostPhotoDao extends Dao {
     }
 }
 
-export default GalleryPostPhotoDao;
+export default GalleryPhotoDao;

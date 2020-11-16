@@ -1,10 +1,13 @@
+import { Op, UniqueConstraintError, ValidationError } from "sequelize";
 import GroupDBManager from "@src/models/GroupDBManager";
 import GalleryPost from "@src/models/galleryPost/GalleryPostModel";
 import LogService from "@src/utils/LogService";
 import Dao from "@src/dao/Dao";
-import { GalleryPostTypes } from "@src/vo/group/controllers/GalleryPost";
-import { AllStrictReqData } from "@src/vo/group/services/reqData";
-import { ValidationError } from "sequelize";
+import GalleryPhoto from "@src/models/galleryPhoto/GalleryPhotoModel";
+import {
+    AllStrictReqData,
+    ParamsStrictReqData
+} from "@src/vo/group/services/reqData";
 
 const logger = LogService.getInstance();
 class GalleryPostDao extends Dao {
@@ -24,92 +27,164 @@ class GalleryPostDao extends Dao {
         decoded,
         params
     }: AllStrictReqData): Promise<GalleryPost | string | null | undefined> {
-        let galleryPost: GalleryPost | null = null;
+        let post: GalleryPost | null = null;
         try {
-            galleryPost = await GalleryPost.findOne({
-                where: { id: params.id }
+            post = await GalleryPost.findOne({
+                where: {
+                    id: params.id
+                }
             });
         } catch (err) {
             logger.error(err);
-            if (err instanceof ValidationError) return "BadRequest";
+            if (err instanceof ValidationError) return `BadRequest`;
             return undefined;
         }
-        return galleryPost;
+        return post;
     }
 
+    // async findSignUp({
+    //     decoded
+    // }: ParamsStrictReqData): Promise<Member | string | null | undefined> {
+    //     let member: Member | null = null;
+    //     try {
+    //         member = await Member.findOne({
+    //             where: {
+    //                 email: decoded?.email
+    //             },
+    //             include: [
+    //                 {
+    //                     model: GalleryPost,
+    //                     as: "memberToGroup",
+    //                     attributes: ["name"]
+    //                 }
+    //             ]
+    //         });
+    //     } catch (err) {
+    //         logger.error(err);
+    //         if (err instanceof ValidationError) return `BadRequest`;
+    //         return undefined;
+    //     }
+    //     return member;
+    // }
+
     async findAll({
+        //gallery post와 엮여있는 모든 postPhoto를 가져오기
         data,
         decoded,
         params
-    }: AllStrictReqData): Promise<GalleryPost[] | string | null | undefined> {
-        let groups: GalleryPost[] | null = null;
+    }: ParamsStrictReqData): Promise<
+        GalleryPost[] | string | null | undefined
+    > {
+        let post: GalleryPost[] | null = null;
         try {
-            groups = await GalleryPost.findAll({
+            post = await GalleryPost.findAll({
                 where: {
-                    groupName: params.galleryName
+                    name: {
+                        [Op.like]: `%${params?.groupName}%`
+                    }
                 }
             });
         } catch (err) {
             logger.error(err);
+            if (err instanceof ValidationError) return `BadRequest`;
             return undefined;
         }
-        return groups;
+        return post;
     }
 
-    async save(
-        galleryPostData: GalleryPostTypes.GalleryPostPostBody
-    ): Promise<GalleryPost | undefined> {
-        if (process.env.NODE_ENV === "test")
-            await GalleryPost.sync({ force: true });
+    // async findAll({
+    //     data,
+    //     decoded,
+    //     params
+    // }: ParamsStrictReqData): Promise<Group[] | string | null | undefined> {
+    //     let groups: Group[] | null = null;
+    //     try {
+    //         groups = await Group.findAll({
+    //             where: {
+    //                 name: params.groupName
+    //             },
+    //             include: Member
+    //         });
+    //     } catch (err) {
+    //         logger.error(err);
+    //         if (err instanceof ValidationError) return `BadRequest`;
+    //         return undefined;
+    //     }
+    //     return groups;
+    // }
 
-        let newGalleryPost: GalleryPost | null = null;
+    //need to modify
+    async save({
+        data,
+        decoded,
+        params
+    }: AllStrictReqData): Promise<GalleryPost | string | null | undefined> {
+        const transaction = await this.db?.getConnection().transaction();
+        let newPost: [GalleryPost, boolean] | null = null;
+        let newPhoto: GalleryPhoto | null = null;
         try {
-            newGalleryPost = await GalleryPost.create(galleryPostData);
+            newPost = await GalleryPost.findOrCreate({
+                ...data,
+                transaction
+            });
+            newPhoto = await GalleryPhoto.findOne({
+                where: { id: params.id },
+                transaction
+            });
+            if (newPhoto == null) throw Error;
+
+            await newPost[0].addPostToPhoto(newPhoto, { transaction });
+            await newPhoto.addPhotoToPost(newPost[0], { transaction });
+
+            await transaction.commit();
         } catch (err) {
             logger.error(err);
+            await transaction.rollback();
+            if (err instanceof UniqueConstraintError) return `AlreadyExistItem`;
+            else if (err instanceof ValidationError) return `BadRequest`;
             return undefined;
         }
-        return newGalleryPost;
+        return newPost[0];
     }
 
-    async update(
-        galleryPostData: GalleryPostTypes.GalleryPostPostBody,
-        afterGalleryPostData: GalleryPostTypes.GalleryPostPostBody
-    ): Promise<any | null | undefined> {
-        if (process.env.NODE_ENV === "test")
-            await GalleryPost.sync({ force: true });
-
-        let updateGalleryPost: any | null = null;
+    async update({
+        data,
+        decoded,
+        params
+    }: AllStrictReqData): Promise<unknown | null | undefined> {
+        let updateGroup: unknown | null = null;
         try {
-            updateGalleryPost = await GalleryPost.update(
-                { ...afterGalleryPostData },
-                { where: { ...galleryPostData } }
+            updateGroup = await GalleryPost.update(
+                { ...data },
+                { where: { id: params.id, galleryName: params.galleryName } }
             );
         } catch (err) {
             logger.error(err);
+            if (err instanceof ValidationError) return `BadRequest`;
             return undefined;
         }
-        return updateGalleryPost;
+        return updateGroup;
     }
 
-    async delete(
-        galleryPostData: GalleryPostTypes.GalleryPostPostBody
-    ): Promise<number | undefined> {
-        if (process.env.NODE_ENV === "test")
-            await GalleryPost.sync({ force: true });
-
-        let deleteGalleryPost: number | null = null;
+    async delete({
+        data,
+        decoded,
+        params
+    }: AllStrictReqData): Promise<number | string | null | undefined> {
+        let deleteGroup: number | null = null;
         try {
-            deleteGalleryPost = await GalleryPost.destroy({
+            deleteGroup = await GalleryPost.destroy({
                 where: {
-                    ...galleryPostData
+                    id: params.id,
+                    galleryName: params.galleryName
                 }
             });
         } catch (err) {
             logger.error(err);
+            if (err instanceof ValidationError) return `BadRequest`;
             return undefined;
         }
-        return deleteGalleryPost; //1 is success, 0 or undefined are fail
+        return deleteGroup;
     }
 }
 

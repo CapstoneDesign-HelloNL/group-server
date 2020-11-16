@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import Controller from "@src/controllers/Controller";
-import GalleryPostPhotoService from "@src/services/galleryPostPhoto/GalleryPostPhotoService";
+import GalleryPhotoService from "@src/services/galleryPhoto/GalleryPhotoService";
 import resTypes from "@src/utils/resTypes";
 
 class CreateController extends Controller {
@@ -14,7 +14,7 @@ class CreateController extends Controller {
         res: Response,
         next: NextFunction
     ): Promise<void> {
-        this.result = await GalleryPostPhotoService.create(req);
+        this.result = await GalleryPhotoService.create(req);
     }
     protected async doResolve(
         req: Request,
