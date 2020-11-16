@@ -6,19 +6,19 @@ import FindOneController from "@src/controllers/services/agenda/FindOneControlle
 const router = Router();
 
 router.get(
-    "/:groupName",
+    "/",
     new JwtVerifyAccessController().excute(),
     new FindAllController().excute()
 );
 
 router.get(
-    "/:groupName/:id",
+    "/:id",
     new JwtVerifyAccessController().excute(),
     new FindOneController().excute()
 );
 
 router.post(
-    "/:groupName",
+    "/",
     new JwtVerifyAccessController().excute(),
     new CreateController().excute()
 );
