@@ -8,29 +8,29 @@ import JwtVerifyAccessController from "@src/controllers/middlewares/jwt/JwtVerif
 const router = Router({ mergeParams: true });
 
 router.get(
-    "/:groupName/:id",
+    "/:id",
     new JwtVerifyAccessController().excute(),
     new FindOneController().excute()
 );
 router.get(
-    "/:groupName",
+    "/",
     new JwtVerifyAccessController().excute(),
     new FindAllController().excute()
 );
 
 router.post(
-    "/:groupName",
+    "/",
     new JwtVerifyAccessController().excute(),
     new CreateController().excute()
 );
 
 router.put(
-    "/:groupName/:id",
+    "/:id",
     new JwtVerifyAccessController().excute(),
     new UpdateController().excute()
 );
 router.delete(
-    "/:groupName/:id",
+    "/:id",
     new JwtVerifyAccessController().excute(),
     new DeleteController().excute()
 );
