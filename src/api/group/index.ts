@@ -12,12 +12,12 @@ import FindAllController from "@src/controllers/services/group/FindAllController
 import FindSignUpController from "@src/controllers/services/group/FindSignUpController";
 import FindOneController from "@src/controllers/services/group/FindOneController";
 
-const router = Router();
+const router = Router({ mergeParams: true });
 
-router.use(":groupName/agenda", agendaRouter);
-router.use(":groupName/notice", noticeRouter);
-router.use(":groupName/gallery", galleryRouter);
-router.use(":groupName/schedule", scheduleRouter);
+router.use("/:groupName/agenda", agendaRouter);
+router.use("/:groupName/notice", noticeRouter);
+router.use("/:groupName/gallery", galleryRouter);
+router.use("/:groupName/schedule", scheduleRouter);
 
 router.get(
     "/one/:groupName",

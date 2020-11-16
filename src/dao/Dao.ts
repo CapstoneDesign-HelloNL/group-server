@@ -1,15 +1,15 @@
 import DBManager from "@src/models/DBManager";
 
 class Dao {
-    protected db: DBManager | undefined;
+    protected db: DBManager | unknown;
 
-    protected static instance: any;
+    protected static instance: unknown;
     protected constructor() {}
 
     protected static setSingleton(): void {
         if (this.instance == null) this.instance = new this();
     }
-    static getInstance(): any {
+    static getInstance(): unknown {
         if (this.instance == null) this.setSingleton();
         return this.instance;
     }

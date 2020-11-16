@@ -58,7 +58,7 @@ export namespace GalleryPostToPhotoModelTypes {
                 notEmpty: true
             },
             references: {
-                model: "GalleryPostPhoto",
+                model: "GalleryPhoto",
                 key: "id"
             }
         }

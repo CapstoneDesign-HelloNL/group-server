@@ -5,7 +5,7 @@ import CreateController from "@src/controllers/services/notice/CreateController"
 import UpdateController from "@src/controllers/services/notice/UpdateController";
 import DeleteController from "@src/controllers/services/notice/DeleteController";
 import JwtVerifyAccessController from "@src/controllers/middlewares/jwt/JwtVerifyAccessController";
-const router = Router();
+const router = Router({ mergeParams: true });
 
 router.get(
     "/:groupName/:id",

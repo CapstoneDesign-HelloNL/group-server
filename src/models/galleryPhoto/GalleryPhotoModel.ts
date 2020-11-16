@@ -12,7 +12,7 @@ import {
     BelongsToManyRemoveAssociationsMixin,
     BelongsToManyCountAssociationsMixin
 } from "sequelize";
-import { GalleryPhotoModelTypes } from "@src/vo/group/models/GalleryPostPhotoModel";
+import { GalleryPhotoModelTypes } from "@src/vo/group/models/GalleryPhotoModel";
 import { GalleryPhotoTypes } from "@src/vo/group/controllers/GalleryPostPhoto";
 import GalleryPost from "@src/models/galleryPost/GalleryPostModel";
 

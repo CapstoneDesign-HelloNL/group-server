@@ -31,7 +31,7 @@ class GroupDBManager extends DBManager {
     protected static setSingleton(): void {
         if (this.instance == null) this.instance = new this();
     }
-    static getInstance(): any {
+    static getInstance(): GroupDBManager {
         if (this.instance == null) this.setSingleton();
         return this.instance;
     }

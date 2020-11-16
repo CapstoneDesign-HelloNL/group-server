@@ -3,7 +3,7 @@ import CreateController from "@src/controllers/services/agenda/CreateController"
 import JwtVerifyAccessController from "@src/controllers/middlewares/jwt/JwtVerifyAccessController";
 import FindAllController from "@src/controllers/services/agenda/FindAllController";
 import FindOneController from "@src/controllers/services/agenda/FindOneController";
-const router = Router();
+const router = Router({ mergeParams: true });
 
 router.get(
     "/",
