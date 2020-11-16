@@ -1,19 +1,17 @@
 import { Router } from "express";
-import FindOneController from "@src/controllers/services/gallery/FindOneController";
-import FindAllController from "@src/controllers/services/gallery/FindAllController";
-import CreateController from "@src/controllers/services/gallery/CreateController";
-import UpdateController from "@src/controllers/services/gallery/UpdateController";
-import DeleteController from "@src/controllers/services/gallery/DeleteController";
+import FindOneController from "@src/controllers/services/galleryPost/FindOneController";
+import FindAllController from "@src/controllers/services/galleryPost/FindAllController";
+import CreateController from "@src/controllers/services/galleryPost/CreateController";
+import UpdateController from "@src/controllers/services/galleryPost/UpdateController";
+import DeleteController from "@src/controllers/services/galleryPost/DeleteController";
 import JwtVerifyAccessController from "@src/controllers/middlewares/jwt/JwtVerifyAccessController";
-
-import postRouter from "@src/api/group/gallery/post";
-
+import photoRouter from "@src/api/group/gallery/post/photo";
 const router = Router({ mergeParams: true });
 
-router.use("/:galleryName/post", postRouter);
+router.use("/:postId/photoId", photoRouter);
 
 router.get(
-    "/:galleryName",
+    "/:id",
     new JwtVerifyAccessController().excute(),
     new FindOneController().excute()
 );
@@ -30,12 +28,12 @@ router.post(
 );
 
 router.put(
-    "/:galleryName",
+    "/:id",
     new JwtVerifyAccessController().excute(),
     new UpdateController().excute()
 );
 router.delete(
-    "/:galleryName",
+    "/:id",
     new JwtVerifyAccessController().excute(),
     new DeleteController().excute()
 );

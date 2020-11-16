@@ -16,7 +16,7 @@ class GroupDao extends Dao {
         this.db = GroupDBManager.getInstance();
     }
     protected async connect() {
-        this.db = GroupDBManager.getInstance();
+        this.db = await GroupDBManager.getInstance();
     }
 
     protected async endConnect() {
@@ -116,7 +116,8 @@ class GroupDao extends Dao {
         decoded,
         params
     }: AllStrictReqData): Promise<Group | string | undefined> {
-        const transaction = await this.db?.getConnection().transaction();
+        const transaction = await GroupDBManager.getInstance().getTransaction();
+        // const transaction = await this.db?.getConnection().transaction();
         let newGroup: Group | null = null;
         let newMember: [Member, boolean] | null = null;
         try {

@@ -16,7 +16,7 @@ class MemberDao extends Dao {
         this.db = GroupDBManager.getInstance();
     }
     protected async connect() {
-        this.db = GroupDBManager.getInstance();
+        this.db = await GroupDBManager.getInstance();
     }
 
     protected async endConnect() {
@@ -69,20 +69,27 @@ class MemberDao extends Dao {
         decoded,
         params
     }: AllStrictReqData): Promise<Member | string | undefined> {
-        const transaction = await this.db?.getConnection().transaction();
+        const transaction = await GroupDBManager.getInstance().getTransaction();
+        // const t = await this.db?.getConnection().transaction();
         let newMember: Member | null = null;
         let group: Group | null = null;
 
         try {
             newMember = await Member.create({ ...data }, { transaction });
-            group = await Group.findByPk(params.groupName, { transaction });
+            group = await Group.findByPk(params.groupName, {
+                transaction
+            });
 
             if (group == null) throw Error;
 
-            await newMember.addMemberToGroup(group, { transaction });
+            await newMember.addMemberToGroup(group, {
+                transaction
+            });
             await group.addMember(newMember, { transaction });
+            await transaction.commit();
         } catch (err) {
             logger.error(err);
+            await transaction.rollback();
             if (err instanceof UniqueConstraintError) return `AlreadyExistItem`;
             else if (err instanceof ValidationError) return `BadRequest`;
             return undefined;

@@ -1,4 +1,4 @@
-import { Sequelize } from "sequelize";
+import { Sequelize, Transaction } from "sequelize";
 import LogService from "@src/utils/LogService";
 import DBManager from "@src/models/DBManager";
 
@@ -52,6 +52,9 @@ class GroupDBManager extends DBManager {
     }
     getConnection(): Sequelize {
         return this.connection;
+    }
+    async getTransaction(): Promise<Transaction> {
+        return await this.connection.transaction();
     }
     async sync(): Promise<void> {
         await this.connection.sync();
