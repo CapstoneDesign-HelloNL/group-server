@@ -1,6 +1,6 @@
 version: "3.8"
 services:
-    server:
+    group_server:
         build: .
         ports:
             - "8082:8080"
@@ -10,7 +10,7 @@ services:
             - group
             - default
 
-    postgres:
+    group_postgres:
         image: "postgres"
         ports:
             - "5434:5432"
