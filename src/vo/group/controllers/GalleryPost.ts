@@ -4,6 +4,7 @@ export namespace GalleryPostTypes {
         content: string;
         author: string;
         galleryName: string;
+        groupName: string;
     }
     export interface GalleryPostBody extends GalleryPostPostBody {
         id: number;

@@ -9,7 +9,7 @@ import JwtVerifyAccessController from "@src/controllers/middlewares/jwt/JwtVerif
 const router = Router({ mergeParams: true });
 
 router.get(
-    "/:galleryName",
+    "/:memberEmail",
     new JwtVerifyAccessController().excute(),
     new FindOneController().excute()
 );
@@ -26,12 +26,12 @@ router.post(
 );
 
 router.put(
-    "/:galleryName",
+    "/:memberEmail",
     new JwtVerifyAccessController().excute(),
     new UpdateController().excute()
 );
 router.delete(
-    "/:galleryName",
+    "/:memberEmail",
     new JwtVerifyAccessController().excute(),
     new DeleteController().excute()
 );

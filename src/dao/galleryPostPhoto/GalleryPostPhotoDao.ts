@@ -31,7 +31,7 @@ class GalleryPhotoDao extends Dao {
         try {
             photo = await GalleryPhoto.findOne({
                 where: {
-                    id: params.id
+                    id: params.photoId
                 }
             });
         } catch (err) {
@@ -79,9 +79,7 @@ class GalleryPhotoDao extends Dao {
         try {
             photo = await GalleryPhoto.findAll({
                 where: {
-                    name: {
-                        [Op.like]: `%${params?.groupName}%`
-                    }
+                    postId: params.postId
                 }
             });
         } catch (err) {
@@ -156,7 +154,7 @@ class GalleryPhotoDao extends Dao {
         try {
             updateGroup = await GalleryPhoto.update(
                 { ...data },
-                { where: { name: params.groupName } }
+                { where: { id: params.photoId, postId: params.postId } }
             );
         } catch (err) {
             logger.error(err);
@@ -175,7 +173,8 @@ class GalleryPhotoDao extends Dao {
         try {
             deleteGroup = await GalleryPhoto.destroy({
                 where: {
-                    name: params.groupName
+                    id: params.photoId,
+                    postId: params.postId
                 }
             });
         } catch (err) {

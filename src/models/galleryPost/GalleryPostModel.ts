@@ -29,6 +29,7 @@ class GalleryPost
     public content!: string;
     public author!: string;
     public galleryName!: string;
+    public groupName!: string;
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
 

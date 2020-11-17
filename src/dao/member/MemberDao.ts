@@ -31,7 +31,7 @@ class MemberDao extends Dao {
         try {
             member = await Member.findOne({
                 where: {
-                    email: params.email
+                    ...params
                 }
             });
         } catch (err) {
@@ -106,7 +106,7 @@ class MemberDao extends Dao {
         try {
             updateMember = await Member.update(
                 { ...data },
-                { where: { email: params.memberEmail } }
+                { where: { ...params } }
             );
         } catch (err) {
             logger.error(err);
@@ -126,7 +126,7 @@ class MemberDao extends Dao {
         try {
             deleteMember = await Member.destroy({
                 where: {
-                    email: params.memberEmail
+                    ...params
                 }
             });
         } catch (err) {

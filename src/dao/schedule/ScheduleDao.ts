@@ -30,7 +30,7 @@ class ScheduleDao extends Dao {
         let result: Schedule | null = null;
         try {
             result = await Schedule.findOne({
-                where: { id: params.id, groupName: params.groupName }
+                where: { ...params }
             });
         } catch (err) {
             logger.error(err);
@@ -49,7 +49,7 @@ class ScheduleDao extends Dao {
         try {
             result = await Schedule.findAll({
                 where: {
-                    groupName: params.groupName
+                    ...params
                 }
             });
         } catch (err) {
@@ -68,7 +68,7 @@ class ScheduleDao extends Dao {
         let result: Schedule | null = null;
         try {
             result = await Schedule.create({
-                groupName: params.groupName,
+                ...params,
                 ...data
             });
         } catch (err) {
@@ -85,15 +85,12 @@ class ScheduleDao extends Dao {
         decoded,
         params
     }: AllStrictReqData): Promise<unknown | null | undefined> {
-        if (process.env.NODE_ENV === "test")
-            await Schedule.sync({ force: true });
-
         let result: unknown | null = null;
         try {
             result = await Schedule.update(
                 { ...data },
                 {
-                    where: { groupName: params.groupName, id: params.id }
+                    where: { ...params }
                 }
             );
         } catch (err) {
@@ -109,15 +106,11 @@ class ScheduleDao extends Dao {
         decoded,
         params
     }: ParamsStrictReqData): Promise<number | string | undefined> {
-        if (process.env.NODE_ENV === "test")
-            await Schedule.sync({ force: true });
-
         let result: number | null = null;
         try {
             result = await Schedule.destroy({
                 where: {
-                    id: params?.id,
-                    groupName: params?.groupName
+                    ...params
                 }
             });
         } catch (err) {

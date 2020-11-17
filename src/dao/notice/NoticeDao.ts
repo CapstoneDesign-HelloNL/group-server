@@ -30,7 +30,7 @@ class NoticeDao extends Dao {
         let result: Notice | null = null;
         try {
             result = await Notice.findOne({
-                where: { id: params.id, groupName: params.groupName }
+                where: { ...params }
             });
         } catch (err) {
             logger.error(err);
@@ -49,7 +49,7 @@ class NoticeDao extends Dao {
         try {
             result = await Notice.findAll({
                 where: {
-                    groupName: params.groupName
+                    ...params
                 }
             });
         } catch (err) {
@@ -68,7 +68,7 @@ class NoticeDao extends Dao {
         let result: Notice | null = null;
         try {
             result = await Notice.create({
-                groupName: params.groupName,
+                ...params,
                 ...data
             });
         } catch (err) {
@@ -85,14 +85,12 @@ class NoticeDao extends Dao {
         decoded,
         params
     }: AllStrictReqData): Promise<unknown | null | undefined> {
-        if (process.env.NODE_ENV === "test") await Notice.sync({ force: true });
-
         let result: unknown | null = null;
         try {
             result = await Notice.update(
-                { groupName: params?.groupName, ...data, id: params?.id },
+                { ...data },
                 {
-                    where: { groupName: params?.groupName, id: params?.id }
+                    where: { ...params }
                 }
             );
         } catch (err) {
@@ -108,14 +106,11 @@ class NoticeDao extends Dao {
         decoded,
         params
     }: ParamsStrictReqData): Promise<number | string | undefined> {
-        if (process.env.NODE_ENV === "test") await Notice.sync({ force: true });
-
         let result: number | null = null;
         try {
             result = await Notice.destroy({
                 where: {
-                    id: params?.id,
-                    groupName: params?.groupName
+                    ...params
                 }
             });
         } catch (err) {

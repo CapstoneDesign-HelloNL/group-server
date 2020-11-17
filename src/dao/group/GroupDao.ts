@@ -49,7 +49,7 @@ class GroupDao extends Dao {
         try {
             member = await Member.findOne({
                 where: {
-                    email: decoded?.email
+                    email: decoded.email
                 },
                 include: [
                     {

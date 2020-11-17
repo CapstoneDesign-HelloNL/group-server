@@ -29,10 +29,12 @@ class AgendaDao extends Dao {
     }: ParamsStrictReqData): Promise<Agenda | string | null | undefined> {
         let result: Agenda | null = null;
         try {
+            console.log(params);
             result = await Agenda.findOne({
                 where: {
-                    id: params.id,
-                    groupName: params.groupName
+                    // id: params.id,
+                    // groupName: params.groupName
+                    ...params
                 }
             });
         } catch (err) {
@@ -53,7 +55,7 @@ class AgendaDao extends Dao {
             result = await Agenda.findAll({
                 order: [["createdAt", "DESC"]],
                 where: {
-                    groupName: params.groupName
+                    ...params
                 }
             });
         } catch (err) {
@@ -72,7 +74,7 @@ class AgendaDao extends Dao {
         let result: Agenda | null = null;
         try {
             result = await Agenda.create({
-                groupName: params.groupName,
+                ...params,
                 ...data
             });
         } catch (err) {
@@ -92,12 +94,10 @@ class AgendaDao extends Dao {
         let result: unknown | null = null;
         try {
             result = await Agenda.update(
-                { groupName: params.groupName, ...data, id: params.id },
+                { ...data },
                 {
                     where: {
-                        groupName: params.groupName,
-                        ...data,
-                        id: params.id
+                        ...params
                     }
                 }
             );
@@ -118,8 +118,7 @@ class AgendaDao extends Dao {
         try {
             deleteAgenda = await Agenda.destroy({
                 where: {
-                    id: params?.id,
-                    groupName: params?.groupName
+                    ...params
                 }
             });
         } catch (err) {

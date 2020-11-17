@@ -31,7 +31,9 @@ class GalleryPostDao extends Dao {
         try {
             post = await GalleryPost.findOne({
                 where: {
-                    id: params.id
+                    id: params.postId,
+                    galleryName: params.galleryName,
+                    groupname: params.groupName
                 }
             });
         } catch (err) {
@@ -79,9 +81,8 @@ class GalleryPostDao extends Dao {
         try {
             post = await GalleryPost.findAll({
                 where: {
-                    name: {
-                        [Op.like]: `%${params?.groupName}%`
-                    }
+                    galleryName: params.galleryName,
+                    groupname: params.groupName
                 }
             });
         } catch (err) {
@@ -159,7 +160,13 @@ class GalleryPostDao extends Dao {
         try {
             updateGroup = await GalleryPost.update(
                 { ...data },
-                { where: { id: params.id, galleryName: params.galleryName } }
+                {
+                    where: {
+                        id: params.postId,
+                        galleryName: params.galleryName,
+                        groupname: params.groupName
+                    }
+                }
             );
         } catch (err) {
             logger.error(err);
@@ -178,8 +185,9 @@ class GalleryPostDao extends Dao {
         try {
             deleteGroup = await GalleryPost.destroy({
                 where: {
-                    id: params.id,
-                    galleryName: params.galleryName
+                    id: params.postId,
+                    galleryName: params.galleryName,
+                    groupname: params.groupName
                 }
             });
         } catch (err) {

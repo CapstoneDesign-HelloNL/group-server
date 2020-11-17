@@ -10,7 +10,7 @@ import postToPhotoRouter from "@src/api/group/gallery/post/postToPhoto";
 
 const router = Router({ mergeParams: true });
 
-router.use("/:postId/photoId", photoRouter);
+router.use("/:postId/photo", photoRouter);
 router.use("/:postId/posttophoto", postToPhotoRouter);
 
 router.get(

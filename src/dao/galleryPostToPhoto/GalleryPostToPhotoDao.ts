@@ -32,7 +32,8 @@ class GalleryPostToPhotoDao extends Dao {
         try {
             postToPhoto = await GalleryPostToPhoto.findOne({
                 where: {
-                    id: params.id
+                    galleryPostId: params.postId,
+                    galleryPhotoId: params.photoId
                 }
             });
         } catch (err) {
@@ -145,7 +146,12 @@ class GalleryPostToPhotoDao extends Dao {
         try {
             updatePostToPhoto = await GalleryPostToPhoto.update(
                 { ...data },
-                { where: { galleryPhotoId: data.galleryPhotoId } }
+                {
+                    where: {
+                        galleryPhotoId: params.photoId,
+                        galleryPostId: params.photoId
+                    }
+                }
             );
         } catch (err) {
             logger.error(err);

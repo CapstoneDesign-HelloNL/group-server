@@ -28,9 +28,7 @@ class GroupToMemberDao extends Dao {
         try {
             groupToMember = await GroupToMember.findOne({
                 where: {
-                    groupName: params.groupName,
-                    memberEmail: params.memberEmail,
-                    memberRank: data.memberRank
+                    ...params
                 }
             });
         } catch (err) {
@@ -48,7 +46,11 @@ class GroupToMemberDao extends Dao {
     }: AllStrictReqData): Promise<GroupToMember[] | string | null | undefined> {
         let groupToMembers: GroupToMember[] | null = null;
         try {
-            groupToMembers = await GroupToMember.findAll();
+            groupToMembers = await GroupToMember.findAll({
+                where: {
+                    ...params
+                }
+            });
         } catch (err) {
             logger.error(err);
             if (err instanceof ValidationError) return "BadRequest";
@@ -65,8 +67,7 @@ class GroupToMemberDao extends Dao {
         let newGroupToMember: GroupToMember | null = null;
         try {
             newGroupToMember = await GroupToMember.create({
-                groupName: params.groupName,
-                memberEmail: params.memberEmail,
+                ...params,
                 memberRank:
                     data.memberRank !== undefined ? data.memberRank : "일반회원"
             });
@@ -87,7 +88,11 @@ class GroupToMemberDao extends Dao {
         try {
             updateGroupToMember = await GroupToMember.update(
                 { ...data },
-                { where: { memberEmail: data.memberEmail } }
+                {
+                    where: {
+                        ...params
+                    }
+                }
             );
         } catch (err) {
             logger.error(err);
@@ -106,8 +111,7 @@ class GroupToMemberDao extends Dao {
         try {
             deleteGroupToMember = await GroupToMember.destroy({
                 where: {
-                    groupName: params.groupName,
-                    memberEmail: params.memberEmail
+                    ...params
                 }
             });
         } catch (err) {
