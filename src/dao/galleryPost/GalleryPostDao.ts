@@ -121,9 +121,6 @@ class GalleryPostDao extends Dao {
         params
     }: AllStrictReqData): Promise<GalleryPost | string | null | undefined> {
         const transaction = await GroupDBManager.getInstance().getTransaction();
-        // const transaction = await GroupDBManager.getInstance()
-        //     .getConnection()
-        //     .transaction();
         let newPost: [GalleryPost, boolean] | null = null;
         let newPhoto: GalleryPhoto | null = null;
         try {

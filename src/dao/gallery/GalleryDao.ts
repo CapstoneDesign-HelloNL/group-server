@@ -28,7 +28,7 @@ class GalleryDao extends Dao {
         let gallery: Gallery | null = null;
         try {
             gallery = await Gallery.findOne({
-                where: { ...params }
+                where: { groupName: params.groupName, name: params.galleryName }
             });
         } catch (err) {
             logger.error(err);
@@ -46,7 +46,7 @@ class GalleryDao extends Dao {
         let groups: Gallery[] | null = null;
         try {
             groups = await Gallery.findAll({
-                where: { ...params }
+                where: { groupName: params.groupName }
             });
         } catch (err) {
             logger.error(err);
@@ -65,7 +65,7 @@ class GalleryDao extends Dao {
         try {
             newGallery = await Gallery.create({
                 ...data,
-                ...params
+                groupName: params.groupName
             });
         } catch (err) {
             logger.error(err);
@@ -87,7 +87,8 @@ class GalleryDao extends Dao {
                 { ...data },
                 {
                     where: {
-                        ...params
+                        groupName: params.groupName,
+                        name: params.galleryName
                     }
                 }
             );
@@ -108,7 +109,8 @@ class GalleryDao extends Dao {
         try {
             deleteGallery = await Gallery.destroy({
                 where: {
-                    ...params
+                    groupName: params.groupName,
+                    name: params.galleryName
                 }
             });
         } catch (err) {

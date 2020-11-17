@@ -1,11 +1,11 @@
 import { NextFunction, Request, Response } from "express";
 import Controller from "@src/controllers/Controller";
-import ScheduleService from "@src/services/schedule/ScheduleService";
+import GroupToMemberService from "@src/services/groupToMember/GroupToMemberService";
 import resTypes from "@src/utils/resTypes";
-import Schedule from "@src/models/schedule/ScheduleModel";
+import GroupToMember from "@src/models/groupToMember/GroupToMemberModel";
 
 class FindOneController extends Controller {
-    private result: Schedule | string;
+    private result: GroupToMember | string;
     constructor() {
         super();
         this.result = "";
@@ -15,7 +15,7 @@ class FindOneController extends Controller {
         res: Response,
         next: NextFunction
     ): Promise<void> {
-        this.result = await ScheduleService.findOne(req);
+        this.result = await GroupToMemberService.findOne(req);
     }
     protected async doResolve(
         req: Request,
