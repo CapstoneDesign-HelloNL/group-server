@@ -21,7 +21,7 @@ const serviceReturn = {
             }
         } catch (e) {
             console.log(e);
-            return "InternalServerError";
+            return "UnexpectedError";
         }
     },
     postOrUpdate: async <T>(
@@ -44,7 +44,7 @@ const serviceReturn = {
             }
         } catch (e) {
             console.log(e);
-            return "InternalServerError";
+            return "UnexpectedError";
         }
     },
     delete: async <T>(reqData: ReqData, daoFunc: Function): Promise<string> => {
@@ -64,7 +64,7 @@ const serviceReturn = {
             }
         } catch (e) {
             console.log(e);
-            return "InternalServerError";
+            return "UnexpectedError";
         }
     }
 };
