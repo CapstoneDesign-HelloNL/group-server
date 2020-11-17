@@ -3,6 +3,9 @@ import MemberDao from "@src/dao/member/MemberDao";
 import serviceFactory from "@src/vo/group/services/ServiceFactory";
 
 class MemberService {
+    static findOne = serviceFactory.get<Member>(
+        MemberDao.getInstance().findOne
+    );
     static findAll = serviceFactory.get<Member>(
         MemberDao.getInstance().findAll
     );

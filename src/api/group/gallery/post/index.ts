@@ -6,12 +6,15 @@ import UpdateController from "@src/controllers/services/galleryPost/UpdateContro
 import DeleteController from "@src/controllers/services/galleryPost/DeleteController";
 import JwtVerifyAccessController from "@src/controllers/middlewares/jwt/JwtVerifyAccessController";
 import photoRouter from "@src/api/group/gallery/post/photo";
+import postToPhotoRouter from "@src/api/group/gallery/post/postToPhoto";
+
 const router = Router({ mergeParams: true });
 
 router.use("/:postId/photoId", photoRouter);
+router.use("/:postId/posttophoto", postToPhotoRouter);
 
 router.get(
-    "/:id",
+    "/:postId",
     new JwtVerifyAccessController().excute(),
     new FindOneController().excute()
 );
@@ -28,12 +31,12 @@ router.post(
 );
 
 router.put(
-    "/:id",
+    "/:postId",
     new JwtVerifyAccessController().excute(),
     new UpdateController().excute()
 );
 router.delete(
-    "/:id",
+    "/:postId",
     new JwtVerifyAccessController().excute(),
     new DeleteController().excute()
 );
