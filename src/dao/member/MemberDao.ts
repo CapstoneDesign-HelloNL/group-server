@@ -49,13 +49,7 @@ class MemberDao extends Dao {
     }: ParamsStrictReqData): Promise<Member[] | string | null | undefined> {
         let member: Member[] | null = null;
         try {
-            member = await Member.findAll({
-                where: {
-                    name: {
-                        [Op.like]: `%${params?.groupName}%`
-                    }
-                }
-            });
+            member = await Member.findAll();
         } catch (err) {
             logger.error(err);
             if (err instanceof ValidationError) return `BadRequest`;
