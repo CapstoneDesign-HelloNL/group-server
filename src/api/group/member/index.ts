@@ -5,6 +5,7 @@ import CreateController from "@src/controllers/services/member/CreateController"
 import DeleteController from "@src/controllers/services/member/DeleteController";
 import JwtVerifyAccessController from "@src/controllers/middlewares/jwt/JwtVerifyAccessController";
 import expressWs from "express-ws";
+import KafkaManager from "@src/models/KafkaManager";
 
 const router = Router({ mergeParams: true }) as expressWs.Router;
 
@@ -25,7 +26,22 @@ router.post(
     new CreateController().excute()
 );
 
-router.ws("/", new CreateController().excute());
+router.ws("/", (ws, req, next) => {
+    ws.on("message", async (msg: String) => {
+        const kafka = KafkaManager.getInstance();
+        const consumer = kafka
+            .getConnection()
+            .consumer({ groupId: "memberUser" });
+        await consumer.connect();
+        await consumer.subscribe({ topic: "userMember", fromBeginning: true });
+        await consumer.run({
+            eachMessage: async ({ topic, partition, message }) => {
+                ws.send(message.value?.toString());
+            }
+        });
+    });
+    // new CreateController().excute();
+});
 
 router.delete(
     "/:email",
