@@ -13,19 +13,9 @@ import JwtVerifyAccessController from "@src/controllers/middlewares/jwt/JwtVerif
 import FindAllController from "@src/controllers/services/group/FindAllController";
 import FindSignUpController from "@src/controllers/services/group/FindSignUpController";
 import FindOneController from "@src/controllers/services/group/FindOneController";
-import express from "express";
 import expressWs from "express-ws";
 
-const { getWss, applyTo } = expressWs(express());
-applyTo(express.Router());
-applyTo({
-    get() {
-        return this;
-    }
-});
-
-const router = express.Router();
-router.ws();
+const router = Router() as expressWs.Router;
 // const router = Router({ mergeParams: true });
 
 router.use("/:groupName/agenda", agendaRouter);

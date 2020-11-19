@@ -4,8 +4,9 @@ import FindAllController from "@src/controllers/services/member/FindAllControlle
 import CreateController from "@src/controllers/services/member/CreateController";
 import DeleteController from "@src/controllers/services/member/DeleteController";
 import JwtVerifyAccessController from "@src/controllers/middlewares/jwt/JwtVerifyAccessController";
+import expressWs from "express-ws";
 
-const router = Router({ mergeParams: true });
+const router = Router({ mergeParams: true }) as expressWs.Router;
 
 router.get(
     "/:email",
@@ -23,6 +24,8 @@ router.post(
     new JwtVerifyAccessController().excute(),
     new CreateController().excute()
 );
+
+router.ws("/", new CreateController().excute());
 
 router.delete(
     "/:email",
