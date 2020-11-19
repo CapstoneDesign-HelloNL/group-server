@@ -6,10 +6,11 @@ import env from "@src/utils/Dotenv";
 import LogService from "@src/utils/LogService";
 import apiRouter from "@src/api/index";
 import InitController from "@src/controllers/services/InitController";
+import expressWs from "express-ws";
 
 env.chooseEnv();
 const app = express();
-
+const wApp = expressWs(app);
 const logger = LogService.getInstance();
 
 app.use(helmet());
