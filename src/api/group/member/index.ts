@@ -30,22 +30,22 @@ router.post(
 //         data: router.ws
 //     });
 // });
-// router.ws("/", async (ws, req) => {
-//     ws.on("message", async (msg: String) => {
-//         const kafka = KafkaManager.getInstance();
-//         const consumer = kafka
-//             .getConnection()
-//             .consumer({ groupId: "memberUser" });
-//         await consumer.connect();
-//         await consumer.subscribe({ topic: "userMember", fromBeginning: true });
-//         await consumer.run({
-//             eachMessage: async ({ topic, partition, message }) => {
-//                 ws.send(message.value?.toString());
-//             }
-//         });
-//     });
-//     // new CreateController().excute();
-// });
+router.ws("/", async (ws, req) => {
+    ws.on("message", async (msg: String) => {
+        const kafka = KafkaManager.getInstance();
+        const consumer = kafka
+            .getConnection()
+            .consumer({ groupId: "memberUser" });
+        await consumer.connect();
+        await consumer.subscribe({ topic: "userMember", fromBeginning: true });
+        await consumer.run({
+            eachMessage: async ({ topic, partition, message }) => {
+                ws.send(message.value?.toString());
+            }
+        });
+    });
+    // new CreateController().excute();
+});
 
 router.delete(
     "/:email",

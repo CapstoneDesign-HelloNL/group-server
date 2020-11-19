@@ -5,13 +5,14 @@ import helmet from "helmet";
 import env from "@src/utils/Dotenv";
 import LogService from "@src/utils/LogService";
 import expressWs from "express-ws";
-import apiRouter from "@src/api/index";
-import InitController from "@src/controllers/services/InitController";
 
 env.chooseEnv();
 const app = express();
 const logger = LogService.getInstance();
 const wApp = expressWs(app);
+
+import apiRouter from "@src/api/index";
+import InitController from "@src/controllers/services/InitController";
 
 wApp.app.use(helmet());
 wApp.app.use(compression());
