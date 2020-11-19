@@ -10,22 +10,38 @@ import expressWs from "express-ws";
 
 env.chooseEnv();
 const app = express();
-const wApp = expressWs(app);
 const logger = LogService.getInstance();
+const wApp = expressWs(app);
 
-app.use(helmet());
-app.use(compression());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(
+wApp.app.use(helmet());
+wApp.app.use(compression());
+wApp.app.use(express.json());
+wApp.app.use(express.urlencoded({ extended: true }));
+wApp.app.use(
     morgan("combined", {
         stream: { write: (message) => LogService.getInstance().info(message) }
     })
 );
 const init = new InitController().excute()();
-app.use("/api", apiRouter);
+wApp.app.use("/api", apiRouter);
 if (process.env.NODE_ENV !== "test")
-    app.listen(process.env.SERVER_PORT || 3000);
+    wApp.app.listen(process.env.SERVER_PORT || 3000);
 
 logger.info(`Server is running on ${process.env.SERVER_PORT || 3000}!`);
-export default app;
+export default wApp.app;
+
+// app.use(helmet());
+// app.use(compression());
+// app.use(express.json());
+// app.use(express.urlencoded({ extended: true }));
+// app.use(
+//     morgan("combined", {
+//         stream: { write: (message) => LogService.getInstance().info(message) }
+//     })
+// );
+// const init = new InitController().excute()();
+// app.use("/api", apiRouter);
+// if (process.env.NODE_ENV !== "test")
+//     app.listen(process.env.SERVER_PORT || 3000);
+// logger.info(`Server is running on ${process.env.SERVER_PORT || 3000}!`);
+// export default app;
