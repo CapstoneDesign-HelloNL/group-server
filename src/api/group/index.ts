@@ -1,3 +1,4 @@
+import expressWs from "express-ws";
 import { Router } from "express";
 import agendaRouter from "@src/api/group/agenda";
 import memberRouter from "@src/api/group/member";
@@ -13,7 +14,6 @@ import JwtVerifyAccessController from "@src/controllers/middlewares/jwt/JwtVerif
 import FindAllController from "@src/controllers/services/group/FindAllController";
 import FindSignUpController from "@src/controllers/services/group/FindSignUpController";
 import FindOneController from "@src/controllers/services/group/FindOneController";
-import expressWs from "express-ws";
 
 const router = Router({ mergeParams: true }) as expressWs.Router;
 // const router = Router({ mergeParams: true });

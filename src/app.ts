@@ -4,9 +4,9 @@ import compression from "compression";
 import helmet from "helmet";
 import env from "@src/utils/Dotenv";
 import LogService from "@src/utils/LogService";
+import expressWs from "express-ws";
 import apiRouter from "@src/api/index";
 import InitController from "@src/controllers/services/InitController";
-import expressWs from "express-ws";
 
 env.chooseEnv();
 const app = express();
@@ -22,6 +22,7 @@ wApp.app.use(
         stream: { write: (message) => LogService.getInstance().info(message) }
     })
 );
+// wApp.app.ws("/", async (ws, req) => console.log(ws));
 const init = new InitController().excute()();
 wApp.app.use("/api", apiRouter);
 if (process.env.NODE_ENV !== "test")
