@@ -12,19 +12,32 @@ interface producers {
 interface consumers {
     [attr: string]: Consumer;
 }
+// interface messageFuncs {
+//     [attr: string]: (payload: EachMessagePayload) => Promise<void>;
+// }
+interface producersName {
+    [attr: string]: string;
+}
+interface consumersName {
+    [attr: string]: string;
+}
 
 class KafkaDao extends Dao {
     protected db: KafkaManager;
     private producers: producers;
     private consumers: consumers;
     private messageFuncs: any;
+    private producersName: producersName;
+    private consumersName: consumersName;
     private constructor() {
         super();
         this.db = KafkaManager.getInstance();
         this.producers = {};
         this.consumers = {};
+        this.producersName = { memberUser: "memberUser" };
+        this.consumersName = { userMember: "userMember" };
         this.messageFuncs = {
-            memberUser: async ({ topic, partition, message }: any) => {
+            userMember: async ({ topic, partition, message }: any) => {
                 const received: KafkaData = JSON.parse(message.value);
                 if (received.status === "Success") {
                     const saveMemberData = { email: received.data.email };
@@ -64,22 +77,37 @@ class KafkaDao extends Dao {
         await this.db?.endConnection();
     }
 
-    private async producerInit(): Promise<void> {
-        const memberUserProducer = this.db.getConnection().producer();
-        await memberUserProducer.connect();
-        this.producers["memberUser"] = memberUserProducer;
+    private async producerInit(name: string): Promise<void> {
+        const producer = this.db.getConnection().producer();
+        await producer.connect();
+        this.producers[name] = producer;
     }
 
-    private async consumerInit(): Promise<void> {
-        const userMemberConsumer = this.db
-            .getConnection()
-            .consumer({ groupId: "userMember" });
-        await userMemberConsumer.connect();
-        await userMemberConsumer.subscribe({
-            topic: "userMember"
+    private async consumerInit(name: string, topic: string): Promise<void> {
+        const consumer = this.db.getConnection().consumer({ groupId: name });
+        await consumer.connect();
+        await consumer.subscribe({
+            topic
         });
-        this.consumers["userMember"] = userMemberConsumer;
+        this.consumers[name] = consumer;
     }
+
+    // private async producerInit(): Promise<void> {
+    //     const memberUserProducer = this.db.getConnection().producer();
+    //     await memberUserProducer.connect();
+    //     this.producers["memberUser"] = memberUserProducer;
+    // }
+
+    // private async consumerInit(): Promise<void> {
+    //     const userMemberConsumer = this.db
+    //         .getConnection()
+    //         .consumer({ groupId: "userMember" });
+    //     await userMemberConsumer.connect();
+    //     await userMemberConsumer.subscribe({
+    //         topic: "userMember"
+    //     });
+    //     this.consumers["userMember"] = userMemberConsumer;
+    // }
 
     private getProducer(name: string): Producer {
         return this.producers[name];
@@ -107,8 +135,9 @@ class KafkaDao extends Dao {
     }
 
     public async init(): Promise<void> {
-        await this.producerInit();
-        await this.consumerInit();
+        for (let name in this.producersName) await this.producerInit(name);
+        for (let name in this.consumersName)
+            await this.consumerInit(name, name);
         await this.receiveMessage("userMember");
     }
 }
