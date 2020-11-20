@@ -58,32 +58,51 @@ class MemberDao extends Dao {
         return member;
     }
 
+    // async save({
+    //     data,
+    //     decoded,
+    //     params
+    // }: AllStrictReqData): Promise<Member | string | undefined> {
+    //     const transaction = await GroupDBManager.getInstance().getTransaction();
+    //     // const t = await this.db?.getConnection().transaction();
+    //     let newMember: Member | null = null;
+    //     let group: Group | null = null;
+
+    //     try {
+    //         newMember = await Member.create({ ...data }, { transaction });
+    //         group = await Group.findByPk(params.groupName, {
+    //             transaction
+    //         });
+
+    //         if (group == null) throw Error;
+
+    //         await newMember.addMemberToGroup(group, {
+    //             transaction
+    //         });
+    //         await group.addMember(newMember, { transaction });
+    //         await transaction.commit();
+    //     } catch (err) {
+    //         logger.error(err);
+    //         await transaction.rollback();
+    //         if (err instanceof UniqueConstraintError) return `AlreadyExistItem`;
+    //         else if (err instanceof ValidationError) return `BadRequest`;
+    //         return undefined;
+    //     }
+    //     return newMember;
+    // }
     async save({
         data,
         decoded,
         params
     }: AllStrictReqData): Promise<Member | string | undefined> {
-        const transaction = await GroupDBManager.getInstance().getTransaction();
+        // const transaction = await GroupDBManager.getInstance().getTransaction();
         // const t = await this.db?.getConnection().transaction();
         let newMember: Member | null = null;
-        let group: Group | null = null;
 
         try {
-            newMember = await Member.create({ ...data }, { transaction });
-            group = await Group.findByPk(params.groupName, {
-                transaction
-            });
-
-            if (group == null) throw Error;
-
-            await newMember.addMemberToGroup(group, {
-                transaction
-            });
-            await group.addMember(newMember, { transaction });
-            await transaction.commit();
+            newMember = await Member.create({ ...data });
         } catch (err) {
             logger.error(err);
-            await transaction.rollback();
             if (err instanceof UniqueConstraintError) return `AlreadyExistItem`;
             else if (err instanceof ValidationError) return `BadRequest`;
             return undefined;

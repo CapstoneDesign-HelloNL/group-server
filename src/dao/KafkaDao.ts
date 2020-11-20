@@ -1,6 +1,7 @@
 import KafkaManager from "@src/models/KafkaManager";
 import Dao from "@src/dao/Dao";
-import { Consumer, KafkaMessage, Producer } from "kafkajs";
+import { Consumer, Producer } from "kafkajs";
+import MemberDao from "./member/MemberDao";
 
 interface producers {
     [attr: string]: Producer;
@@ -14,7 +15,7 @@ class KafkaDao extends Dao {
     protected db: KafkaManager;
     private producers: producers;
     private consumers: consumers;
-    protected constructor() {
+    private constructor() {
         super();
         this.db = KafkaManager.getInstance();
         this.producers = {};
@@ -64,7 +65,7 @@ class KafkaDao extends Dao {
         console.log(data);
         await this.getProducer(name).send({
             topic,
-            messages: [{ value: data }]
+            messages: [{ value: JSON.stringify(data) }]
         });
     }
 
@@ -72,7 +73,18 @@ class KafkaDao extends Dao {
         let kafkaData = {};
         await this.getConsumer(name).run({
             eachMessage: async ({ topic, partition, message }: any) => {
-                console.log(JSON.parse(message.value));
+                const received = JSON.parse(message.value);
+                const saveMemberData = { email: received.email };
+                const newMember = await MemberDao.getInstance().save({
+                    data: saveMemberData
+                });
+                // if (newMember === typeof Member) {
+                await this.sendMessage(
+                    "memberUser",
+                    "memberUser",
+                    "Member Save Success!"
+                );
+                // }
             }
         });
     }
