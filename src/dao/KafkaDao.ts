@@ -17,11 +17,41 @@ class KafkaDao extends Dao {
     protected db: KafkaManager;
     private producers: producers;
     private consumers: consumers;
+    private messageFuncs: any;
     private constructor() {
         super();
         this.db = KafkaManager.getInstance();
         this.producers = {};
         this.consumers = {};
+        this.messageFuncs = {
+            memberUser: async ({ topic, partition, message }: any) => {
+                const received: KafkaData = JSON.parse(message.value);
+                if (received.status === "Success") {
+                    const saveMemberData = { email: received.data.email };
+                    const newMember:
+                        | Member
+                        | undefined = await MemberDao.getInstance().save({
+                        data: saveMemberData
+                    });
+                    if (newMember instanceof Member) {
+                        await this.sendMessage("memberUser", "memberUser", {
+                            status: "Success",
+                            data: { msg: "Member Create Success!" }
+                        });
+                    } else {
+                        await this.sendMessage("memberUser", "memberUser", {
+                            status: "Fail",
+                            data: { msg: "Member Create Fail!" }
+                        });
+                    }
+                } else {
+                    await this.sendMessage("memberUser", "memberUser", {
+                        status: "Fail",
+                        data: { msg: "User Create Fail!" }
+                    });
+                }
+            }
+        };
         const firstInit = async () => await this.init();
         firstInit();
     }
@@ -72,33 +102,7 @@ class KafkaDao extends Dao {
 
     public async receiveMessage(name: string) {
         await this.getConsumer(name).run({
-            eachMessage: async ({ topic, partition, message }: any) => {
-                const received: KafkaData = JSON.parse(message.value);
-                if (received.status === "Success") {
-                    const saveMemberData = { email: received.data.email };
-                    const newMember:
-                        | Member
-                        | undefined = await MemberDao.getInstance().save({
-                        data: saveMemberData
-                    });
-                    if (newMember instanceof Member) {
-                        await this.sendMessage("memberUser", "memberUser", {
-                            status: "Success",
-                            data: { msg: "Member Create Success!" }
-                        });
-                    } else {
-                        await this.sendMessage("memberUser", "memberUser", {
-                            status: "Fail",
-                            data: { msg: "Member Create Fail!" }
-                        });
-                    }
-                } else {
-                    await this.sendMessage("memberUser", "memberUser", {
-                        status: "Fail",
-                        data: { msg: "User Create Fail!" }
-                    });
-                }
-            }
+            eachMessage: this.messageFuncs[name]
         });
     }
 
