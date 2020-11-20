@@ -44,8 +44,7 @@ class KafkaDao extends Dao {
             .consumer({ groupId: "userMember" });
         await userMemberConsumer.connect();
         await userMemberConsumer.subscribe({
-            topic: "userMember",
-            fromBeginning: true
+            topic: "userMember"
         });
         this.consumers["userMember"] = userMemberConsumer;
     }
@@ -79,11 +78,9 @@ class KafkaDao extends Dao {
                     data: saveMemberData
                 });
                 // if (newMember === typeof Member) {
-                await this.sendMessage(
-                    "memberUser",
-                    "memberUser",
-                    "Member Save Success!"
-                );
+                await this.sendMessage("memberUser", "memberUser", {
+                    msg: "Member Save Success!"
+                });
                 // }
             }
         });
