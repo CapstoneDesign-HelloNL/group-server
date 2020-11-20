@@ -2,6 +2,8 @@ import KafkaManager from "@src/models/KafkaManager";
 import Dao from "@src/dao/Dao";
 import { Consumer, Producer } from "kafkajs";
 import MemberDao from "./member/MemberDao";
+import Member from "@src/models/member/MemberModel";
+import KafkaData from "@src/vo/group/services/kafkaData";
 
 interface producers {
     [attr: string]: Producer;
@@ -59,7 +61,7 @@ class KafkaDao extends Dao {
     public async sendMessage(
         name: string,
         topic: string,
-        data: any
+        data: KafkaData
     ): Promise<void> {
         console.log(data);
         await this.getProducer(name).send({
@@ -69,19 +71,33 @@ class KafkaDao extends Dao {
     }
 
     public async receiveMessage(name: string) {
-        let kafkaData = {};
         await this.getConsumer(name).run({
             eachMessage: async ({ topic, partition, message }: any) => {
-                const received = JSON.parse(message.value);
-                const saveMemberData = { email: received.email };
-                const newMember = await MemberDao.getInstance().save({
-                    data: saveMemberData
-                });
-                // if (newMember === typeof Member) {
-                await this.sendMessage("memberUser", "memberUser", {
-                    msg: "Member Save Success!"
-                });
-                // }
+                const received: KafkaData = JSON.parse(message.value);
+                if (received.status === "Success") {
+                    const saveMemberData = { email: received.data.email };
+                    const newMember:
+                        | Member
+                        | undefined = await MemberDao.getInstance().save({
+                        data: saveMemberData
+                    });
+                    if (newMember instanceof Member) {
+                        await this.sendMessage("memberUser", "memberUser", {
+                            status: "Success",
+                            data: { msg: "Member Create Success!" }
+                        });
+                    } else {
+                        await this.sendMessage("memberUser", "memberUser", {
+                            status: "Fail",
+                            data: { msg: "Member Create Fail!" }
+                        });
+                    }
+                } else {
+                    await this.sendMessage("memberUser", "memberUser", {
+                        status: "Fail",
+                        data: { msg: "User Create Fail!" }
+                    });
+                }
             }
         });
     }
