@@ -35,15 +35,15 @@ class KafkaDao extends Dao {
         this.producers = {};
         this.consumers = {};
         this.producersName = {
-            memberUser: "memberUser",
+            memberUserCreate: "memberUserCreate",
             memberUserDelete: "memberUserDelete"
         };
         this.consumersName = {
-            userMember: "userMember",
+            userMemberCreate: "userMemberCreate",
             userMemberDelete: "userMemberDelete"
         };
         this.messageFuncs = {
-            userMember: async ({ topic, partition, message }: any) => {
+            userMemberCreate: async ({ topic, partition, message }: any) => {
                 const received: KafkaData = JSON.parse(message.value);
                 if (received.status === "Success") {
                     const saveMemberData = { email: received.data.email };
@@ -53,21 +53,33 @@ class KafkaDao extends Dao {
                         data: saveMemberData
                     });
                     if (newMember instanceof Member) {
-                        await this.sendMessage("memberUser", "memberUser", {
-                            status: "Success",
-                            data: { msg: "Member Create Success!" }
-                        });
+                        await this.sendMessage(
+                            "memberUserCreate",
+                            "memberUserCreate",
+                            {
+                                status: "Success",
+                                data: { msg: "Member Create Success!" }
+                            }
+                        );
                     } else {
-                        await this.sendMessage("memberUser", "memberUser", {
-                            status: "Fail",
-                            data: { msg: "Member Create Fail!" }
-                        });
+                        await this.sendMessage(
+                            "memberUserCreate",
+                            "memberUserCreate",
+                            {
+                                status: "Fail",
+                                data: { msg: "Member Create Fail!" }
+                            }
+                        );
                     }
                 } else {
-                    await this.sendMessage("memberUser", "memberUser", {
-                        status: "Fail",
-                        data: { msg: "User Create Fail!" }
-                    });
+                    await this.sendMessage(
+                        "memberUserCreate",
+                        "memberUserCreate",
+                        {
+                            status: "Fail",
+                            data: { msg: "User Create Fail!" }
+                        }
+                    );
                 }
             },
             userMemberDelete: async ({ topic, partition, message }: any) => {
