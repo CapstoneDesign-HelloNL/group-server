@@ -1,6 +1,6 @@
 import KafkaManager from "@src/models/KafkaManager";
 import Dao from "@src/dao/Dao";
-import { Consumer, Producer } from "kafkajs";
+import { Consumer, EachMessagePayload, Producer } from "kafkajs";
 import MemberDao from "./member/MemberDao";
 import Member from "@src/models/member/MemberModel";
 import KafkaData from "@src/vo/group/services/kafkaData";
@@ -12,9 +12,9 @@ interface producers {
 interface consumers {
     [attr: string]: Consumer;
 }
-// interface messageFuncs {
-//     [attr: string]: (payload: EachMessagePayload) => Promise<void>;
-// }
+interface messageFuncs {
+    [attr: string]: (payload: EachMessagePayload) => Promise<void>;
+}
 interface producersName {
     [attr: string]: string;
 }
@@ -34,8 +34,14 @@ class KafkaDao extends Dao {
         this.db = KafkaManager.getInstance();
         this.producers = {};
         this.consumers = {};
-        this.producersName = { memberUser: "memberUser" };
-        this.consumersName = { userMember: "userMember" };
+        this.producersName = {
+            memberUser: "memberUser",
+            memberUserDelete: "memberUserDelete"
+        };
+        this.consumersName = {
+            userMember: "userMember",
+            userMemberDelete: "userMemberDelete"
+        };
         this.messageFuncs = {
             userMember: async ({ topic, partition, message }: any) => {
                 const received: KafkaData = JSON.parse(message.value);
@@ -62,6 +68,45 @@ class KafkaDao extends Dao {
                         status: "Fail",
                         data: { msg: "User Create Fail!" }
                     });
+                }
+            },
+            userMemberDelete: async ({ topic, partition, message }: any) => {
+                const received: KafkaData = JSON.parse(message.value);
+                if (received.status === "Success") {
+                    const deleteMemberParams = { email: received.data.email };
+                    const newMember:
+                        | number
+                        | undefined = await MemberDao.getInstance().delete({
+                        params: deleteMemberParams
+                    });
+                    if (newMember === 1) {
+                        await this.sendMessage(
+                            "memberUserDelete",
+                            "memberUserDelete",
+                            {
+                                status: "Success",
+                                data: { msg: "Member Delete Success!" }
+                            }
+                        );
+                    } else {
+                        await this.sendMessage(
+                            "memberUserDelete",
+                            "memberUserDelete",
+                            {
+                                status: "Fail",
+                                data: { msg: "Member Delete Fail!" }
+                            }
+                        );
+                    }
+                } else {
+                    await this.sendMessage(
+                        "memberUserDelete",
+                        "memberUserDelete",
+                        {
+                            status: "Fail",
+                            data: { msg: "User Delete Fail!" }
+                        }
+                    );
                 }
             }
         };
@@ -92,23 +137,6 @@ class KafkaDao extends Dao {
         this.consumers[name] = consumer;
     }
 
-    // private async producerInit(): Promise<void> {
-    //     const memberUserProducer = this.db.getConnection().producer();
-    //     await memberUserProducer.connect();
-    //     this.producers["memberUser"] = memberUserProducer;
-    // }
-
-    // private async consumerInit(): Promise<void> {
-    //     const userMemberConsumer = this.db
-    //         .getConnection()
-    //         .consumer({ groupId: "userMember" });
-    //     await userMemberConsumer.connect();
-    //     await userMemberConsumer.subscribe({
-    //         topic: "userMember"
-    //     });
-    //     this.consumers["userMember"] = userMemberConsumer;
-    // }
-
     private getProducer(name: string): Producer {
         return this.producers[name];
     }
@@ -138,7 +166,7 @@ class KafkaDao extends Dao {
         for (let name in this.producersName) await this.producerInit(name);
         for (let name in this.consumersName)
             await this.consumerInit(name, name);
-        await this.receiveMessage("userMember");
+        for (let name in this.consumersName) await this.receiveMessage(name);
     }
 }
 
