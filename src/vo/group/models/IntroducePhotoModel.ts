@@ -6,7 +6,7 @@ import {
     ModelValidateOptions
 } from "sequelize";
 export namespace IntroducePhotoModelTypes {
-    export interface IBaseNIntroducePhotoTableOptions extends InitOptions {
+    export interface IBaseIntroducePhotoTableOptions extends InitOptions {
         sequelize: Sequelize;
         tableName: string;
     }

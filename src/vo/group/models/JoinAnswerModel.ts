@@ -6,7 +6,7 @@ import {
     ModelValidateOptions
 } from "sequelize";
 export namespace JoinAnswerModelTypes {
-    export interface IBaseJoinQuestionTableOptions extends InitOptions {
+    export interface IBaseJoinAnswerTableOptions extends InitOptions {
         sequelize: Sequelize;
         tableName: string;
     }

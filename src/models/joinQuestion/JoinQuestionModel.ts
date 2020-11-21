@@ -7,24 +7,23 @@ import {
     BelongsToCreateAssociationMixin,
     BelongsToSetAssociationMixin
 } from "sequelize";
-import { NoticeModelTypes } from "@src/vo/group/models/NoticeModel";
-import { NoticeTypes } from "@src/vo/group/controllers/Notice";
+import { JoinQuestionModelTypes } from "@src/vo/group/models/JoinQuestionModel";
+import { JoinQuestionTypes } from "@src/vo/group/controllers/JoinQuestion";
 import Group from "@src/models/group/GroupModel";
+import JoinRequest from "@src/models/joinRequest/JoinRequestModel";
 
-interface NoticeCreationAttributes
-    extends Optional<NoticeTypes.NoticeBody, "id"> {}
-class Notice
+interface JoinQuestionCreationAttributes
+    extends Optional<JoinQuestionTypes.JoinQuestionBody, "id"> {}
+class JoinQuestion
     extends Model
     // extends Model<
     //     GroupNoticeTypes.GroupNoticeBody,
     //     GroupNoticeCreationAttributes
     // >
-    implements NoticeTypes.NoticeBody {
+    implements JoinQuestionTypes.JoinQuestionBody {
     public id!: number;
-    public title!: string;
     public content!: string;
-    public author!: string;
-    public photo!: string;
+    public order!: number;
     public groupName!: string;
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
@@ -33,15 +32,16 @@ class Notice
     public createGroup!: BelongsToCreateAssociationMixin<Group>;
     public setGroup!: BelongsToSetAssociationMixin<Group, "groupName">;
     public static associations: {
-        noticesToGroups: Association<Notice, Group>;
+        joinQuestionToGroups: Association<JoinQuestion, Group>;
+        joinQuestionToJoinRequests: Association<JoinQuestion, JoinRequest>;
     };
 
     static initiate(connection: Sequelize): Model {
-        const opt: NoticeModelTypes.IBaseNoticeTableOptions = {
+        const opt: JoinQuestionModelTypes.IBaseJoinQuestionTableOptions = {
             sequelize: connection,
-            tableName: "Notice"
+            tableName: "JoinQuestion"
         };
-        return Notice.init(NoticeModelTypes.attr, opt);
+        return JoinQuestion.init(JoinQuestionModelTypes.attr, opt);
     }
 }
-export default Notice;
+export default JoinQuestion;

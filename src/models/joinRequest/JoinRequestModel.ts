@@ -7,24 +7,22 @@ import {
     BelongsToCreateAssociationMixin,
     BelongsToSetAssociationMixin
 } from "sequelize";
-import { NoticeModelTypes } from "@src/vo/group/models/NoticeModel";
-import { NoticeTypes } from "@src/vo/group/controllers/Notice";
+import { JoinRequestModelTypes } from "@src/vo/group/models/JoinRequestModel";
+import { JoinRequestTypes } from "@src/vo/group/controllers/JoinRequest";
 import Group from "@src/models/group/GroupModel";
+import JoinQuestion from "@src/models/joinQuestion/JoinQuestionModel";
 
-interface NoticeCreationAttributes
-    extends Optional<NoticeTypes.NoticeBody, "id"> {}
-class Notice
+interface JoinRequestCreationAttributes
+    extends Optional<JoinRequestTypes.JoinRequestBody, "id"> {}
+class JoinRequest
     extends Model
     // extends Model<
     //     GroupNoticeTypes.GroupNoticeBody,
     //     GroupNoticeCreationAttributes
     // >
-    implements NoticeTypes.NoticeBody {
+    implements JoinRequestTypes.JoinRequestBody {
     public id!: number;
-    public title!: string;
-    public content!: string;
     public author!: string;
-    public photo!: string;
     public groupName!: string;
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
@@ -33,15 +31,16 @@ class Notice
     public createGroup!: BelongsToCreateAssociationMixin<Group>;
     public setGroup!: BelongsToSetAssociationMixin<Group, "groupName">;
     public static associations: {
-        noticesToGroups: Association<Notice, Group>;
+        joinRequestToGroups: Association<JoinRequest, Group>;
+        joinRequestToJoinQuestion: Association<JoinRequest, JoinQuestion>;
     };
 
     static initiate(connection: Sequelize): Model {
-        const opt: NoticeModelTypes.IBaseNoticeTableOptions = {
+        const opt: JoinRequestModelTypes.IBaseJoinRequestTableOptions = {
             sequelize: connection,
-            tableName: "Notice"
+            tableName: "JoinRequest"
         };
-        return Notice.init(NoticeModelTypes.attr, opt);
+        return JoinRequest.init(JoinRequestModelTypes.attr, opt);
     }
 }
-export default Notice;
+export default JoinRequest;
