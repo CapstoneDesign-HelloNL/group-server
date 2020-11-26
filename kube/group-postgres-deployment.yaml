@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.22.0 (955b78124)
+  # creationTimestamp: null
+  labels:
+    io.kompose.service: group-postgres
+  name: group-postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: group-postgres
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.22.0 (955b78124)
+      # creationTimestamp: null
+      labels:
+        io.kompose.network/group: "true"
+        io.kompose.network/message-q: "true"
+        io.kompose.service: group-postgres
+    spec:
+      containers:
+        - env:
+            - name: POSTGRES_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  key: POSTGRES_DATABASE
+                  name: db-auth-docker-env
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  key: POSTGRES_PASSWORD
+                  name: db-auth-docker-env
+            - name: POSTGRES_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  key: POSTGRES_USERNAME
+                  name: db-auth-docker-env
+          image: postgres
+          name: group-postgres
+          ports:
+            - containerPort: 5432
+          resources: {}
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: group-data
+      restartPolicy: Always
+      volumes:
+        - name: group-data
+          persistentVolumeClaim:
+            claimName: group-data
+status: {}

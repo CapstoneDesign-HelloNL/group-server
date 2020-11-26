@@ -1,6 +1,6 @@
-version: "3.8"
+version: "3"
 services:
-    group_server:
+    group-server:
         build: .
         ports:
             - "8082:8080"
@@ -10,7 +10,7 @@ services:
             - group
             - default
 
-    group_postgres:
+    group-postgres:
         image: "postgres"
         ports:
             - "5434:5432"
@@ -24,7 +24,7 @@ services:
 networks:
     default:
         external:
-            name: messageQ
+            name: message-q
         driver: bridge
     group:
         external: true

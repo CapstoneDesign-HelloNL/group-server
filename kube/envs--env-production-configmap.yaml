@@ -1,0 +1,15 @@
+apiVersion: v1
+data:
+  DATABASE: postgres
+  DB_DIALECT: postgres
+  DB_HOST: group-postgres
+  DB_PASSWORD: didwjdgns1
+  DB_USERNAME: postgres
+  JWT_SECRET_KEY: MINO_JUNGHUN_JONGHEE
+  SERVER_PORT: "8080"
+kind: ConfigMap
+metadata:
+  # creationTimestamp: null
+  labels:
+    io.kompose.service: group-server-envs--env-production
+  name: envs--env-production
