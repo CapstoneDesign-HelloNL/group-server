@@ -1,14 +1,14 @@
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
-metadata:
-  # creationTimestamp: null
-  name: group
-spec:
-  ingress:
-    - from:
-        - podSelector:
-            matchLabels:
-              io.kompose.network/group: "true"
-  podSelector:
-    matchLabels:
-      io.kompose.network/group: "true"
+# apiVersion: networking.k8s.io/v1
+# kind: NetworkPolicy
+# metadata:
+#   # creationTimestamp: null
+#   name: group
+# spec:
+#   ingress:
+#     - from:
+#         - podSelector:
+#             matchLabels:
+#               io.kompose.network/group: "true"
+#   podSelector:
+#     matchLabels:
+#       io.kompose.network/group: "true"
