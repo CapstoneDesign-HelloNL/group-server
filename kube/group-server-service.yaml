@@ -15,5 +15,5 @@ spec:
       targetPort: 8080
   selector:
     io.kompose.service: group-server
-status:
-  loadBalancer: {}
+# status:
+  # loadBalancer: {}
