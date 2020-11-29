@@ -4,6 +4,7 @@ import JwtService from "@src/services/middlewares/JwtService";
 import LogService from "@src/utils/LogService";
 import { NextFunction, Request, Response } from "express";
 import resTypes from "@src/utils/resTypes";
+import StrictRequest from "@src/vo/group/services/request";
 const logger = LogService.getInstance();
 /*
 로직
@@ -14,7 +15,7 @@ const logger = LogService.getInstance();
 */
 
 class JwtVerifyAccessController extends Controller {
-    private verify: string | unknown | undefined;
+    private verify: string | object | undefined;
     constructor() {
         super();
         this.verify = undefined;
@@ -34,7 +35,7 @@ class JwtVerifyAccessController extends Controller {
         next: NextFunction
     ): Promise<void> {
         if (typeof this.verify !== "string") {
-            req.body.decoded = await this.verify;
+            req.decoded = this.verify;
             next();
         } else resTypes.tokenErrorRes(res);
     }

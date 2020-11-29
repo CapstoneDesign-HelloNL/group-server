@@ -72,8 +72,8 @@ const serviceFactory = {
     get: <T>(daoFunc: Function) => {
         const func = async (req: Request): Promise<T | string> => {
             const reqData: ReqData = {
-                data: req.body.data,
-                decoded: req.body.decoded,
+                data: req.body,
+                decoded: req.decoded,
                 params: req.params
             };
             //if -> return "BadRequest"
@@ -89,8 +89,8 @@ const serviceFactory = {
     postOrUpdate: <T>(daoFunc: Function) => {
         const func = async (req: Request): Promise<string> => {
             const reqData: ReqData = {
-                data: req.body.data,
-                decoded: req.body.decoded,
+                data: req.body,
+                decoded: req.decoded,
                 params: req.params
             };
             //if -> return "BadRequest"
@@ -105,8 +105,8 @@ const serviceFactory = {
     delete: <T>(daoFunc: Function) => {
         const func = async (req: Request): Promise<string> => {
             const reqData: ReqData = {
-                data: req.body.data,
-                decoded: req.body.decoded,
+                data: req.body,
+                decoded: req.decoded,
                 params: req.params
             };
             //if -> return "BadRequest"

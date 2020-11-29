@@ -9,7 +9,7 @@ interface params {
 }
 export interface ReqData {
     data?: data;
-    decoded: decoded;
+    decoded?: decoded;
     params?: params;
 }
 export interface ParamsStrictReqData extends ReqData {
