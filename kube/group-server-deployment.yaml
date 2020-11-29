@@ -21,8 +21,8 @@ spec:
         kompose.version: 1.22.0 (955b78124)
       # creationTimestamp: null
       labels:
-        io.kompose.network/group: "true"
-        io.kompose.network/message-q: "true"
+        # io.kompose.network/group: "true"
+        # io.kompose.network/message-q: "true"
         io.kompose.service: group-server
     spec:
       containers:
@@ -31,72 +31,72 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   key: DATABASE
-                  name: envs--env-production
+                  name: envs--env-production-group
             - name: DB_DIALECT
               valueFrom:
                 configMapKeyRef:
                   key: DB_DIALECT
-                  name: envs--env-production
+                  name: envs--env-production-group
             - name: DB_HOST
               valueFrom:
                 configMapKeyRef:
                   key: DB_HOST
-                  name: envs--env-production
+                  name: envs--env-production-group
             - name: DB_PORT
               valueFrom:
                 configMapKeyRef:
                   key: DB_PORT
-                  name: envs--env-production
+                  name: envs-env-production-group
             - name: DB_PASSWORD
               valueFrom:
                 configMapKeyRef:
                   key: DB_PASSWORD
-                  name: envs--env-production
+                  name: envs-env-production-group
             - name: DB_USERNAME
               valueFrom:
                 configMapKeyRef:
                   key: DB_USERNAME
-                  name: envs--env-production
+                  name: envs-env-production-group
             - name: JWT_SECRET_KEY
               valueFrom:
                 configMapKeyRef:
                   key: JWT_SECRET_KEY
-                  name: envs--env-production
+                  name: envs-env-production-group
             - name: SERVER_PORT
               valueFrom:
                 configMapKeyRef:
                   key: SERVER_PORT
-                  name: envs--env-production
+                  name: envs-env-production-group
             - name: KAFKA_HOST_NAME_1
               valueFrom:
                 configMapKeyRef:
                   key: KAFKA_HOST_NAME_1
-                  name: envs--env-production
+                  name: envs-env-production-group
             - name: KAFKA_HOST_NAME_2
               valueFrom:
                 configMapKeyRef:
                   key: KAFKA_HOST_NAME_2
-                  name: envs--env-production
+                  name: envs-env-production-group
             - name: KAFKA_HOST_NAME_3
               valueFrom:
                 configMapKeyRef:
                   key: KAFKA_HOST_NAME_3
-                  name: envs--env-production
+                  name: envs-env-production-group
             - name: KAFKA_HOST_PORT_1
               valueFrom:
                 configMapKeyRef:
                   key: KAFKA_HOST_PORT_1
-                  name: envs--env-production
+                  name: envs-env-production-group
             - name: KAFKA_HOST_PORT_2
               valueFrom:
                 configMapKeyRef:
                   key: KAFKA_HOST_PORT_2
-                  name: envs--env-production
+                  name: envs-env-production-group
             - name: KAFKA_HOST_PORT_3
               valueFrom:
                 configMapKeyRef:
                   key: KAFKA_HOST_PORT_3
-                  name: envs--env-production
+                  name: envs-env-production-group
           image: luciferkala/group-server
           name: group-server
           ports:
