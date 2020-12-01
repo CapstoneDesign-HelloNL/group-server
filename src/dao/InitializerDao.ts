@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/require-await */
 /* eslint-disable @typescript-eslint/no-floating-promises */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import Member from "@src/models/member/MemberModel";
 import Group from "@src/models/group/GroupModel";
 import GroupToMember from "@src/models/groupToMember/GroupToMemberModel";
 
