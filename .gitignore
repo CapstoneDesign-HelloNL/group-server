@@ -16,5 +16,6 @@ yarn.lock
 envs/
 config/
 kube/
+*.yaml
 
 Untitled.code-workspace
