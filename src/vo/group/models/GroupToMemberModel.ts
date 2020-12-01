@@ -58,15 +58,9 @@ export namespace GroupToMemberModelTypes {
             type: DataTypes.STRING,
             allowNull: false,
             primaryKey: true,
-            onDelete: "CASCADE",
-            onUpdate: "CASCADE",
             validate: {
                 notEmpty: true,
                 isEmail: true
-            },
-            references: {
-                model: "Member",
-                key: "email"
             }
         },
         memberRank: {
