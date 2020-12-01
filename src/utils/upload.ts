@@ -1,24 +1,26 @@
-const multer = require("multer");
-const multerS3 = require("multer-s3");
-const AWS = require("aws-sdk");
+import multer from "multer";
+import multerS3 from "multer-s3";
+import AWS from "aws-sdk";
 
 const s3 = new AWS.S3({
-    accessKeyId: process.env.KEYID, //노출주의
-    secretAccessKey: process.env.KEY, //노출주의
+    accessKeyId: process.env.ACCESS_KEY_ID, //노출주의
+    secretAccessKey: process.env.SECRET_ACCESS_KEY, //노출주의
     region: process.env.REGION //노출주의
 });
 
-const storage = multerS3({
-    s3: s3,
-    bucket: "project-portfolio-upload",
-    contentType: multerS3.AUTO_CONTENT_TYPE,
-    acl: "public-read",
-    metadata: function (req, file, cb) {
-        cb(null, { fieldName: file.fieldname });
-    },
-    key: function (req, file, cb) {
-        cb(null, `uploads/${Date.now()}_${file.originalname}`);
-    }
+const upload = multer({
+    storage: multerS3({
+        s3: s3,
+        bucket: "areact-picture",
+        contentType: multerS3.AUTO_CONTENT_TYPE,
+        acl: "public-read",
+        metadata: function (req, file, cb) {
+            cb(null, { fieldName: file.fieldname });
+        },
+        key: function (req, file, cb) {
+            cb(null, Date.now() + "." + file.originalname.split(".").pop());
+        }
+    })
 });
 
-exports.upload = multer({ storage: storage });
+export default upload;
