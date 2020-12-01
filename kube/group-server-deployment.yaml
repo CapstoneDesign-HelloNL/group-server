@@ -46,58 +46,58 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   key: DB_PORT
-                  name: envs-env-production-group
+                  name: envs--env-production-group
             - name: DB_PASSWORD
               valueFrom:
                 configMapKeyRef:
                   key: DB_PASSWORD
-                  name: envs-env-production-group
+                  name: envs--env-production-group
             - name: DB_USERNAME
               valueFrom:
                 configMapKeyRef:
                   key: DB_USERNAME
-                  name: envs-env-production-group
+                  name: envs--env-production-group
             - name: JWT_SECRET_KEY
               valueFrom:
                 configMapKeyRef:
                   key: JWT_SECRET_KEY
-                  name: envs-env-production-group
+                  name: envs--env-production-group
             - name: SERVER_PORT
               valueFrom:
                 configMapKeyRef:
                   key: SERVER_PORT
-                  name: envs-env-production-group
+                  name: envs--env-production-group
             - name: KAFKA_HOST_NAME_1
               valueFrom:
                 configMapKeyRef:
                   key: KAFKA_HOST_NAME_1
-                  name: envs-env-production-group
+                  name: envs--env-production-group
             - name: KAFKA_HOST_NAME_2
               valueFrom:
                 configMapKeyRef:
                   key: KAFKA_HOST_NAME_2
-                  name: envs-env-production-group
+                  name: envs--env-production-group
             - name: KAFKA_HOST_NAME_3
               valueFrom:
                 configMapKeyRef:
                   key: KAFKA_HOST_NAME_3
-                  name: envs-env-production-group
+                  name: envs--env-production-group
             - name: KAFKA_HOST_PORT_1
               valueFrom:
                 configMapKeyRef:
                   key: KAFKA_HOST_PORT_1
-                  name: envs-env-production-group
+                  name: envs--env-production-group
             - name: KAFKA_HOST_PORT_2
               valueFrom:
                 configMapKeyRef:
                   key: KAFKA_HOST_PORT_2
-                  name: envs-env-production-group
+                  name: envs--env-production-group
             - name: KAFKA_HOST_PORT_3
               valueFrom:
                 configMapKeyRef:
                   key: KAFKA_HOST_PORT_3
-                  name: envs-env-production-group
-          image: luciferkala/group-server
+                  name: envs--env-production-group
+          image: luciferkala/group-server:feature
           name: group-server
           ports:
             - containerPort: 8080
