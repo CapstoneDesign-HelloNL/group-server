@@ -148,7 +148,8 @@ class GalleryPhotoDao extends Dao {
     async update({
         data,
         decoded,
-        params
+        params,
+        files
     }: AllStrictReqData): Promise<unknown | null | undefined> {
         let updateGroup: unknown | null = null;
         try {

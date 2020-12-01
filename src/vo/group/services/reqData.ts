@@ -7,11 +7,17 @@ interface decoded {
 interface params {
     [attr: string]: any;
 }
+interface files {
+    [attr: string]: any;
+}
+interface file {}
+
 export interface ReqData {
     data?: data;
     decoded?: decoded;
     params?: params;
 }
+
 export interface ParamsStrictReqData extends ReqData {
     params: params;
 }
@@ -21,4 +27,5 @@ export interface StrictReqData extends ReqData {
 }
 export interface AllStrictReqData extends StrictReqData {
     params: params;
+    files?: files;
 }

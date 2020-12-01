@@ -1,3 +1,4 @@
+import Express from "express";
 import { Op, UniqueConstraintError, ValidationError } from "sequelize";
 import GroupDBManager from "@src/models/GroupDBManager";
 import GalleryPost from "@src/models/galleryPost/GalleryPostModel";
@@ -33,7 +34,7 @@ class GalleryPostDao extends Dao {
                 where: {
                     id: params.postId,
                     galleryName: params.galleryName,
-                    groupname: params.groupName
+                    groupName: params.groupName
                 }
             });
         } catch (err) {
@@ -82,7 +83,7 @@ class GalleryPostDao extends Dao {
             post = await GalleryPost.findAll({
                 where: {
                     galleryName: params.galleryName,
-                    groupname: params.groupName
+                    groupName: params.groupName
                 }
             });
         } catch (err) {
@@ -118,24 +119,28 @@ class GalleryPostDao extends Dao {
     async save({
         data,
         decoded,
-        params
+        params,
+        files
     }: AllStrictReqData): Promise<GalleryPost | string | null | undefined> {
         const transaction = await GroupDBManager.getInstance().getTransaction();
-        let newPost: [GalleryPost, boolean] | null = null;
+        let newPost: GalleryPost | null = null;
         let newPhoto: GalleryPhoto | null = null;
         try {
-            newPost = await GalleryPost.findOrCreate({
+            newPost = await GalleryPost.create({
                 ...data,
+                ...params,
                 transaction
             });
-            newPhoto = await GalleryPhoto.findOne({
-                where: { id: params.id },
-                transaction
-            });
-            if (newPhoto == null) throw Error;
+            for (let file in files) {
+                newPhoto = await GalleryPhoto.create({
+                    galleryPhotoUrl: files[file].path,
+                    transaction
+                });
+                if (newPhoto == null) throw Error;
 
-            await newPost[0].addPostToPhoto(newPhoto, { transaction });
-            await newPhoto.addPhotoToPost(newPost[0], { transaction });
+                await newPost.addPostToPhoto(newPhoto, { transaction });
+                await newPhoto.addPhotoToPost(newPost, { transaction });
+            }
 
             await transaction.commit();
         } catch (err) {
@@ -145,15 +150,17 @@ class GalleryPostDao extends Dao {
             else if (err instanceof ValidationError) return `BadRequest`;
             return undefined;
         }
-        return newPost[0];
+        return newPost;
     }
 
     async update({
         data,
         decoded,
-        params
+        params,
+        files
     }: AllStrictReqData): Promise<unknown | null | undefined> {
         let updateGroup: unknown | null = null;
+        let existPhotos: GalleryPhoto[] | null = null;
         try {
             updateGroup = await GalleryPost.update(
                 { ...data },
@@ -161,7 +168,7 @@ class GalleryPostDao extends Dao {
                     where: {
                         id: params.postId,
                         galleryName: params.galleryName,
-                        groupname: params.groupName
+                        groupName: params.groupName
                     }
                 }
             );
@@ -184,7 +191,7 @@ class GalleryPostDao extends Dao {
                 where: {
                     id: params.postId,
                     galleryName: params.galleryName,
-                    groupname: params.groupName
+                    groupName: params.groupName
                 }
             });
         } catch (err) {

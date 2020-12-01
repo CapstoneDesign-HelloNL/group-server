@@ -7,6 +7,7 @@ import DeleteController from "@src/controllers/services/galleryPost/DeleteContro
 import JwtVerifyAccessController from "@src/controllers/middlewares/jwt/JwtVerifyAccessController";
 import photoRouter from "@src/api/group/gallery/post/photo";
 import postToPhotoRouter from "@src/api/group/gallery/post/postToPhoto";
+import upload from "@src/utils/upload";
 
 const router = Router({ mergeParams: true });
 
@@ -27,6 +28,7 @@ router.get(
 router.post(
     "/",
     new JwtVerifyAccessController().excute(),
+    upload.array("photos"),
     new CreateController().excute()
 );
 
