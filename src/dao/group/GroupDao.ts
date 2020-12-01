@@ -46,11 +46,11 @@ class GroupDao extends Dao {
     async findSignUp({
         decoded
     }: ParamsStrictReqData): Promise<
-        GroupToMember | string | null | undefined
+        GroupToMember[] | string | null | undefined
     > {
-        let member: GroupToMember | null = null;
+        let members: GroupToMember[] | null = null;
         try {
-            member = await GroupToMember.findOne({
+            members = await GroupToMember.findAll({
                 where: {
                     memberEmail: decoded?.email
                 }
@@ -60,7 +60,7 @@ class GroupDao extends Dao {
             if (err instanceof ValidationError) return `BadRequest`;
             return undefined;
         }
-        return member;
+        return members;
     }
 
     async findAll({

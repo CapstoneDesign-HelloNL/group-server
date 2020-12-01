@@ -97,7 +97,7 @@ spec:
                 configMapKeyRef:
                   key: KAFKA_HOST_PORT_3
                   name: envs--env-production-group
-          image: luciferkala/group-server:feature
+          image: luciferkala/group-server
           name: group-server
           ports:
             - containerPort: 8080
