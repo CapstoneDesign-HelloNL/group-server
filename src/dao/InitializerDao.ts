@@ -38,7 +38,6 @@ class InitializerDao extends Dao {
 
     public async init(): Promise<void> {
         Group.initiate(this.db.getConnection());
-        // Member.initiate(this.db.getConnection());
         GroupToMember.initiate(this.db.getConnection());
 
         Agenda.initiate(this.db.getConnection());
@@ -85,16 +84,6 @@ class InitializerDao extends Dao {
             foreignKey: "groupName",
             as: "memberToGroup"
         });
-        // Group.belongsToMany(Member, {
-        //     through: "GroupToMember",
-        //     foreignKey: "groupName", // replaces `productId`
-        //     as: "members"
-        // });
-        // Member.belongsToMany(Group, {
-        //     through: "GroupToMember",
-        //     foreignKey: "memberEmail",
-        //     as: "memberToGroup"
-        // });
 
         Agenda.belongsTo(Group, {
             targetKey: "name",
@@ -135,7 +124,6 @@ class InitializerDao extends Dao {
 
     public async sync(): Promise<void> {
         await Group.sync();
-        // await Member.sync();
         await GroupToMember.sync();
 
         await Agenda.sync();
@@ -146,7 +134,6 @@ class InitializerDao extends Dao {
         await GalleryPost.sync();
         await GalleryPhoto.sync();
         await GalleryPostToPhoto.sync();
-        // await this.endConnect();
     }
 }
 
