@@ -134,12 +134,13 @@ class GalleryPostDao extends Dao {
             for (let file in files) {
                 newPhoto = await GalleryPhoto.create({
                     galleryPhotoUrl: files[file].path,
+                    postId: newPost.id,
                     transaction
                 });
-                if (newPhoto == null) throw Error;
+                // if (newPhoto == null) throw Error;
 
-                await newPost.addPostToPhoto(newPhoto, { transaction });
-                await newPhoto.addPhotoToPost(newPost, { transaction });
+                // await newPost.addPostToPhoto(newPhoto, { transaction });
+                // await newPhoto.addPhotoToPost(newPost, { transaction });
             }
 
             await transaction.commit();

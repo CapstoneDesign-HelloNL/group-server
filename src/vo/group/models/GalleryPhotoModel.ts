@@ -17,6 +17,7 @@ export namespace GalleryPhotoModelTypes {
     }
     export interface IGalleryPhotoScheme extends ModelAttributes {
         galleryPhotoUrl: IColumnOption;
+        postId: IColumnOption;
     }
     export const attr: GalleryPhotoModelTypes.IGalleryPhotoScheme = {
         id: {
@@ -30,6 +31,14 @@ export namespace GalleryPhotoModelTypes {
             validate: {
                 isUrl: true,
                 notEmpty: true
+            }
+        },
+        postId: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            validate: {
+                notEmpty: true,
+                isNumeric: true
             }
         }
     };

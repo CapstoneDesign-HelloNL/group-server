@@ -11,7 +11,7 @@ import Gallery from "@src/models/gallery/GalleryModel";
 
 import GalleryPost from "@src/models/galleryPost/GalleryPostModel";
 import GalleryPhoto from "@src/models/galleryPhoto/GalleryPhotoModel";
-import GalleryPostToPhoto from "@src/models/galleryPostToPhoto/GalleryPostToPhotoModel";
+// import GalleryPostToPhoto from "@src/models/galleryPostToPhoto/GalleryPostToPhotoModel";
 
 import GroupDBManager from "@src/models/GroupDBManager";
 import Dao from "@src/dao/Dao";
@@ -46,7 +46,7 @@ class InitializerDao extends Dao {
 
         GalleryPost.initiate(this.db.getConnection());
         GalleryPhoto.initiate(this.db.getConnection());
-        GalleryPostToPhoto.initiate(this.db.getConnection());
+        // GalleryPostToPhoto.initiate(this.db.getConnection());
 
         Group.hasMany(Agenda, {
             sourceKey: "name",
@@ -76,6 +76,12 @@ class InitializerDao extends Dao {
             sourceKey: "name",
             foreignKey: "groupName",
             as: "members" // this determines the name in `associations`!
+        });
+
+        GalleryPost.hasMany(GalleryPhoto, {
+            sourceKey: "id",
+            foreignKey: "postId",
+            as: "galleryPostPhoto" // this determines the name in `associations`!
         });
 
         GroupToMember.belongsTo(Group, {
@@ -108,17 +114,23 @@ class InitializerDao extends Dao {
             as: "gallerysToGroups"
         });
 
-        GalleryPost.belongsToMany(GalleryPhoto, {
-            through: "GalleryPostToPhoto",
-            foreignKey: "galleryPostId",
-            as: "PostToPhoto"
+        GalleryPhoto.belongsTo(GalleryPost, {
+            targetKey: "id",
+            foreignKey: "postId",
+            as: "galleryPhotoPost"
         });
 
-        GalleryPhoto.belongsToMany(GalleryPost, {
-            through: "GalleryPostToPhoto",
-            foreignKey: "galleryPhotoId",
-            as: "PhotoToPost"
-        });
+        // GalleryPost.belongsToMany(GalleryPhoto, {
+        //     through: "GalleryPostToPhoto",
+        //     foreignKey: "galleryPostId",
+        //     as: "PostToPhoto"
+        // });
+
+        // GalleryPhoto.belongsToMany(GalleryPost, {
+        //     through: "GalleryPostToPhoto",
+        //     foreignKey: "galleryPhotoId",
+        //     as: "PhotoToPost"
+        // });
     }
 
     public async sync(): Promise<void> {
@@ -132,7 +144,7 @@ class InitializerDao extends Dao {
 
         await GalleryPost.sync();
         await GalleryPhoto.sync();
-        await GalleryPostToPhoto.sync();
+        // await GalleryPostToPhoto.sync();
     }
 }
 
