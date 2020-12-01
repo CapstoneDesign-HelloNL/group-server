@@ -67,6 +67,7 @@ class GroupToMemberDao extends Dao {
         let newGroupToMember: GroupToMember | null = null;
         try {
             newGroupToMember = await GroupToMember.create({
+                ...data,
                 ...params,
                 memberRank:
                     data.memberRank !== undefined ? data.memberRank : "일반회원"
