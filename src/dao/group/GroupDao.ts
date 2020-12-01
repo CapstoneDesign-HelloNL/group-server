@@ -3,11 +3,12 @@ import GroupDBManager from "@src/models/GroupDBManager";
 import Group from "@src/models/group/GroupModel";
 import LogService from "@src/utils/LogService";
 import Dao from "@src/dao/Dao";
-import Member from "@src/models/member/MemberModel";
+// import Member from "@src/models/member/MemberModel";
 import {
     AllStrictReqData,
     ParamsStrictReqData
 } from "@src/vo/group/services/reqData";
+import GroupToMember from "@src/models/groupToMember/GroupToMemberModel";
 
 const logger = LogService.getInstance();
 class GroupDao extends Dao {
@@ -44,20 +45,15 @@ class GroupDao extends Dao {
 
     async findSignUp({
         decoded
-    }: ParamsStrictReqData): Promise<Member | string | null | undefined> {
-        let member: Member | null = null;
+    }: ParamsStrictReqData): Promise<
+        GroupToMember | string | null | undefined
+    > {
+        let member: GroupToMember | null = null;
         try {
-            member = await Member.findOne({
+            member = await GroupToMember.findOne({
                 where: {
-                    email: decoded.email
-                },
-                include: [
-                    {
-                        model: Group,
-                        as: "memberToGroup",
-                        attributes: ["name"]
-                    }
-                ]
+                    memberEmail: decoded?.email
+                }
             });
         } catch (err) {
             logger.error(err);
@@ -110,25 +106,25 @@ class GroupDao extends Dao {
     //     }
     //     return groups;
     // }
-
     async save({
         data,
         decoded,
         params
-    }: AllStrictReqData): Promise<Group | string | undefined> {
+    }: AllStrictReqData): Promise<Group | string | null | undefined> {
         const transaction = await GroupDBManager.getInstance().getTransaction();
-        // const transaction = await this.db?.getConnection().transaction();
         let newGroup: Group | null = null;
-        let newMember: [Member, boolean] | null = null;
+        let newMember: GroupToMember | null;
         try {
-            newGroup = await Group.create({ ...data }, { transaction });
-            newMember = await Member.findOrCreate({
-                where: { email: decoded.email },
+            newGroup = await Group.create({
+                ...data,
                 transaction
             });
-
-            await newGroup.addMember(newMember[0], { transaction });
-            await newMember[0].addMemberToGroup(newGroup, { transaction });
+            newMember = await GroupToMember.create({
+                groupName: data.name,
+                memberEmail: decoded.email,
+                memberRank: "관리자",
+                transaction
+            });
             await transaction.commit();
         } catch (err) {
             logger.error(err);
@@ -139,6 +135,34 @@ class GroupDao extends Dao {
         }
         return newGroup;
     }
+    // async save({
+    //     data,
+    //     decoded,
+    //     params
+    // }: AllStrictReqData): Promise<Group | string | undefined> {
+    //     const transaction = await GroupDBManager.getInstance().getTransaction();
+    //     // const transaction = await this.db?.getConnection().transaction();
+    //     let newGroup: Group | null = null;
+    //     let newMember: [Member, boolean] | null = null;
+    //     try {
+    //         newGroup = await Group.create({ ...data }, { transaction });
+    //         newMember = await Member.findOrCreate({
+    //             where: { email: decoded.email },
+    //             transaction
+    //         });
+
+    //         await newGroup.addMember(newMember[0], { transaction });
+    //         await newMember[0].addMemberToGroup(newGroup, { transaction });
+    //         await transaction.commit();
+    //     } catch (err) {
+    //         logger.error(err);
+    //         await transaction.rollback();
+    //         if (err instanceof UniqueConstraintError) return `AlreadyExistItem`;
+    //         else if (err instanceof ValidationError) return `BadRequest`;
+    //         return undefined;
+    //     }
+    //     return newGroup;
+    // }
 
     async update({
         data,

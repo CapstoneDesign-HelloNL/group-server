@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import Controller from "@src/controllers/Controller";
-import ScheduleService from "@src/services/schedule/ScheduleService";
+import GroupToMemberService from "@src/services/groupToMember/GroupToMemberService";
 import resTypes from "@src/utils/resTypes";
 
 class UpdateController extends Controller {
@@ -14,7 +14,7 @@ class UpdateController extends Controller {
         res: Response,
         next: NextFunction
     ): Promise<void> {
-        this.result = await ScheduleService.update(req);
+        this.result = await GroupToMemberService.update(req);
     }
     protected async doResolve(
         req: Request,
@@ -32,7 +32,7 @@ class UpdateController extends Controller {
                 resTypes.unexpectedErrorRes(res);
                 break;
             default:
-                resTypes.successRes(res, "Update schedule");
+                resTypes.successRes(res, "Update member");
         }
     }
 }

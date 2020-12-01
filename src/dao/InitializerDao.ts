@@ -38,7 +38,7 @@ class InitializerDao extends Dao {
 
     public async init(): Promise<void> {
         Group.initiate(this.db.getConnection());
-        Member.initiate(this.db.getConnection());
+        // Member.initiate(this.db.getConnection());
         GroupToMember.initiate(this.db.getConnection());
 
         Agenda.initiate(this.db.getConnection());
@@ -74,16 +74,27 @@ class InitializerDao extends Dao {
             as: "galleries" // this determines the name in `associations`!
         });
 
-        Group.belongsToMany(Member, {
-            through: "GroupToMember",
-            foreignKey: "groupName", // replaces `productId`
-            as: "members"
+        Group.hasMany(GroupToMember, {
+            sourceKey: "name",
+            foreignKey: "groupName",
+            as: "members" // this determines the name in `associations`!
         });
-        Member.belongsToMany(Group, {
-            through: "GroupToMember",
-            foreignKey: "memberEmail",
+
+        GroupToMember.belongsTo(Group, {
+            targetKey: "name",
+            foreignKey: "groupName",
             as: "memberToGroup"
         });
+        // Group.belongsToMany(Member, {
+        //     through: "GroupToMember",
+        //     foreignKey: "groupName", // replaces `productId`
+        //     as: "members"
+        // });
+        // Member.belongsToMany(Group, {
+        //     through: "GroupToMember",
+        //     foreignKey: "memberEmail",
+        //     as: "memberToGroup"
+        // });
 
         Agenda.belongsTo(Group, {
             targetKey: "name",
@@ -124,7 +135,7 @@ class InitializerDao extends Dao {
 
     public async sync(): Promise<void> {
         await Group.sync();
-        await Member.sync();
+        // await Member.sync();
         await GroupToMember.sync();
 
         await Agenda.sync();

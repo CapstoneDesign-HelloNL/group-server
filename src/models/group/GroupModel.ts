@@ -24,7 +24,8 @@ import Agenda from "@src/models/agenda/AgendaModel";
 import Schedule from "@src/models/schedule/ScheduleModel";
 import Notice from "@src/models/notice/NoticeModel";
 import Gallery from "@src/models/gallery/GalleryModel";
-import Member from "@src/models/member/MemberModel";
+// import Member from "@src/models/member/MemberModel";
+import GroupToMember from "@src/models/groupToMember/GroupToMemberModel";
 
 interface GroupCreationAttributes
     extends Optional<GroupTypes.GroupBody, "name"> {}
@@ -65,28 +66,34 @@ class Group
     public countGalleries!: HasManyCountAssociationsMixin;
     public createGallery!: HasManyCreateAssociationMixin<Gallery>;
 
-    public getMembers!: BelongsToManyGetAssociationsMixin<Member>; // Note the null assertions!
-    public addMember!: BelongsToManyAddAssociationMixin<Member, string>;
-    public addMembers!: BelongsToManyAddAssociationsMixin<Member, string>;
-    public hasMember!: BelongsToManyHasAssociationMixin<Member, string>;
-    public hasMembers!: BelongsToManyHasAssociationsMixin<Member, string>;
-    public createMember!: BelongsToManyCreateAssociationMixin<Member>;
-    public removeMember!: BelongsToManyRemoveAssociationMixin<Member, string>;
-    public removeMembers!: BelongsToManyRemoveAssociationsMixin<Member, string>;
-    public countMembers!: BelongsToManyCountAssociationsMixin;
+    public getGroupToMember!: HasManyGetAssociationsMixin<GroupToMember>; // Note the null assertions!
+    public addGroupToMember!: HasManyAddAssociationMixin<GroupToMember, string>;
+    public hasGroupToMember!: HasManyHasAssociationMixin<GroupToMember, string>;
+    public countGroupToMembers!: HasManyCountAssociationsMixin;
+    public createGroupToMembers!: HasManyCreateAssociationMixin<GroupToMember>;
+
+    // public getMembers!: BelongsToManyGetAssociationsMixin<Member>; // Note the null assertions!
+    // public addMember!: BelongsToManyAddAssociationMixin<Member, string>;
+    // public addMembers!: BelongsToManyAddAssociationsMixin<Member, string>;
+    // public hasMember!: BelongsToManyHasAssociationMixin<Member, string>;
+    // public hasMembers!: BelongsToManyHasAssociationsMixin<Member, string>;
+    // public createMember!: BelongsToManyCreateAssociationMixin<Member>;
+    // public removeMember!: BelongsToManyRemoveAssociationMixin<Member, string>;
+    // public removeMembers!: BelongsToManyRemoveAssociationsMixin<Member, string>;
+    // public countMembers!: BelongsToManyCountAssociationsMixin;
 
     public readonly agenda?: Agenda[];
     public readonly notice?: Notice[];
     public readonly schedule?: Schedule[];
     public readonly gallery?: Gallery[];
-    public readonly member?: Member[];
+    public readonly groupToMember?: GroupToMember[];
 
     public static associations: {
         agendas: Association<Group, Agenda>;
         notices: Association<Group, Notice>;
         schedules: Association<Group, Schedule>;
         galleries: Association<Group, Gallery>;
-        members: Association<Group, Member>;
+        members: Association<Group, GroupToMember>;
     };
 
     static initiate(connection: Sequelize): Model {
