@@ -18,7 +18,6 @@ const router = Router({ mergeParams: true });
 // const router = Router({ mergeParams: true });
 
 router.use("/:groupName/agenda", agendaRouter);
-// router.use("/member", memberRouter);
 router.use("/:groupName/grouptomember", groupToMemberRouter);
 router.use("/:groupName/notice", noticeRouter);
 router.use("/:groupName/gallery", galleryRouter);

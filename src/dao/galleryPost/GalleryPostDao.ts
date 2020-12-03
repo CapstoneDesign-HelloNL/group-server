@@ -131,9 +131,10 @@ class GalleryPostDao extends Dao {
                 ...params,
                 transaction
             });
+            console.log(files);
             for (let file in files) {
                 newPhoto = await GalleryPhoto.create({
-                    galleryPhotoUrl: files[file].path,
+                    galleryPhotoUrl: files[file].location,
                     postId: newPost.id,
                     transaction
                 });

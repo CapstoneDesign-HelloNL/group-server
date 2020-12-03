@@ -131,9 +131,6 @@ class GalleryPhotoDao extends Dao {
             });
             if (newPost == null) throw Error;
 
-            await newPhoto[0].addPhotoToPost(newPost, { transaction });
-            await newPost.addPostToPhoto(newPhoto[0], { transaction });
-
             await transaction.commit();
         } catch (err) {
             logger.error(err);

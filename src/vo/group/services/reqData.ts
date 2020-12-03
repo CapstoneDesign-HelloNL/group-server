@@ -16,6 +16,7 @@ export interface ReqData {
     data?: data;
     decoded?: decoded;
     params?: params;
+    files?: files;
 }
 
 export interface ParamsStrictReqData extends ReqData {
