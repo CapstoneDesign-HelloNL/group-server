@@ -3,11 +3,11 @@ import { NextFunction, Request, Response } from "express";
 import Controller from "@src/controllers/Controller";
 import GroupService from "@src/services/group/GroupService";
 import resTypes from "@src/utils/resTypes";
-import GroupToMember from "@src/models/groupToMember/GroupToMemberModel";
+import Member from "@src/models/member/MemberModel";
 // import Member from "@src/models/member/MemberModel";
 
 class FindByNameController extends Controller {
-    private result: string | GroupToMember;
+    private result: string | Member;
     constructor() {
         super();
         this.result = "";

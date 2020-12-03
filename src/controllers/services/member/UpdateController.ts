@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import Controller from "@src/controllers/Controller";
-import GroupToMemberService from "@src/services/groupToMember/GroupToMemberService";
+import MemberService from "@src/services/member/MemberService";
 import resTypes from "@src/utils/resTypes";
 
 class UpdateController extends Controller {
@@ -14,7 +14,7 @@ class UpdateController extends Controller {
         res: Response,
         next: NextFunction
     ): Promise<void> {
-        this.result = await GroupToMemberService.delete(req);
+        this.result = await MemberService.update(req);
     }
     protected async doResolve(
         req: Request,
@@ -31,11 +31,8 @@ class UpdateController extends Controller {
             case "UnexpectedError":
                 resTypes.unexpectedErrorRes(res);
                 break;
-            case "NoItemDeleted":
-                resTypes.noItemDeletedRes(res, "groupToMember");
-                break;
             default:
-                resTypes.successRes(res, "Delete groupToMember");
+                resTypes.successRes(res, "Update member");
         }
     }
 }

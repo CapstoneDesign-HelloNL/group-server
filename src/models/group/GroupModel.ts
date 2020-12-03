@@ -7,16 +7,7 @@ import {
     HasManyAddAssociationMixin,
     HasManyHasAssociationMixin,
     HasManyCountAssociationsMixin,
-    HasManyCreateAssociationMixin,
-    BelongsToManyGetAssociationsMixin,
-    BelongsToManyAddAssociationMixin,
-    BelongsToManyAddAssociationsMixin,
-    BelongsToManyHasAssociationMixin,
-    BelongsToManyHasAssociationsMixin,
-    BelongsToManyCreateAssociationMixin,
-    BelongsToManyRemoveAssociationMixin,
-    BelongsToManyRemoveAssociationsMixin,
-    BelongsToManyCountAssociationsMixin
+    HasManyCreateAssociationMixin
 } from "sequelize";
 import { GroupModelTypes } from "@src/vo/group/models/GroupModel";
 import { GroupTypes } from "@src/vo/group/controllers/Group";
@@ -24,8 +15,7 @@ import Agenda from "@src/models/agenda/AgendaModel";
 import Schedule from "@src/models/schedule/ScheduleModel";
 import Notice from "@src/models/notice/NoticeModel";
 import Gallery from "@src/models/gallery/GalleryModel";
-// import Member from "@src/models/member/MemberModel";
-import GroupToMember from "@src/models/groupToMember/GroupToMemberModel";
+import Member from "@src/models/member/MemberModel";
 
 interface GroupCreationAttributes
     extends Optional<GroupTypes.GroupBody, "name"> {}
@@ -66,11 +56,11 @@ class Group
     public countGalleries!: HasManyCountAssociationsMixin;
     public createGallery!: HasManyCreateAssociationMixin<Gallery>;
 
-    public getGroupToMember!: HasManyGetAssociationsMixin<GroupToMember>; // Note the null assertions!
-    public addGroupToMember!: HasManyAddAssociationMixin<GroupToMember, string>;
-    public hasGroupToMember!: HasManyHasAssociationMixin<GroupToMember, string>;
+    public getGroupToMember!: HasManyGetAssociationsMixin<Member>; // Note the null assertions!
+    public addGroupToMember!: HasManyAddAssociationMixin<Member, string>;
+    public hasGroupToMember!: HasManyHasAssociationMixin<Member, string>;
     public countGroupToMembers!: HasManyCountAssociationsMixin;
-    public createGroupToMembers!: HasManyCreateAssociationMixin<GroupToMember>;
+    public createGroupToMembers!: HasManyCreateAssociationMixin<Member>;
 
     // public getMembers!: BelongsToManyGetAssociationsMixin<Member>; // Note the null assertions!
     // public addMember!: BelongsToManyAddAssociationMixin<Member, string>;
@@ -86,14 +76,14 @@ class Group
     public readonly notice?: Notice[];
     public readonly schedule?: Schedule[];
     public readonly gallery?: Gallery[];
-    public readonly groupToMember?: GroupToMember[];
+    public readonly groupToMember?: Member[];
 
     public static associations: {
         agendas: Association<Group, Agenda>;
         notices: Association<Group, Notice>;
         schedules: Association<Group, Schedule>;
         galleries: Association<Group, Gallery>;
-        members: Association<Group, GroupToMember>;
+        members: Association<Group, Member>;
     };
 
     static initiate(connection: Sequelize): Model {

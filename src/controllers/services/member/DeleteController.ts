@@ -1,11 +1,10 @@
 import { NextFunction, Request, Response } from "express";
 import Controller from "@src/controllers/Controller";
-import GroupToMemberService from "@src/services/groupToMember/GroupToMemberService";
+import MemberService from "@src/services/member/MemberService";
 import resTypes from "@src/utils/resTypes";
-import GroupToMember from "@src/models/groupToMember/GroupToMemberModel";
 
-class FindAllController extends Controller {
-    private result: GroupToMember[] | string;
+class UpdateController extends Controller {
+    private result: string;
     constructor() {
         super();
         this.result = "";
@@ -15,7 +14,7 @@ class FindAllController extends Controller {
         res: Response,
         next: NextFunction
     ): Promise<void> {
-        this.result = await GroupToMemberService.findAll(req);
+        this.result = await MemberService.delete(req);
     }
     protected async doResolve(
         req: Request,
@@ -29,16 +28,16 @@ class FindAllController extends Controller {
             case "InternalServerError":
                 resTypes.internalErrorRes(res);
                 break;
-            case "CannotFindItem":
-                resTypes.cannotFindItemRes(res, "groupToMember");
-                break;
             case "UnexpectedError":
                 resTypes.unexpectedErrorRes(res);
                 break;
+            case "NoItemDeleted":
+                resTypes.noItemDeletedRes(res, "Member");
+                break;
             default:
-                resTypes.successRes(res, "Find all groupToMember", this.result);
+                resTypes.successRes(res, "Delete Member");
         }
     }
 }
 
-export default FindAllController;
+export default UpdateController;

@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from "express";
 import Controller from "@src/controllers/Controller";
-import GroupToMemberService from "@src/services/groupToMember/GroupToMemberService";
+import MemberService from "@src/services/member/MemberService";
 import resTypes from "@src/utils/resTypes";
 
-class UpdateController extends Controller {
+class CreateController extends Controller {
     private result: string;
     constructor() {
         super();
@@ -14,7 +14,7 @@ class UpdateController extends Controller {
         res: Response,
         next: NextFunction
     ): Promise<void> {
-        this.result = await GroupToMemberService.update(req);
+        this.result = await MemberService.create(req);
     }
     protected async doResolve(
         req: Request,
@@ -31,10 +31,13 @@ class UpdateController extends Controller {
             case "UnexpectedError":
                 resTypes.unexpectedErrorRes(res);
                 break;
+            case "AlreadyExistItem":
+                resTypes.alreadyExistItemRes(res, "Member");
+                break;
             default:
-                resTypes.successRes(res, "Update member");
+                resTypes.successRes(res, "Create Member");
         }
     }
 }
 
-export default UpdateController;
+export default CreateController;

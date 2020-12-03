@@ -1,11 +1,11 @@
 import { NextFunction, Request, Response } from "express";
 import Controller from "@src/controllers/Controller";
-import GroupToMemberService from "@src/services/groupToMember/GroupToMemberService";
+import MemberService from "@src/services/member/MemberService";
 import resTypes from "@src/utils/resTypes";
-import GroupToMember from "@src/models/groupToMember/GroupToMemberModel";
+import Member from "@src/models/member/MemberModel";
 
 class FindOneController extends Controller {
-    private result: GroupToMember | string;
+    private result: Member | Member[] | string;
     constructor() {
         super();
         this.result = "";
@@ -15,7 +15,7 @@ class FindOneController extends Controller {
         res: Response,
         next: NextFunction
     ): Promise<void> {
-        this.result = await GroupToMemberService.findOne(req);
+        this.result = await MemberService.findOne(req);
     }
     protected async doResolve(
         req: Request,
@@ -30,13 +30,13 @@ class FindOneController extends Controller {
                 resTypes.internalErrorRes(res);
                 break;
             case "CannotFindItem":
-                resTypes.cannotFindItemRes(res, "schedule");
+                resTypes.cannotFindItemRes(res, "member");
                 break;
             case "UnexpectedError":
                 resTypes.unexpectedErrorRes(res);
                 break;
             default:
-                resTypes.successRes(res, "Find schedule", this.result);
+                resTypes.successRes(res, "Find member", this.result);
         }
     }
 }

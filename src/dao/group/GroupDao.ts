@@ -8,7 +8,7 @@ import {
     AllStrictReqData,
     ParamsStrictReqData
 } from "@src/vo/group/services/reqData";
-import GroupToMember from "@src/models/groupToMember/GroupToMemberModel";
+import Member from "@src/models/member/MemberModel";
 
 const logger = LogService.getInstance();
 class GroupDao extends Dao {
@@ -45,12 +45,10 @@ class GroupDao extends Dao {
 
     async findSignUp({
         decoded
-    }: ParamsStrictReqData): Promise<
-        GroupToMember[] | string | null | undefined
-    > {
-        let members: GroupToMember[] | null = null;
+    }: ParamsStrictReqData): Promise<Member[] | string | null | undefined> {
+        let members: Member[] | null = null;
         try {
-            members = await GroupToMember.findAll({
+            members = await Member.findAll({
                 where: {
                     memberEmail: decoded?.email
                 }
@@ -113,13 +111,13 @@ class GroupDao extends Dao {
     }: AllStrictReqData): Promise<Group | string | null | undefined> {
         const transaction = await GroupDBManager.getInstance().getTransaction();
         let newGroup: Group | null = null;
-        let newMember: GroupToMember | null;
+        let newMember: Member | null;
         try {
             newGroup = await Group.create({
                 ...data,
                 transaction
             });
-            newMember = await GroupToMember.create({
+            newMember = await Member.create({
                 groupName: data.name,
                 memberEmail: decoded.email,
                 memberRank: "관리자",

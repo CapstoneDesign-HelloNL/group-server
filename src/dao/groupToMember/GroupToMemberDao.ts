@@ -1,12 +1,12 @@
 import GroupDBManager from "@src/models/GroupDBManager";
-import GroupToMember from "@src/models/groupToMember/GroupToMemberModel";
+import Member from "@src/models/member/MemberModel";
 import LogService from "@src/utils/LogService";
 import Dao from "@src/dao/Dao";
 import { AllStrictReqData } from "@src/vo/group/services/reqData";
 import { ValidationError } from "sequelize";
 
 const logger = LogService.getInstance();
-class GroupToMemberDao extends Dao {
+class MemberDao extends Dao {
     protected constructor() {
         super();
         this.db = GroupDBManager.getInstance();
@@ -23,10 +23,10 @@ class GroupToMemberDao extends Dao {
         data,
         decoded,
         params
-    }: AllStrictReqData): Promise<GroupToMember | string | null | undefined> {
-        let groupToMember: GroupToMember | null = null;
+    }: AllStrictReqData): Promise<Member | string | null | undefined> {
+        let member: Member | null = null;
         try {
-            groupToMember = await GroupToMember.findOne({
+            member = await Member.findOne({
                 where: {
                     ...params
                 }
@@ -36,17 +36,17 @@ class GroupToMemberDao extends Dao {
             if (err instanceof ValidationError) return "BadRequest";
             return undefined;
         }
-        return groupToMember;
+        return member;
     }
 
     async findAll({
         data,
         decoded,
         params
-    }: AllStrictReqData): Promise<GroupToMember[] | string | null | undefined> {
-        let groupToMembers: GroupToMember[] | null = null;
+    }: AllStrictReqData): Promise<Member[] | string | null | undefined> {
+        let members: Member[] | null = null;
         try {
-            groupToMembers = await GroupToMember.findAll({
+            members = await Member.findAll({
                 where: {
                     ...params
                 }
@@ -56,17 +56,17 @@ class GroupToMemberDao extends Dao {
             if (err instanceof ValidationError) return "BadRequest";
             return undefined;
         }
-        return groupToMembers;
+        return members;
     }
 
     async save({
         data,
         decoded,
         params
-    }: AllStrictReqData): Promise<GroupToMember | string | null | undefined> {
-        let newGroupToMember: GroupToMember | null = null;
+    }: AllStrictReqData): Promise<Member | string | null | undefined> {
+        let newMember: Member | null = null;
         try {
-            newGroupToMember = await GroupToMember.create({
+            newMember = await Member.create({
                 ...data,
                 ...params,
                 memberRank:
@@ -77,7 +77,7 @@ class GroupToMemberDao extends Dao {
             if (err instanceof ValidationError) return "BadRequest";
             return undefined;
         }
-        return newGroupToMember;
+        return newMember;
     }
 
     async update({
@@ -85,9 +85,9 @@ class GroupToMemberDao extends Dao {
         decoded,
         params
     }: AllStrictReqData): Promise<unknown | null | undefined> {
-        let updateGroupToMember: unknown | null = null;
+        let updateMember: unknown | null = null;
         try {
-            updateGroupToMember = await GroupToMember.update(
+            updateMember = await Member.update(
                 { ...data },
                 {
                     where: {
@@ -100,7 +100,7 @@ class GroupToMemberDao extends Dao {
             if (err instanceof ValidationError) return "BadRequest";
             return undefined;
         }
-        return updateGroupToMember;
+        return updateMember;
     }
 
     async delete({
@@ -108,9 +108,9 @@ class GroupToMemberDao extends Dao {
         decoded,
         params
     }: AllStrictReqData): Promise<number | string | null | undefined> {
-        let deleteGroupToMember: number | null = null;
+        let deleteMember: number | null = null;
         try {
-            deleteGroupToMember = await GroupToMember.destroy({
+            deleteMember = await Member.destroy({
                 where: {
                     ...params
                 }
@@ -120,8 +120,8 @@ class GroupToMemberDao extends Dao {
             if (err instanceof ValidationError) return "BadRequest";
             return undefined;
         }
-        return deleteGroupToMember; //1 is success, 0 or undefined are fail
+        return deleteMember; //1 is success, 0 or undefined are fail
     }
 }
 
-export default GroupToMemberDao;
+export default MemberDao;

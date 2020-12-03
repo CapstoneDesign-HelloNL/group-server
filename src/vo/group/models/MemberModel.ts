@@ -8,8 +8,8 @@ import {
     ModelValidateOptions
 } from "sequelize";
 
-export namespace GroupToMemberModelTypes {
-    export interface IBaseGroupToMemberTableOptions extends InitOptions {
+export namespace MemberModelTypes {
+    export interface IBaseMemberTableOptions extends InitOptions {
         sequelize: Sequelize;
         tableName: string;
     }
@@ -33,13 +33,7 @@ export namespace GroupToMemberModelTypes {
         memberEmail: IColumnOption;
         memberRank: IColumnOption;
     }
-    export const attr: GroupToMemberModelTypes.IGroupToMemberScheme = {
-        // id: {
-        //     type: DataTypes.INTEGER,
-        //     allowNull: false,
-        //     autoIncrement: true,
-        //     primaryKey: true
-        // },
+    export const attr: MemberModelTypes.IGroupToMemberScheme = {
         groupName: {
             type: DataTypes.STRING,
             allowNull: false,

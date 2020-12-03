@@ -70,7 +70,7 @@ const serviceReturn = {
 };
 const serviceFactory = {
     get: <T>(daoFunc: Function) => {
-        const func = async (req: Request): Promise<T | string> => {
+        const func = async (req: Request): Promise<T | T[] | string> => {
             const reqData: ReqData = {
                 data: req.body,
                 decoded: req.decoded,
@@ -78,7 +78,7 @@ const serviceFactory = {
                 files: req.files
             };
             //if -> return "BadRequest"
-            const result: T | string = await serviceReturn.get<T>(
+            const result: T | T[] | string = await serviceReturn.get<T>(
                 reqData,
                 daoFunc
             );

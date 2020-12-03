@@ -1,10 +1,11 @@
 import { NextFunction, Request, Response } from "express";
 import Controller from "@src/controllers/Controller";
-import GroupToMemberService from "@src/services/groupToMember/GroupToMemberService";
+import MemberService from "@src/services/member/MemberService";
 import resTypes from "@src/utils/resTypes";
+import Member from "@src/models/member/MemberModel";
 
-class CreateController extends Controller {
-    private result: string;
+class FindAllController extends Controller {
+    private result: Member | Member[] | string;
     constructor() {
         super();
         this.result = "";
@@ -14,7 +15,7 @@ class CreateController extends Controller {
         res: Response,
         next: NextFunction
     ): Promise<void> {
-        this.result = await GroupToMemberService.create(req);
+        this.result = await MemberService.findAll(req);
     }
     protected async doResolve(
         req: Request,
@@ -28,16 +29,16 @@ class CreateController extends Controller {
             case "InternalServerError":
                 resTypes.internalErrorRes(res);
                 break;
+            case "CannotFindItem":
+                resTypes.cannotFindItemRes(res, "Member");
+                break;
             case "UnexpectedError":
                 resTypes.unexpectedErrorRes(res);
                 break;
-            case "AlreadyExistItem":
-                resTypes.alreadyExistItemRes(res, "groupToMember");
-                break;
             default:
-                resTypes.successRes(res, "Create groupToMember");
+                resTypes.successRes(res, "Find all Member", this.result);
         }
     }
 }
 
-export default CreateController;
+export default FindAllController;

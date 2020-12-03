@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import Group from "@src/models/group/GroupModel";
-import GroupToMember from "@src/models/groupToMember/GroupToMemberModel";
+import Member from "@src/models/member/MemberModel";
 
 import Agenda from "@src/models/agenda/AgendaModel";
 import Schedule from "@src/models/schedule/ScheduleModel";
@@ -37,7 +37,7 @@ class InitializerDao extends Dao {
 
     public async init(): Promise<void> {
         Group.initiate(this.db.getConnection());
-        GroupToMember.initiate(this.db.getConnection());
+        Member.initiate(this.db.getConnection());
 
         Agenda.initiate(this.db.getConnection());
         Notice.initiate(this.db.getConnection());
@@ -72,7 +72,7 @@ class InitializerDao extends Dao {
             as: "galleries" // this determines the name in `associations`!
         });
 
-        Group.hasMany(GroupToMember, {
+        Group.hasMany(Member, {
             sourceKey: "name",
             foreignKey: "groupName",
             as: "members" // this determines the name in `associations`!
@@ -84,7 +84,7 @@ class InitializerDao extends Dao {
             as: "galleryPostPhoto" // this determines the name in `associations`!
         });
 
-        GroupToMember.belongsTo(Group, {
+        Member.belongsTo(Group, {
             targetKey: "name",
             foreignKey: "groupName",
             as: "memberToGroup"
@@ -135,7 +135,7 @@ class InitializerDao extends Dao {
 
     public async sync(): Promise<void> {
         await Group.sync();
-        await GroupToMember.sync();
+        await Member.sync();
 
         await Agenda.sync();
         await Notice.sync();
