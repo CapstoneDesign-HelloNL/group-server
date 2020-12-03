@@ -11,7 +11,6 @@ import Gallery from "@src/models/gallery/GalleryModel";
 
 import GalleryPost from "@src/models/galleryPost/GalleryPostModel";
 import GalleryPhoto from "@src/models/galleryPhoto/GalleryPhotoModel";
-// import GalleryPostToPhoto from "@src/models/galleryPostToPhoto/GalleryPostToPhotoModel";
 
 import GroupDBManager from "@src/models/GroupDBManager";
 import Dao from "@src/dao/Dao";

@@ -1,5 +1,5 @@
 import Member from "@src/models/member/MemberModel";
-import MemberDao from "@src/dao/groupToMember/GroupToMemberDao";
+import MemberDao from "@src/dao/member/MemberDao";
 import serviceFactory from "@src/vo/group/services/ServiceFactory";
 
 class MemberService {
