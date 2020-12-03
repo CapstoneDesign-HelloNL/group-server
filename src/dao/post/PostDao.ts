@@ -4,7 +4,7 @@ import GroupDBManager from "@src/models/GroupDBManager";
 import Post from "@src/models/post/PostModel";
 import LogService from "@src/utils/LogService";
 import Dao from "@src/dao/Dao";
-import GalleryPhoto from "@src/models/galleryPhoto/GalleryPhotoModel";
+import Photo from "@src/models/photo/PhotoModel";
 import {
     AllStrictReqData,
     ParamsStrictReqData
@@ -122,7 +122,7 @@ class PostDao extends Dao {
     }: AllStrictReqData): Promise<Post | string | null | undefined> {
         const transaction = await GroupDBManager.getInstance().getTransaction();
         let newPost: Post | null = null;
-        let newPhoto: GalleryPhoto | null = null;
+        let newPhoto: Photo | null = null;
         try {
             newPost = await Post.create({
                 ...data,
@@ -131,7 +131,7 @@ class PostDao extends Dao {
             });
             console.log(files);
             for (let file in files) {
-                newPhoto = await GalleryPhoto.create({
+                newPhoto = await Photo.create({
                     galleryPhotoUrl: files[file].location,
                     postId: newPost.id,
                     transaction
@@ -160,7 +160,7 @@ class PostDao extends Dao {
         files
     }: AllStrictReqData): Promise<unknown | null | undefined> {
         let updateGroup: unknown | null = null;
-        let existPhotos: GalleryPhoto[] | null = null;
+        let existPhotos: Photo[] | null = null;
         try {
             updateGroup = await Post.update(
                 { ...data },

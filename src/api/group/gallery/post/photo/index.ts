@@ -1,9 +1,9 @@
 import { Router } from "express";
-import FindOneController from "@src/controllers/services/galleryPhoto/FindOneController";
-import FindAllController from "@src/controllers/services/galleryPhoto/FindAllController";
-import CreateController from "@src/controllers/services/galleryPhoto/CreateController";
-import UpdateController from "@src/controllers/services/galleryPhoto/UpdateController";
-import DeleteController from "@src/controllers/services/galleryPhoto/DeleteController";
+import FindOneController from "@src/controllers/services/photo/FindOneController";
+import FindAllController from "@src/controllers/services/photo/FindAllController";
+import CreateController from "@src/controllers/services/photo/CreateController";
+import UpdateController from "@src/controllers/services/photo/UpdateController";
+import DeleteController from "@src/controllers/services/photo/DeleteController";
 import JwtVerifyAccessController from "@src/controllers/middlewares/jwt/JwtVerifyAccessController";
 const router = Router({ mergeParams: true });
 

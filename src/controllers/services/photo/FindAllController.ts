@@ -1,10 +1,11 @@
 import { NextFunction, Request, Response } from "express";
 import Controller from "@src/controllers/Controller";
-import GalleryPhotoService from "@src/services/galleryPhoto/GalleryPhotoService";
+import PhotoService from "@src/services/photo/PhotoService";
 import resTypes from "@src/utils/resTypes";
+import Photo from "@src/models/photo/PhotoModel";
 
-class UpdateController extends Controller {
-    private result: string;
+class FindAllController extends Controller {
+    private result: Photo[] | string;
     constructor() {
         super();
         this.result = "";
@@ -14,7 +15,7 @@ class UpdateController extends Controller {
         res: Response,
         next: NextFunction
     ): Promise<void> {
-        this.result = await GalleryPhotoService.update(req);
+        this.result = await PhotoService.findAll(req);
     }
     protected async doResolve(
         req: Request,
@@ -28,13 +29,16 @@ class UpdateController extends Controller {
             case "InternalServerError":
                 resTypes.internalErrorRes(res);
                 break;
+            case "CannotFindItem":
+                resTypes.cannotFindItemRes(res, "gallery photo");
+                break;
             case "UnexpectedError":
                 resTypes.unexpectedErrorRes(res);
                 break;
             default:
-                resTypes.successRes(res, "Update gallery photo");
+                resTypes.successRes(res, "Find all gallery photo", this.result);
         }
     }
 }
 
-export default UpdateController;
+export default FindAllController;

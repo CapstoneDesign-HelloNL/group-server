@@ -11,7 +11,7 @@ import {
 } from "sequelize";
 import { GalleryModelTypes } from "@src/vo/group/models/GalleryModel";
 import { GalleryTypes } from "@src/vo/group/controllers/Gallery";
-import GalleryPost from "../galleryPost/GalleryPostModel";
+import Post from "../post/PostModel";
 
 interface GalleryCreationAttributes
     extends Optional<GalleryTypes.GalleryBody, "name"> {}
@@ -21,17 +21,17 @@ class Gallery extends Model implements GalleryTypes.GalleryBody {
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
 
-    public getGallerys!: HasManyGetAssociationsMixin<GalleryPost>; // Note the null assertions!
-    public addGallery!: HasManyAddAssociationMixin<GalleryPost, number>;
-    public hasGallery!: HasManyHasAssociationMixin<GalleryPost, number>;
+    public getGallerys!: HasManyGetAssociationsMixin<Post>; // Note the null assertions!
+    public addGallery!: HasManyAddAssociationMixin<Post, number>;
+    public hasGallery!: HasManyHasAssociationMixin<Post, number>;
     public countGalleries!: HasManyCountAssociationsMixin;
-    public createGallery!: HasManyCreateAssociationMixin<GalleryPost>;
+    public createGallery!: HasManyCreateAssociationMixin<Post>;
 
     public static associations: {
-        galleryPosts: Association<Gallery, GalleryPost>;
+        galleryPosts: Association<Gallery, Post>;
     };
 
-    public readonly groupGalleryPost?: GalleryPost[];
+    public readonly groupGalleryPost?: Post[];
     static initiate(connection: Sequelize): Model {
         const opt: GalleryModelTypes.IBaseGalleryTableOptions = {
             sequelize: connection,

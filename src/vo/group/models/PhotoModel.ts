@@ -5,8 +5,8 @@ import {
     ModelAttributes,
     ModelValidateOptions
 } from "sequelize";
-export namespace GalleryPhotoModelTypes {
-    export interface IBaseGalleryPhotoTableOptions extends InitOptions {
+export namespace PhotoModelTypes {
+    export interface IBasePhotoTableOptions extends InitOptions {
         sequelize: Sequelize;
         tableName: string;
     }
@@ -15,17 +15,17 @@ export namespace GalleryPhotoModelTypes {
         allowNull: boolean;
         validate?: ModelValidateOptions;
     }
-    export interface IGalleryPhotoScheme extends ModelAttributes {
-        galleryPhotoUrl: IColumnOption;
+    export interface IPhotoScheme extends ModelAttributes {
+        photoUrl: IColumnOption;
         postId: IColumnOption;
     }
-    export const attr: GalleryPhotoModelTypes.IGalleryPhotoScheme = {
+    export const attr: PhotoModelTypes.IPhotoScheme = {
         id: {
             type: DataTypes.INTEGER,
             autoIncrement: true,
             primaryKey: true
         },
-        galleryPhotoUrl: {
+        photoUrl: {
             type: DataTypes.TEXT,
             allowNull: false,
             validate: {

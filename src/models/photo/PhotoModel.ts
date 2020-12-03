@@ -12,15 +12,13 @@ import {
     BelongsToManyRemoveAssociationsMixin,
     BelongsToManyCountAssociationsMixin
 } from "sequelize";
-import { GalleryPhotoModelTypes } from "@src/vo/group/models/GalleryPhotoModel";
-import { GalleryPhotoTypes } from "@src/vo/group/controllers/GalleryPostPhoto";
-import GalleryPost from "@src/models/galleryPost/GalleryPostModel";
+import { PhotoModelTypes } from "@src/vo/group/models/PhotoModel";
+import { PhotoTypes } from "@src/vo/group/controllers/Photo";
+import Post from "@src/models/post/PostModel";
 
-interface GalleryPostPhotoCreationAttributes
-    extends Optional<GalleryPhotoTypes.GalleryPhotoBody, "id"> {}
-class GalleryPhoto extends Model implements GalleryPhotoTypes.GalleryPhotoBody {
+class Photo extends Model implements PhotoTypes.PhotoBody {
     public id!: number;
-    public galleryPhotoUrl!: string;
+    public photoUrl!: string;
     public postId!: string;
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
@@ -54,11 +52,11 @@ class GalleryPhoto extends Model implements GalleryPhotoTypes.GalleryPhotoBody {
     // public countPhotoToPosts!: BelongsToManyCountAssociationsMixin;
 
     static initiate(connection: Sequelize): Model {
-        const opt: GalleryPhotoModelTypes.IBaseGalleryPhotoTableOptions = {
+        const opt: PhotoModelTypes.IBasePhotoTableOptions = {
             sequelize: connection,
-            tableName: "GalleryPhoto"
+            tableName: "Photo"
         };
-        return GalleryPhoto.init(GalleryPhotoModelTypes.attr, opt);
+        return Photo.init(PhotoModelTypes.attr, opt);
     }
 }
-export default GalleryPhoto;
+export default Photo;

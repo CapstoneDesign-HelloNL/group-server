@@ -20,7 +20,7 @@ import {
 } from "sequelize";
 import { PostModelTypes } from "@src/vo/group/models/PostModel";
 import { PostTypes } from "@src/vo/group/controllers/Post";
-import GalleryPhoto from "@src/models/galleryPhoto/GalleryPhotoModel";
+import Photo from "@src/models/photo/PhotoModel";
 class Post extends Model implements PostTypes.PostBody {
     public id!: number;
     public title!: string;
@@ -31,14 +31,14 @@ class Post extends Model implements PostTypes.PostBody {
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
 
-    public getPhotos!: HasManyGetAssociationsMixin<GalleryPhoto>; // Note the null assertions!
-    public addPhoto!: HasManyAddAssociationMixin<GalleryPhoto, number>;
-    public hasPhoto!: HasManyHasAssociationMixin<GalleryPhoto, number>;
+    public getPhotos!: HasManyGetAssociationsMixin<Photo>; // Note the null assertions!
+    public addPhoto!: HasManyAddAssociationMixin<Photo, number>;
+    public hasPhoto!: HasManyHasAssociationMixin<Photo, number>;
     public countPhotos!: HasManyCountAssociationsMixin;
-    public createPhoto!: HasManyCreateAssociationMixin<GalleryPhoto>;
+    public createPhoto!: HasManyCreateAssociationMixin<Photo>;
 
     public static associations: {
-        galleryPostPhoto: Association<Post, GalleryPhoto>;
+        galleryPostPhoto: Association<Post, Photo>;
     };
     // public getPostToPhotos!: BelongsToManyGetAssociationsMixin<GalleryPhoto>; // Note the null assertions!
     // public addPostToPhoto!: BelongsToManyAddAssociationMixin<

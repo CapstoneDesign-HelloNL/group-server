@@ -1,11 +1,11 @@
 import { NextFunction, Request, Response } from "express";
 import Controller from "@src/controllers/Controller";
-import GalleryPhotoService from "@src/services/galleryPhoto/GalleryPhotoService";
+import PhotoService from "@src/services/photo/PhotoService";
 import resTypes from "@src/utils/resTypes";
-import GalleryPhoto from "@src/models/galleryPhoto/GalleryPhotoModel";
+import Photo from "@src/models/photo/PhotoModel";
 
-class FindAllController extends Controller {
-    private result: GalleryPhoto[] | string;
+class FindOneController extends Controller {
+    private result: Photo | string;
     constructor() {
         super();
         this.result = "";
@@ -15,7 +15,7 @@ class FindAllController extends Controller {
         res: Response,
         next: NextFunction
     ): Promise<void> {
-        this.result = await GalleryPhotoService.findAll(req);
+        this.result = await PhotoService.findOne(req);
     }
     protected async doResolve(
         req: Request,
@@ -36,9 +36,9 @@ class FindAllController extends Controller {
                 resTypes.unexpectedErrorRes(res);
                 break;
             default:
-                resTypes.successRes(res, "Find all gallery photo", this.result);
+                resTypes.successRes(res, "Find gallery photo", this.result);
         }
     }
 }
 
-export default FindAllController;
+export default FindOneController;

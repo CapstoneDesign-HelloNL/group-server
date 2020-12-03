@@ -1,23 +1,19 @@
-import GalleryPost from "@src/models/galleryPost/GalleryPostModel";
-import GalleryPostDao from "@src/dao/galleryPost/GalleryPostDao";
+import Post from "@src/models/post/PostModel";
+import PostDao from "@src/dao/post/PostDao";
 import serviceFactory from "@src/vo/group/services/ServiceFactory";
 
 class PostService {
-    static findOne = serviceFactory.get<GalleryPost>(
-        GalleryPostDao.getInstance().findOne
+    static findOne = serviceFactory.get<Post>(PostDao.getInstance().findOne);
+    static findAll = serviceFactory.getMany<Post>(
+        PostDao.getInstance().findAll
     );
-    static findAll = serviceFactory.getMany<GalleryPost>(
-        GalleryPostDao.getInstance().findAll
+    static create = serviceFactory.postOrUpdate<Post>(
+        PostDao.getInstance().save
     );
-    static create = serviceFactory.postOrUpdate<GalleryPost>(
-        GalleryPostDao.getInstance().save
+    static update = serviceFactory.postOrUpdate<Post>(
+        PostDao.getInstance().update
     );
-    static update = serviceFactory.postOrUpdate<GalleryPost>(
-        GalleryPostDao.getInstance().update
-    );
-    static delete = serviceFactory.delete<GalleryPost>(
-        GalleryPostDao.getInstance().delete
-    );
+    static delete = serviceFactory.delete<Post>(PostDao.getInstance().delete);
 }
 
 export default PostService;
