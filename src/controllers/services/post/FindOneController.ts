@@ -1,10 +1,11 @@
 import { NextFunction, Request, Response } from "express";
 import Controller from "@src/controllers/Controller";
-import GalleryPostService from "@src/services/galleryPost/GalleryPostService";
+import PostService from "@src/services/post/PostService";
 import resTypes from "@src/utils/resTypes";
+import Post from "@src/models/post/PostModel";
 
-class UpdateController extends Controller {
-    private result: string;
+class FindOneController extends Controller {
+    private result: Post | string;
     constructor() {
         super();
         this.result = "";
@@ -14,7 +15,7 @@ class UpdateController extends Controller {
         res: Response,
         next: NextFunction
     ): Promise<void> {
-        this.result = await GalleryPostService.update(req);
+        this.result = await PostService.findOne(req);
     }
     protected async doResolve(
         req: Request,
@@ -28,13 +29,16 @@ class UpdateController extends Controller {
             case "InternalServerError":
                 resTypes.internalErrorRes(res);
                 break;
+            case "CannotFindItem":
+                resTypes.cannotFindItemRes(res, "post");
+                break;
             case "UnexpectedError":
                 resTypes.unexpectedErrorRes(res);
                 break;
             default:
-                resTypes.successRes(res, "Update gallery post");
+                resTypes.successRes(res, "Find post", this.result);
         }
     }
 }
 
-export default UpdateController;
+export default FindOneController;

@@ -5,8 +5,8 @@ import {
     ModelAttributes,
     ModelValidateOptions
 } from "sequelize";
-export namespace GalleryPostModelTypes {
-    export interface IBaseGalleryPostTableOptions extends InitOptions {
+export namespace PostModelTypes {
+    export interface IBasePostTableOptions extends InitOptions {
         sequelize: Sequelize;
         tableName: string;
     }
@@ -15,13 +15,13 @@ export namespace GalleryPostModelTypes {
         allowNull: boolean;
         validate?: ModelValidateOptions;
     }
-    export interface IGalleryPostScheme extends ModelAttributes {
+    export interface IPostScheme extends ModelAttributes {
         title: IColumnOption;
         content: IColumnOption;
         author: IColumnOption;
         galleryName: IColumnOption;
     }
-    export const attr: GalleryPostModelTypes.IGalleryPostScheme = {
+    export const attr: PostModelTypes.IPostScheme = {
         id: {
             type: DataTypes.INTEGER,
             autoIncrement: true,

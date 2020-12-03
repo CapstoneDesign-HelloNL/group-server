@@ -1,11 +1,10 @@
 import { NextFunction, Request, Response } from "express";
 import Controller from "@src/controllers/Controller";
-import GalleryPostService from "@src/services/galleryPost/GalleryPostService";
+import PostService from "@src/services/post/PostService";
 import resTypes from "@src/utils/resTypes";
-import GalleryPost from "@src/models/galleryPost/GalleryPostModel";
 
-class FindAllController extends Controller {
-    private result: GalleryPost[] | string;
+class CreateController extends Controller {
+    private result: string;
     constructor() {
         super();
         this.result = "";
@@ -15,7 +14,7 @@ class FindAllController extends Controller {
         res: Response,
         next: NextFunction
     ): Promise<void> {
-        this.result = await GalleryPostService.findAll(req);
+        this.result = await PostService.create(req);
     }
     protected async doResolve(
         req: Request,
@@ -29,16 +28,16 @@ class FindAllController extends Controller {
             case "InternalServerError":
                 resTypes.internalErrorRes(res);
                 break;
-            case "CannotFindItem":
-                resTypes.cannotFindItemRes(res, "group");
-                break;
             case "UnexpectedError":
                 resTypes.unexpectedErrorRes(res);
                 break;
+            case "AlreadyExistItem":
+                resTypes.alreadyExistItemRes(res, "post");
+                break;
             default:
-                resTypes.successRes(res, "Find all gallery post", this.result);
+                resTypes.successRes(res, "Create post");
         }
     }
 }
 
-export default FindAllController;
+export default CreateController;

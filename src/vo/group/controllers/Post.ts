@@ -1,12 +1,12 @@
-export namespace GalleryPostTypes {
-    export interface GalleryPostPostBody {
+export namespace PostTypes {
+    export interface PostPostBody {
         title: string;
         content: string;
         author: string;
         galleryName: string;
         groupName: string;
     }
-    export interface GalleryPostBody extends GalleryPostPostBody {
+    export interface PostBody extends PostPostBody {
         id: number;
     }
 }

@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from "express";
 import Controller from "@src/controllers/Controller";
-import GalleryPostService from "@src/services/galleryPost/GalleryPostService";
+import PostService from "@src/services/post/PostService";
 import resTypes from "@src/utils/resTypes";
 
-class CreateController extends Controller {
+class UpdateController extends Controller {
     private result: string;
     constructor() {
         super();
@@ -14,7 +14,7 @@ class CreateController extends Controller {
         res: Response,
         next: NextFunction
     ): Promise<void> {
-        this.result = await GalleryPostService.create(req);
+        this.result = await PostService.update(req);
     }
     protected async doResolve(
         req: Request,
@@ -31,13 +31,10 @@ class CreateController extends Controller {
             case "UnexpectedError":
                 resTypes.unexpectedErrorRes(res);
                 break;
-            case "AlreadyExistItem":
-                resTypes.alreadyExistItemRes(res, "gallery post");
-                break;
             default:
-                resTypes.successRes(res, "Create gallery post");
+                resTypes.successRes(res, "Update post");
         }
     }
 }
 
-export default CreateController;
+export default UpdateController;

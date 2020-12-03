@@ -2,7 +2,7 @@ import GalleryPost from "@src/models/galleryPost/GalleryPostModel";
 import GalleryPostDao from "@src/dao/galleryPost/GalleryPostDao";
 import serviceFactory from "@src/vo/group/services/ServiceFactory";
 
-class GalleryPostService {
+class PostService {
     static findOne = serviceFactory.get<GalleryPost>(
         GalleryPostDao.getInstance().findOne
     );
@@ -20,4 +20,4 @@ class GalleryPostService {
     );
 }
 
-export default GalleryPostService;
+export default PostService;

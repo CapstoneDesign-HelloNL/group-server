@@ -18,10 +18,10 @@ import {
     HasManyCreateAssociationMixin,
     Association
 } from "sequelize";
-import { GalleryPostModelTypes } from "@src/vo/group/models/GalleryPostModel";
-import { GalleryPostTypes } from "@src/vo/group/controllers/GalleryPost";
+import { PostModelTypes } from "@src/vo/group/models/PostModel";
+import { PostTypes } from "@src/vo/group/controllers/Post";
 import GalleryPhoto from "@src/models/galleryPhoto/GalleryPhotoModel";
-class GalleryPost extends Model implements GalleryPostTypes.GalleryPostBody {
+class Post extends Model implements PostTypes.PostBody {
     public id!: number;
     public title!: string;
     public content!: string;
@@ -38,7 +38,7 @@ class GalleryPost extends Model implements GalleryPostTypes.GalleryPostBody {
     public createPhoto!: HasManyCreateAssociationMixin<GalleryPhoto>;
 
     public static associations: {
-        galleryPostPhoto: Association<GalleryPost, GalleryPhoto>;
+        galleryPostPhoto: Association<Post, GalleryPhoto>;
     };
     // public getPostToPhotos!: BelongsToManyGetAssociationsMixin<GalleryPhoto>; // Note the null assertions!
     // public addPostToPhoto!: BelongsToManyAddAssociationMixin<
@@ -71,11 +71,11 @@ class GalleryPost extends Model implements GalleryPostTypes.GalleryPostBody {
     // public countPostToPhotos!: BelongsToManyCountAssociationsMixin;
 
     static initiate(connection: Sequelize): Model {
-        const opt: GalleryPostModelTypes.IBaseGalleryPostTableOptions = {
+        const opt: PostModelTypes.IBasePostTableOptions = {
             sequelize: connection,
-            tableName: "GalleryPost"
+            tableName: "Post"
         };
-        return GalleryPost.init(GalleryPostModelTypes.attr, opt);
+        return Post.init(PostModelTypes.attr, opt);
     }
 }
-export default GalleryPost;
+export default Post;

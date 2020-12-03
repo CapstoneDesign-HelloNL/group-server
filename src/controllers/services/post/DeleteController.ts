@@ -1,11 +1,10 @@
 import { NextFunction, Request, Response } from "express";
 import Controller from "@src/controllers/Controller";
-import GalleryPostService from "@src/services/galleryPost/GalleryPostService";
+import PostService from "@src/services/post/PostService";
 import resTypes from "@src/utils/resTypes";
-import GalleryPost from "@src/models/galleryPost/GalleryPostModel";
 
-class FindOneController extends Controller {
-    private result: GalleryPost | string;
+class UpdateController extends Controller {
+    private result: string;
     constructor() {
         super();
         this.result = "";
@@ -15,7 +14,8 @@ class FindOneController extends Controller {
         res: Response,
         next: NextFunction
     ): Promise<void> {
-        this.result = await GalleryPostService.findOne(req);
+        this.result = await PostService.delete(req);
+        console.log(this.result);
     }
     protected async doResolve(
         req: Request,
@@ -29,16 +29,16 @@ class FindOneController extends Controller {
             case "InternalServerError":
                 resTypes.internalErrorRes(res);
                 break;
-            case "CannotFindItem":
-                resTypes.cannotFindItemRes(res, "group");
-                break;
             case "UnexpectedError":
                 resTypes.unexpectedErrorRes(res);
                 break;
+            case "NoItemDeleted":
+                resTypes.noItemDeletedRes(res, "post");
+                break;
             default:
-                resTypes.successRes(res, "Find gallery post", this.result);
+                resTypes.successRes(res, "Delete post");
         }
     }
 }
 
-export default FindOneController;
+export default UpdateController;
