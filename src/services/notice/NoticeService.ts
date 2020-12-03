@@ -6,7 +6,7 @@ class NoticeService {
     static findOne = serviceFactory.get<Notice>(
         NoticeDao.getInstance().findOne
     );
-    static findAll = serviceFactory.get<Notice[]>(
+    static findAll = serviceFactory.getMany<Notice>(
         NoticeDao.getInstance().findAll
     );
     static create = serviceFactory.postOrUpdate<Notice>(

@@ -1,7 +1,6 @@
 import {
     Model,
     Sequelize,
-    Optional,
     Association,
     BelongsToGetAssociationMixin,
     BelongsToCreateAssociationMixin,
@@ -11,15 +10,7 @@ import { ScheduleModelTypes } from "@src/vo/group/models/ScheduleModel";
 import { ScheduleTypes } from "@src/vo/group/controllers/Schedule";
 import Group from "@src/models/group/GroupModel";
 
-interface ScheduleCreationAttributes
-    extends Optional<ScheduleTypes.ScheduleBody, "id"> {}
-class Schedule
-    extends Model
-    // extends Model<
-    //     GroupScheduleTypes.GroupScheduleBody,
-    //     GroupScheduleCreationAttributes
-    // >
-    implements ScheduleTypes.ScheduleBody {
+class Schedule extends Model implements ScheduleTypes.ScheduleBody {
     public id!: number;
     public title!: string;
     public content!: string;
@@ -43,9 +34,5 @@ class Schedule
         };
         return Schedule.init(ScheduleModelTypes.attr, opt);
     }
-    // static createUser(value: GroupTypes.GroupPostBody) {
-    //     return UserModel.create(value);
-    // }
 }
-// GroupSchedule.Group = GroupSchedule.belongsTo(Group);
 export default Schedule;

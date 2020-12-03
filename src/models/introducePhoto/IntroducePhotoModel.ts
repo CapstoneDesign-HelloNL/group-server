@@ -11,14 +11,8 @@ import { IntroducePhotoModelTypes } from "@src/vo/group/models/IntroducePhotoMod
 import { IntroducePhotoTypes } from "@src/vo/group/controllers/IntroducePhoto";
 import Introduce from "@src/models/introduce/IntroduceModel";
 
-interface IntroducePhotoCreationAttributes
-    extends Optional<IntroducePhotoTypes.IntroducePhotoBody, "id"> {}
 class IntroducePhoto
     extends Model
-    // extends Model<
-    //     GroupNoticeTypes.GroupNoticeBody,
-    //     GroupNoticeCreationAttributes
-    // >
     implements IntroducePhotoTypes.IntroducePhotoBody {
     public id!: number;
     public url!: string;

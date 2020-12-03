@@ -6,7 +6,7 @@ import GroupService from "@src/services/group/GroupService";
 import resTypes from "@src/utils/resTypes";
 
 class FindAllController extends Controller {
-    private result: string | Group;
+    private result: string | Group[];
     constructor() {
         super();
         this.result = "";

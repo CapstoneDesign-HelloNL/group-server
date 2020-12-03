@@ -2,14 +2,8 @@ import { Model, Sequelize, Optional } from "sequelize";
 import { GalleryPostToPhotoModelTypes } from "@src/vo/group/models/GalleryPostToPhotoModel";
 import { GalleryPostToPhotoTypes } from "@src/vo/group/controllers/GalleryPostToPhoto";
 
-interface GalleryPostToPhotoCreationAttributes
-    extends Optional<GalleryPostToPhotoTypes.GalleryPostToPhotoBody, "id"> {}
 class GalleryPostToPhoto
     extends Model
-    // extends Model<
-    //     GroupGalleryPostToPhotoTypes.GroupGalleryPostToPhotoBody,
-    //     GroupGalleryPostToPhotoCreationAttributes
-    // >
     implements GalleryPostToPhotoTypes.GalleryPostToPhotoBody {
     public id!: number;
     public galleryPostId!: number;

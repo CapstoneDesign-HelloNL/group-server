@@ -18,13 +18,7 @@ import GalleryPost from "@src/models/galleryPost/GalleryPostModel";
 
 interface GalleryPostPhotoCreationAttributes
     extends Optional<GalleryPhotoTypes.GalleryPhotoBody, "id"> {}
-class GalleryPhoto
-    extends Model
-    // extends Model<
-    //     GroupGalleryPostPhotoTypes.GroupGalleryPostPhotoBody,
-    //     GroupGalleryPostPhotoCreationAttributes
-    // >
-    implements GalleryPhotoTypes.GalleryPhotoBody {
+class GalleryPhoto extends Model implements GalleryPhotoTypes.GalleryPhotoBody {
     public id!: number;
     public galleryPhotoUrl!: string;
     public postId!: string;

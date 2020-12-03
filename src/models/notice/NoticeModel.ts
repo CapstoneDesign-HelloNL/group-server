@@ -11,15 +11,7 @@ import { NoticeModelTypes } from "@src/vo/group/models/NoticeModel";
 import { NoticeTypes } from "@src/vo/group/controllers/Notice";
 import Group from "@src/models/group/GroupModel";
 
-interface NoticeCreationAttributes
-    extends Optional<NoticeTypes.NoticeBody, "id"> {}
-class Notice
-    extends Model
-    // extends Model<
-    //     GroupNoticeTypes.GroupNoticeBody,
-    //     GroupNoticeCreationAttributes
-    // >
-    implements NoticeTypes.NoticeBody {
+class Notice extends Model implements NoticeTypes.NoticeBody {
     public id!: number;
     public title!: string;
     public content!: string;

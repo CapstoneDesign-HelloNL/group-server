@@ -11,15 +11,7 @@ import { JoinAnswerModelTypes } from "@src/vo/group/models/JoinAnswerModel";
 import { JoinAnswerTypes } from "@src/vo/group/controllers/JoinAnswer";
 import Group from "@src/models/group/GroupModel";
 
-// interface NoticeCreationAttributes
-//     extends Optional<JoinAnswerTypes.JoinAnswerBody, "id"> {}
-class JoinAnswer
-    extends Model
-    // extends Model<
-    //     GroupNoticeTypes.GroupNoticeBody,
-    //     GroupNoticeCreationAttributes
-    // >
-    implements JoinAnswerTypes.JoinAnswerBody {
+class JoinAnswer extends Model implements JoinAnswerTypes.JoinAnswerBody {
     public content!: string;
     public author!: string;
     public questionId!: number;

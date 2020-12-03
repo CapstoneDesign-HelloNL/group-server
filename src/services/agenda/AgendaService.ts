@@ -6,7 +6,7 @@ class AgendaService {
     static findOne = serviceFactory.get<Agenda>(
         AgendaDao.getInstance().findOne
     );
-    static findAll = serviceFactory.get<Agenda[]>(
+    static findAll = serviceFactory.getMany<Agenda>(
         AgendaDao.getInstance().findAll
     );
     static create = serviceFactory.postOrUpdate<Agenda>(

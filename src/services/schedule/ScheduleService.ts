@@ -6,7 +6,7 @@ class ScheduleService {
     static findOne = serviceFactory.get<Schedule>(
         ScheduleDao.getInstance().findOne
     );
-    static findAll = serviceFactory.get<Schedule[]>(
+    static findAll = serviceFactory.getMany<Schedule>(
         ScheduleDao.getInstance().findAll
     );
     static create = serviceFactory.postOrUpdate<Schedule>(

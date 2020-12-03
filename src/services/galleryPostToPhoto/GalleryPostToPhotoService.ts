@@ -6,7 +6,7 @@ class GalleryPostToPhotoService {
     static findOne = serviceFactory.get<GalleryPostToPhoto>(
         GalleryPostToPhotoDao.getInstance().findOne
     );
-    static findAll = serviceFactory.get<GalleryPostToPhoto[]>(
+    static findAll = serviceFactory.getMany<GalleryPostToPhoto>(
         GalleryPostToPhotoDao.getInstance().findAll
     );
     static create = serviceFactory.postOrUpdate<GalleryPostToPhoto>(

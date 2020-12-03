@@ -13,13 +13,7 @@ import Group from "@src/models/group/GroupModel";
 
 interface IntroduceCreationAttributes
     extends Optional<IntroduceTypes.IntroduceBody, "id"> {}
-class Introduce
-    extends Model
-    // extends Model<
-    //     GroupNoticeTypes.GroupNoticeBody,
-    //     GroupNoticeCreationAttributes
-    // >
-    implements IntroduceTypes.IntroduceBody {
+class Introduce extends Model implements IntroduceTypes.IntroduceBody {
     public id!: number;
     public content!: string;
     public groupName!: string;

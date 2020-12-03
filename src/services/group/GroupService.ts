@@ -6,7 +6,9 @@ import serviceFactory from "@src/vo/group/services/ServiceFactory";
 
 class GroupService {
     static findOne = serviceFactory.get<Group>(GroupDao.getInstance().findOne);
-    static findAll = serviceFactory.get<Group>(GroupDao.getInstance().findAll);
+    static findAll = serviceFactory.getMany<Group>(
+        GroupDao.getInstance().findAll
+    );
     static findSignUp = serviceFactory.get<Member>(
         GroupDao.getInstance().findSignUp
     );

@@ -12,15 +12,7 @@ import { JoinQuestionTypes } from "@src/vo/group/controllers/JoinQuestion";
 import Group from "@src/models/group/GroupModel";
 import JoinRequest from "@src/models/joinRequest/JoinRequestModel";
 
-interface JoinQuestionCreationAttributes
-    extends Optional<JoinQuestionTypes.JoinQuestionBody, "id"> {}
-class JoinQuestion
-    extends Model
-    // extends Model<
-    //     GroupNoticeTypes.GroupNoticeBody,
-    //     GroupNoticeCreationAttributes
-    // >
-    implements JoinQuestionTypes.JoinQuestionBody {
+class JoinQuestion extends Model implements JoinQuestionTypes.JoinQuestionBody {
     public id!: number;
     public content!: string;
     public order!: number;

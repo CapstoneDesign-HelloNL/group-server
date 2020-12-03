@@ -15,13 +15,7 @@ import GalleryPost from "../galleryPost/GalleryPostModel";
 
 interface GalleryCreationAttributes
     extends Optional<GalleryTypes.GalleryBody, "name"> {}
-class Gallery
-    extends Model
-    // extends Model<
-    //     GroupGalleryTypes.GroupGalleryBody,
-    //     GroupGalleryCreationAttributes
-    // >
-    implements GalleryTypes.GalleryBody {
+class Gallery extends Model implements GalleryTypes.GalleryBody {
     public name!: string;
     public groupName!: string;
     public readonly createdAt!: Date;

@@ -21,15 +21,7 @@ import {
 import { GalleryPostModelTypes } from "@src/vo/group/models/GalleryPostModel";
 import { GalleryPostTypes } from "@src/vo/group/controllers/GalleryPost";
 import GalleryPhoto from "@src/models/galleryPhoto/GalleryPhotoModel";
-interface GalleryPostCreationAttributes
-    extends Optional<GalleryPostTypes.GalleryPostBody, "id"> {}
-class GalleryPost
-    extends Model
-    // extends Model<
-    //     GroupGalleryPostTypes.GroupGalleryPostBody,
-    //     GroupGalleryPostCreationAttributes
-    // >
-    implements GalleryPostTypes.GalleryPostBody {
+class GalleryPost extends Model implements GalleryPostTypes.GalleryPostBody {
     public id!: number;
     public title!: string;
     public content!: string;

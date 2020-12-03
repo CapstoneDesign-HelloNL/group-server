@@ -6,7 +6,7 @@ class MemberService {
     static findOne = serviceFactory.get<Member>(
         MemberDao.getInstance().findOne
     );
-    static findAll = serviceFactory.get<Member>(
+    static findAll = serviceFactory.getMany<Member>(
         MemberDao.getInstance().findAll
     );
     static create = serviceFactory.postOrUpdate<Member>(

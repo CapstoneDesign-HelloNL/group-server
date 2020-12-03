@@ -17,12 +17,7 @@ import Notice from "@src/models/notice/NoticeModel";
 import Gallery from "@src/models/gallery/GalleryModel";
 import Member from "@src/models/member/MemberModel";
 
-interface GroupCreationAttributes
-    extends Optional<GroupTypes.GroupBody, "name"> {}
-class Group
-    extends Model
-    // extends Model<GroupTypes.GroupBody, GroupCreationAttributes>
-    implements GroupTypes.GroupBody {
+class Group extends Model implements GroupTypes.GroupBody {
     public name!: string;
     public admin!: string;
     public advisor!: string;

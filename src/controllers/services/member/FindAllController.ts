@@ -5,7 +5,7 @@ import resTypes from "@src/utils/resTypes";
 import Member from "@src/models/member/MemberModel";
 
 class FindAllController extends Controller {
-    private result: Member | Member[] | string;
+    private result: Member[] | string;
     constructor() {
         super();
         this.result = "";
