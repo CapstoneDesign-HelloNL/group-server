@@ -25,7 +25,7 @@ class Schedule extends Model implements ScheduleTypes.ScheduleBody {
     public createGroup!: BelongsToCreateAssociationMixin<Group>;
     public setGroup!: BelongsToSetAssociationMixin<Group, "groupName">;
     public static associations: {
-        schedulesToGroups: Association<Schedule, Group>;
+        schedulesToGroup: Association<Schedule, Group>;
     };
     static initiate(connection: Sequelize): Model {
         const opt: ScheduleModelTypes.IBaseScheduleTableOptions = {

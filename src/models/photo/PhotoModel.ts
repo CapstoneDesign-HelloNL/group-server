@@ -10,7 +10,11 @@ import {
     BelongsToManyCreateAssociationMixin,
     BelongsToManyRemoveAssociationMixin,
     BelongsToManyRemoveAssociationsMixin,
-    BelongsToManyCountAssociationsMixin
+    BelongsToManyCountAssociationsMixin,
+    Association,
+    BelongsToGetAssociationMixin,
+    BelongsToCreateAssociationMixin,
+    BelongsToSetAssociationMixin
 } from "sequelize";
 import { PhotoModelTypes } from "@src/vo/group/models/PhotoModel";
 import { PhotoTypes } from "@src/vo/group/controllers/Photo";
@@ -23,33 +27,13 @@ class Photo extends Model implements PhotoTypes.PhotoBody {
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
 
-    // public getPhotoToPosts!: BelongsToManyGetAssociationsMixin<GalleryPost>; // Note the null assertions!
-    // public addPhotoToPost!: BelongsToManyAddAssociationMixin<
-    //     GalleryPost,
-    //     string
-    // >;
-    // public addPhotoToPosts!: BelongsToManyAddAssociationsMixin<
-    //     GalleryPost,
-    //     string
-    // >;
-    // public hasPhotoToPost!: BelongsToManyHasAssociationMixin<
-    //     GalleryPost,
-    //     string
-    // >;
-    // public hasPhotoToPosts!: BelongsToManyHasAssociationsMixin<
-    //     GalleryPost,
-    //     string
-    // >;
-    // public createPhotoToPost!: BelongsToManyCreateAssociationMixin<GalleryPost>;
-    // public removePhotoToPost!: BelongsToManyRemoveAssociationMixin<
-    //     GalleryPost,
-    //     string
-    // >;
-    // public removePhotoToPosts!: BelongsToManyRemoveAssociationsMixin<
-    //     GalleryPost,
-    //     string
-    // >;
-    // public countPhotoToPosts!: BelongsToManyCountAssociationsMixin;
+    public getPosts!: BelongsToGetAssociationMixin<Post>; // Note the null assertions!
+    public createPost!: BelongsToCreateAssociationMixin<Post>;
+    public setPost!: BelongsToSetAssociationMixin<Post, "postId">;
+
+    public static associations: {
+        photosToPost: Association<Photo, Post>;
+    };
 
     static initiate(connection: Sequelize): Model {
         const opt: PhotoModelTypes.IBasePhotoTableOptions = {

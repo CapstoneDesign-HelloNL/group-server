@@ -6,13 +6,11 @@ import UpdateController from "@src/controllers/services/post/UpdateController";
 import DeleteController from "@src/controllers/services/post/DeleteController";
 import JwtVerifyAccessController from "@src/controllers/middlewares/jwt/JwtVerifyAccessController";
 import photoRouter from "@src/api/group/gallery/post/photo";
-import postToPhotoRouter from "@src/api/group/gallery/post/postToPhoto";
 import upload from "@src/utils/upload";
 
 const router = Router({ mergeParams: true });
 
 router.use("/:postId/photo", photoRouter);
-router.use("/:postId/posttophoto", postToPhotoRouter);
 
 router.get(
     "/:postId",

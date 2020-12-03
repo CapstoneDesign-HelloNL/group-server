@@ -24,9 +24,6 @@ class Group extends Model implements GroupTypes.GroupBody {
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
 
-    // Since TS cannot determine model association at compile time
-    // we have to declare them here purely virtually
-    // these will not exist until `Model.init` was called.
     public getAgendas!: HasManyGetAssociationsMixin<Agenda>; // Note the null assertions!
     public addAgenda!: HasManyAddAssociationMixin<Agenda, string>;
     public hasAgenda!: HasManyHasAssociationMixin<Agenda, string>;
@@ -34,44 +31,34 @@ class Group extends Model implements GroupTypes.GroupBody {
     public createAgenda!: HasManyCreateAssociationMixin<Agenda>;
 
     public getNotices!: HasManyGetAssociationsMixin<Notice>; // Note the null assertions!
-    public addNotice!: HasManyAddAssociationMixin<Notice, string>;
-    public hasNotice!: HasManyHasAssociationMixin<Notice, string>;
+    public addNotice!: HasManyAddAssociationMixin<Notice, number>;
+    public hasNotice!: HasManyHasAssociationMixin<Notice, number>;
     public countNotices!: HasManyCountAssociationsMixin;
     public createNotice!: HasManyCreateAssociationMixin<Notice>;
 
     public getSchedules!: HasManyGetAssociationsMixin<Schedule>; // Note the null assertions!
-    public addSchedule!: HasManyAddAssociationMixin<Schedule, string>;
-    public hasSchedule!: HasManyHasAssociationMixin<Schedule, string>;
+    public addSchedule!: HasManyAddAssociationMixin<Schedule, number>;
+    public hasSchedule!: HasManyHasAssociationMixin<Schedule, number>;
     public countSchedules!: HasManyCountAssociationsMixin;
     public createSchedule!: HasManyCreateAssociationMixin<Schedule>;
 
-    public getGallery!: HasManyGetAssociationsMixin<Gallery>; // Note the null assertions!
+    public getGalleries!: HasManyGetAssociationsMixin<Gallery>; // Note the null assertions!
     public addGallery!: HasManyAddAssociationMixin<Gallery, string>;
     public hasGallery!: HasManyHasAssociationMixin<Gallery, string>;
     public countGalleries!: HasManyCountAssociationsMixin;
     public createGallery!: HasManyCreateAssociationMixin<Gallery>;
 
-    public getGroupToMember!: HasManyGetAssociationsMixin<Member>; // Note the null assertions!
-    public addGroupToMember!: HasManyAddAssociationMixin<Member, string>;
-    public hasGroupToMember!: HasManyHasAssociationMixin<Member, string>;
-    public countGroupToMembers!: HasManyCountAssociationsMixin;
-    public createGroupToMembers!: HasManyCreateAssociationMixin<Member>;
-
-    // public getMembers!: BelongsToManyGetAssociationsMixin<Member>; // Note the null assertions!
-    // public addMember!: BelongsToManyAddAssociationMixin<Member, string>;
-    // public addMembers!: BelongsToManyAddAssociationsMixin<Member, string>;
-    // public hasMember!: BelongsToManyHasAssociationMixin<Member, string>;
-    // public hasMembers!: BelongsToManyHasAssociationsMixin<Member, string>;
-    // public createMember!: BelongsToManyCreateAssociationMixin<Member>;
-    // public removeMember!: BelongsToManyRemoveAssociationMixin<Member, string>;
-    // public removeMembers!: BelongsToManyRemoveAssociationsMixin<Member, string>;
-    // public countMembers!: BelongsToManyCountAssociationsMixin;
+    public getMembers!: HasManyGetAssociationsMixin<Member>; // Note the null assertions!
+    public addMember!: HasManyAddAssociationMixin<Member, string>;
+    public hasMember!: HasManyHasAssociationMixin<Member, string>;
+    public countMembers!: HasManyCountAssociationsMixin;
+    public createMember!: HasManyCreateAssociationMixin<Member>;
 
     public readonly agenda?: Agenda[];
     public readonly notice?: Notice[];
     public readonly schedule?: Schedule[];
     public readonly gallery?: Gallery[];
-    public readonly groupToMember?: Member[];
+    public readonly member?: Member[];
 
     public static associations: {
         agendas: Association<Group, Agenda>;

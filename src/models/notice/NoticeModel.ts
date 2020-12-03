@@ -25,7 +25,7 @@ class Notice extends Model implements NoticeTypes.NoticeBody {
     public createGroup!: BelongsToCreateAssociationMixin<Group>;
     public setGroup!: BelongsToSetAssociationMixin<Group, "groupName">;
     public static associations: {
-        noticesToGroups: Association<Notice, Group>;
+        noticesToGroup: Association<Notice, Group>;
     };
 
     static initiate(connection: Sequelize): Model {

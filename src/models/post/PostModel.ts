@@ -1,26 +1,20 @@
 import {
     Model,
     Sequelize,
-    Optional,
-    BelongsToManyGetAssociationsMixin,
-    BelongsToManyAddAssociationMixin,
-    BelongsToManyAddAssociationsMixin,
-    BelongsToManyHasAssociationMixin,
-    BelongsToManyHasAssociationsMixin,
-    BelongsToManyCreateAssociationMixin,
-    BelongsToManyRemoveAssociationMixin,
-    BelongsToManyRemoveAssociationsMixin,
-    BelongsToManyCountAssociationsMixin,
     HasManyGetAssociationsMixin,
     HasManyAddAssociationMixin,
     HasManyHasAssociationMixin,
     HasManyCountAssociationsMixin,
     HasManyCreateAssociationMixin,
-    Association
+    Association,
+    BelongsToGetAssociationMixin,
+    BelongsToCreateAssociationMixin,
+    BelongsToSetAssociationMixin
 } from "sequelize";
 import { PostModelTypes } from "@src/vo/group/models/PostModel";
 import { PostTypes } from "@src/vo/group/controllers/Post";
 import Photo from "@src/models/photo/PhotoModel";
+import Gallery from "../gallery/GalleryModel";
 class Post extends Model implements PostTypes.PostBody {
     public id!: number;
     public title!: string;
@@ -37,39 +31,14 @@ class Post extends Model implements PostTypes.PostBody {
     public countPhotos!: HasManyCountAssociationsMixin;
     public createPhoto!: HasManyCreateAssociationMixin<Photo>;
 
-    public static associations: {
-        galleryPostPhoto: Association<Post, Photo>;
-    };
-    // public getPostToPhotos!: BelongsToManyGetAssociationsMixin<GalleryPhoto>; // Note the null assertions!
-    // public addPostToPhoto!: BelongsToManyAddAssociationMixin<
-    //     GalleryPhoto,
-    //     string
-    // >;
-    // public addPostToPhotos!: BelongsToManyAddAssociationsMixin<
-    //     GalleryPhoto,
-    //     string
-    // >;
-    // public hasPostToPhoto!: BelongsToManyHasAssociationMixin<
-    //     GalleryPhoto,
-    //     string
-    // >;
-    // public hasPostToPhotos!: BelongsToManyHasAssociationsMixin<
-    //     GalleryPhoto,
-    //     string
-    // >;
-    // public createPostToPhoto!: BelongsToManyCreateAssociationMixin<
-    //     GalleryPhoto
-    // >;
-    // public removePostToPhoto!: BelongsToManyRemoveAssociationMixin<
-    //     GalleryPhoto,
-    //     string
-    // >;
-    // public removePostToPhotos!: BelongsToManyRemoveAssociationsMixin<
-    //     GalleryPhoto,
-    //     string
-    // >;
-    // public countPostToPhotos!: BelongsToManyCountAssociationsMixin;
+    public getGalleries!: BelongsToGetAssociationMixin<Gallery>; // Note the null assertions!
+    public createGallery!: BelongsToCreateAssociationMixin<Gallery>;
+    public setGallery!: BelongsToSetAssociationMixin<Gallery, "galleryName">;
 
+    public static associations: {
+        photos: Association<Post, Photo>;
+        postsToGallery: Association<Post, Gallery>;
+    };
     static initiate(connection: Sequelize): Model {
         const opt: PostModelTypes.IBasePostTableOptions = {
             sequelize: connection,

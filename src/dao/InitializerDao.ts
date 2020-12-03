@@ -80,43 +80,43 @@ class InitializerDao extends Dao {
         Post.hasMany(Photo, {
             sourceKey: "id",
             foreignKey: "postId",
-            as: "galleryPostPhoto" // this determines the name in `associations`!
+            as: "photos" // this determines the name in `associations`!
         });
 
         Member.belongsTo(Group, {
             targetKey: "name",
             foreignKey: "groupName",
-            as: "memberToGroup"
+            as: "membersToGroup"
         });
 
         Agenda.belongsTo(Group, {
             targetKey: "name",
             foreignKey: "groupName",
-            as: "agendasToGroups"
+            as: "agendasToGroup"
         });
 
         Notice.belongsTo(Group, {
             targetKey: "name",
             foreignKey: "groupName",
-            as: "noticesToGroups"
+            as: "noticesToGroup"
         });
 
         Schedule.belongsTo(Group, {
             targetKey: "name",
             foreignKey: "groupName",
-            as: "schedulesToGroups"
+            as: "schedulesToGroup"
         });
 
         Gallery.belongsTo(Group, {
             targetKey: "name",
             foreignKey: "groupName",
-            as: "gallerysToGroups"
+            as: "gallerysToGroup"
         });
 
         Photo.belongsTo(Post, {
             targetKey: "id",
             foreignKey: "postId",
-            as: "galleryPhotoPost"
+            as: "photosToPost"
         });
 
         // GalleryPost.belongsToMany(GalleryPhoto, {
