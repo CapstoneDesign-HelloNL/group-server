@@ -77,6 +77,18 @@ class InitializerDao extends Dao {
             as: "members" // this determines the name in `associations`!
         });
 
+        Gallery.hasMany(Post, {
+            sourceKey: "name",
+            foreignKey: "galleryName",
+            as: "posts" // this determines the name in `associations`!
+        });
+
+        Gallery.hasMany(Post, {
+            sourceKey: "groupName",
+            foreignKey: "groupName",
+            as: "posts" // this determines the name in `associations`!
+        });
+
         Post.hasMany(Photo, {
             sourceKey: "id",
             foreignKey: "postId",
@@ -117,6 +129,18 @@ class InitializerDao extends Dao {
             targetKey: "id",
             foreignKey: "postId",
             as: "photosToPost"
+        });
+
+        Post.belongsTo(Gallery, {
+            targetKey: "name",
+            foreignKey: "galleryName",
+            as: "postsToGallery"
+        });
+
+        Post.belongsTo(Gallery, {
+            targetKey: "groupName",
+            foreignKey: "groupName",
+            as: "postsToGallery"
         });
 
         // GalleryPost.belongsToMany(GalleryPhoto, {

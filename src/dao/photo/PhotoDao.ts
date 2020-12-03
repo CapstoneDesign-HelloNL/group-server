@@ -31,7 +31,8 @@ class PhotoDao extends Dao {
         try {
             photo = await Photo.findOne({
                 where: {
-                    id: params.photoId
+                    id: params.id,
+                    postId: params.postId
                 }
             });
         } catch (err) {
@@ -115,15 +116,15 @@ class PhotoDao extends Dao {
         params
     }: AllStrictReqData): Promise<Photo | string | null | undefined> {
         const transaction = await GroupDBManager.getInstance().getTransaction();
-        let newPhoto: [Photo, boolean] | null = null;
+        let newPhoto: Photo | null = null;
         let newPost: Post | null = null;
         try {
-            newPhoto = await Photo.findOrCreate({
+            newPhoto = await Photo.create({
                 ...data,
                 transaction
             });
             newPost = await Post.findOne({
-                where: { id: params.id },
+                where: { id: params.postId },
                 transaction
             });
             if (newPost == null) throw Error;
@@ -136,7 +137,7 @@ class PhotoDao extends Dao {
             else if (err instanceof ValidationError) return `BadRequest`;
             return undefined;
         }
-        return newPhoto[0];
+        return newPhoto;
     }
 
     async update({
@@ -149,7 +150,7 @@ class PhotoDao extends Dao {
         try {
             updatePhoto = await Photo.update(
                 { ...data },
-                { where: { id: params.photoId, postId: params.postId } }
+                { where: { id: params.id, postId: params.postId } }
             );
         } catch (err) {
             logger.error(err);
@@ -168,7 +169,7 @@ class PhotoDao extends Dao {
         try {
             deletePhoto = await Photo.destroy({
                 where: {
-                    id: params.photoId,
+                    id: params.id,
                     postId: params.postId
                 }
             });

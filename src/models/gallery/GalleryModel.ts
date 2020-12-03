@@ -17,8 +17,6 @@ import { GalleryTypes } from "@src/vo/group/controllers/Gallery";
 import Post from "../post/PostModel";
 import Group from "../group/GroupModel";
 
-interface GalleryCreationAttributes
-    extends Optional<GalleryTypes.GalleryBody, "name"> {}
 class Gallery extends Model implements GalleryTypes.GalleryBody {
     public name!: string;
     public groupName!: string;

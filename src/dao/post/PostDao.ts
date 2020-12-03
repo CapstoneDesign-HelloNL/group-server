@@ -1,5 +1,4 @@
-import Express from "express";
-import { Op, UniqueConstraintError, ValidationError } from "sequelize";
+import { UniqueConstraintError, ValidationError } from "sequelize";
 import GroupDBManager from "@src/models/GroupDBManager";
 import Post from "@src/models/post/PostModel";
 import LogService from "@src/utils/LogService";
@@ -132,7 +131,7 @@ class PostDao extends Dao {
             console.log(files);
             for (let file in files) {
                 newPhoto = await Photo.create({
-                    galleryPhotoUrl: files[file].location,
+                    photoUrl: files[file].location,
                     postId: newPost.id,
                     transaction
                 });
