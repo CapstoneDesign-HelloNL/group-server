@@ -1,9 +1,9 @@
 import { Router } from "express";
-import FindOneController from "@src/controllers/services/groupToMember/FindOneController";
-import FindAllController from "@src/controllers/services/groupToMember/FindAllController";
-import CreateController from "@src/controllers/services/groupToMember/CreateController";
-import UpdateController from "@src/controllers/services/groupToMember/UpdateController";
-import DeleteController from "@src/controllers/services/groupToMember/DeleteController";
+import FindOneController from "@src/controllers/services/member/FindOneController";
+import FindAllController from "@src/controllers/services/member/FindAllController";
+import CreateController from "@src/controllers/services/member/CreateController";
+import UpdateController from "@src/controllers/services/member/UpdateController";
+import DeleteController from "@src/controllers/services/member/DeleteController";
 import JwtVerifyAccessController from "@src/controllers/middlewares/jwt/JwtVerifyAccessController";
 
 const router = Router({ mergeParams: true });
