@@ -9,6 +9,7 @@ import {
     ParamsStrictReqData
 } from "@src/vo/group/services/reqData";
 import Member from "@src/models/member/MemberModel";
+import { Sequelize } from "sequelize";
 
 const logger = LogService.getInstance();
 class GroupDao extends Dao {
@@ -33,6 +34,9 @@ class GroupDao extends Dao {
             group = await Group.findOne({
                 where: {
                     name: params.groupName
+                },
+                attributes: {
+                    exclude: ["joinCode"]
                 }
             });
         } catch (err) {
@@ -45,20 +49,33 @@ class GroupDao extends Dao {
 
     async findSignUp({
         decoded
-    }: ParamsStrictReqData): Promise<Member[] | string | null | undefined> {
-        let members: Member[] | null = null;
+    }: ParamsStrictReqData): Promise<Group[] | string | null | undefined> {
+        let groups: Group[] | null = null;
         try {
-            members = await Member.findAll({
-                where: {
-                    memberEmail: decoded?.email
-                }
+            groups = await Group.findAll({
+                attributes: [
+                    "name",
+                    "univName",
+                    [
+                        Sequelize.fn("COUNT", Sequelize.col("memberEmail")),
+                        "joinCount"
+                    ]
+                ],
+                include: [
+                    {
+                        model: Member,
+                        as: "membersToGroup",
+                        attributes: []
+                    }
+                ],
+                group: ["name"]
             });
         } catch (err) {
             logger.error(err);
             if (err instanceof ValidationError) return `BadRequest`;
             return undefined;
         }
-        return members;
+        return groups;
     }
 
     async findAll({

@@ -1,7 +1,9 @@
 export namespace GroupTypes {
     export interface GroupBody {
         name: string;
-        admin: string;
-        advisor: string;
+        univName: string;
+        joinCode: string;
+        // admin: string;
+        // advisor: string;
     }
 }

@@ -18,8 +18,10 @@ export namespace GroupModelTypes {
     }
     export interface IGroupScheme extends ModelAttributes {
         name: IColumnOption;
-        admin: IColumnOption;
-        advisor: IColumnOption;
+        univName: IColumnOption;
+        joinCode: IColumnOption;
+        // admin: IColumnOption;
+        // advisor: IColumnOption;
     }
     export const attr: GroupModelTypes.IGroupScheme = {
         name: {
@@ -30,19 +32,33 @@ export namespace GroupModelTypes {
                 notEmpty: true
             }
         },
-        admin: {
+        univName: {
             type: DataTypes.STRING,
             allowNull: false,
             validate: {
                 notEmpty: true
             }
         },
-        advisor: {
+        joinCode: {
             type: DataTypes.STRING,
             allowNull: true,
             validate: {
                 notEmpty: true
             }
         }
+        // admin: {
+        //     type: DataTypes.STRING,
+        //     allowNull: false,
+        //     validate: {
+        //         notEmpty: true
+        //     }
+        // },
+        // advisor: {
+        //     type: DataTypes.STRING,
+        //     allowNull: true,
+        //     validate: {
+        //         notEmpty: true
+        //     }
+        // }
     };
 }

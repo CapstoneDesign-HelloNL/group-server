@@ -17,10 +17,17 @@ import Notice from "@src/models/notice/NoticeModel";
 import Gallery from "@src/models/gallery/GalleryModel";
 import Member from "@src/models/member/MemberModel";
 
-class Group extends Model implements GroupTypes.GroupBody {
+// interface GroupCreationAttributes
+//     extends Optional<GroupTypes.GroupBody, "name"> {}
+class Group
+    extends Model
+    // <GroupTypes.GroupBody, GroupCreationAttributes>
+    implements GroupTypes.GroupBody {
     public name!: string;
-    public admin!: string;
-    public advisor!: string;
+    public univName!: string;
+    public joinCode!: string;
+    // public admin!: string;
+    // public advisor!: string;
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
 

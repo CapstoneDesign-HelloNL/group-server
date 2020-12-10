@@ -2,7 +2,10 @@ import GroupDBManager from "@src/models/GroupDBManager";
 import Member from "@src/models/member/MemberModel";
 import LogService from "@src/utils/LogService";
 import Dao from "@src/dao/Dao";
-import { AllStrictReqData } from "@src/vo/group/services/reqData";
+import {
+    AllStrictReqData,
+    ParamsStrictReqData
+} from "@src/vo/group/services/reqData";
 import { ValidationError } from "sequelize";
 
 const logger = LogService.getInstance();
@@ -17,6 +20,24 @@ class MemberDao extends Dao {
 
     protected async endConnect() {
         await this.db?.endConnection();
+    }
+
+    async findSignUp({
+        decoded
+    }: ParamsStrictReqData): Promise<Member[] | string | null | undefined> {
+        let members: Member[] | null = null;
+        try {
+            members = await Member.findAll({
+                where: {
+                    memberEmail: decoded?.email
+                }
+            });
+        } catch (err) {
+            logger.error(err);
+            if (err instanceof ValidationError) return `BadRequest`;
+            return undefined;
+        }
+        return members;
     }
 
     async findOne({
